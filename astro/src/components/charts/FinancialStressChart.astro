@@ -1,0 +1,248 @@
+---
+const sourceUrl = "https://www.financialresearch.gov/financial-stress-index/";
+---
+
+<section class="stress-section" aria-labelledby="stress-title">
+  <header class="measure">
+    <p class="faint">MACRO · FINANCIAL STRESS</p>
+    <h2 id="stress-title">全球金融压力：总指数与信用、融资贡献</h2>
+    <p class="muted">
+      OFR FSI 把 33 个市场变量合成为一条日频压力曲线。零代表历史平均水平；
+      高于零表示压力高于平均。它是对市场压力的广义观察，不等于 ICE 高收益或投资级 OAS。
+    </p>
+  </header>
+
+  <div class="latest-strip measure-wide" aria-live="polite">
+    <div>
+      <span class="faint">最新 OFR FSI</span>
+      <strong data-latest-value>—</strong>
+    </div>
+    <div>
+      <span class="faint">状态</span>
+      <strong data-latest-state>读取中</strong>
+    </div>
+    <div>
+      <span class="faint">数据日期</span>
+      <strong data-latest-date>—</strong>
+    </div>
+  </div>
+
+  <div
+    id="financial-stress-chart"
+    class="stress-chart measure-wide"
+    role="img"
+    aria-label="OFR 金融压力总指数、信用贡献和融资贡献历史折线图"
+  >
+    <p class="muted" data-chart-status>正在读取 OFR 数据…</p>
+  </div>
+
+  <p class="chart-note faint measure">
+    数据滞后两个工作日，历史值可能修订，因此不直接用于未经快照处理的历史回测。
+    来源：
+    <a href={sourceUrl} rel="noreferrer">Office of Financial Research</a>
+    。本站不是 OFR 或美国财政部认可、赞助或认证的产品。
+  </p>
+</section>
+
+<script>
+  import { LineChart } from "echarts/charts";
+  import {
+    GridComponent,
+    LegendComponent,
+    TooltipComponent,
+  } from "echarts/components";
+  import * as echarts from "echarts/core";
+  import { CanvasRenderer } from "echarts/renderers";
+  import {
+    ARC_ECHARTS_THEME,
+    ARC_ECHARTS_THEME_DARK,
+  } from "../../lib/echarts-theme";
+
+  type SeriesRow = {
+    dates: string[];
+    values: number[];
+  };
+
+  type FinancialStressData = {
+    latest: {
+      date: string;
+      fsi: number;
+    };
+    series: {
+      fsi: SeriesRow;
+      credit: SeriesRow;
+      funding: SeriesRow;
+    };
+  };
+
+  echarts.use([
+    LineChart,
+    GridComponent,
+    LegendComponent,
+    TooltipComponent,
+    CanvasRenderer,
+  ]);
+  echarts.registerTheme("arc", ARC_ECHARTS_THEME);
+  echarts.registerTheme("arc-dark", ARC_ECHARTS_THEME_DARK);
+
+  const describeStress = (value: number) => {
+    if (value >= 2) return "显著高于平均";
+    if (value >= 0.5) return "高于平均";
+    if (value > -0.5) return "接近平均";
+    return "低于平均";
+  };
+
+  async function renderFinancialStress() {
+    const element = document.getElementById("financial-stress-chart");
+    if (!element) return;
+    const status = element.querySelector("[data-chart-status]");
+
+    const response = await fetch("/data/financial_stress.json");
+    if (!response.ok) {
+      if (status) status.textContent = "数据暂不可用，请稍后重试。";
+      return;
+    }
+
+    const data = (await response.json()) as FinancialStressData;
+    const latestValue = document.querySelector("[data-latest-value]");
+    const latestState = document.querySelector("[data-latest-state]");
+    const latestDate = document.querySelector("[data-latest-date]");
+    if (latestValue) latestValue.textContent = data.latest.fsi.toFixed(2);
+    if (latestState) latestState.textContent = describeStress(data.latest.fsi);
+    if (latestDate) latestDate.textContent = data.latest.date;
+    status?.remove();
+
+    const darkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const chart = echarts.init(element, darkMode ? "arc-dark" : "arc");
+    chart.setOption({
+      animation: false,
+      tooltip: {
+        trigger: "axis",
+        valueFormatter: (value: number) => value.toFixed(3),
+      },
+      legend: {
+        data: ["OFR FSI", "信用贡献", "融资贡献"],
+        top: 0,
+      },
+      grid: {
+        left: 54,
+        right: 24,
+        top: 48,
+        bottom: 42,
+      },
+      xAxis: {
+        type: "category",
+        boundaryGap: false,
+        data: data.series.fsi.dates,
+        axisLabel: {
+          hideOverlap: true,
+          formatter: (value: string) => value.slice(0, 4),
+        },
+      },
+      yAxis: {
+        type: "value",
+        name: "指数贡献",
+        nameGap: 16,
+      },
+      series: [
+        {
+          name: "OFR FSI",
+          type: "line",
+          data: data.series.fsi.values,
+          showSymbol: false,
+          sampling: "lttb",
+          lineStyle: { color: "#9a3b2e", width: 1.6 },
+        },
+        {
+          name: "信用贡献",
+          type: "line",
+          data: data.series.credit.values,
+          showSymbol: false,
+          sampling: "lttb",
+          lineStyle: { color: "#6b8e9e", width: 1 },
+        },
+        {
+          name: "融资贡献",
+          type: "line",
+          data: data.series.funding.values,
+          showSymbol: false,
+          sampling: "lttb",
+          lineStyle: { color: "#c4a35a", width: 1 },
+        },
+      ],
+    });
+
+    const resizeObserver = new ResizeObserver(() => chart.resize());
+    resizeObserver.observe(element);
+  }
+
+  renderFinancialStress().catch((error: unknown) => {
+    const status = document.querySelector("#financial-stress-chart [data-chart-status]");
+    if (status) status.textContent = `数据读取失败：${String(error)}`;
+  });
+</script>
+
+<style>
+  .stress-section {
+    margin-block: var(--space-section);
+  }
+
+  .stress-section header {
+    margin-bottom: 2rem;
+  }
+
+  .stress-section header h2 {
+    margin-block: 0.25rem 0.75rem;
+  }
+
+  .measure-wide {
+    margin-inline: auto;
+    max-width: var(--measure-wide);
+  }
+
+  .latest-strip {
+    border-block: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-bottom: 1.5rem;
+  }
+
+  .latest-strip div {
+    display: grid;
+    gap: 0.2rem;
+    padding: 0.8rem 1rem;
+  }
+
+  .latest-strip div + div {
+    border-left: 1px solid var(--rule);
+  }
+
+  .latest-strip strong {
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .stress-chart {
+    height: 430px;
+  }
+
+  .chart-note {
+    margin-top: 1rem;
+  }
+
+  @media (max-width: 640px) {
+    .latest-strip {
+      grid-template-columns: 1fr;
+    }
+
+    .latest-strip div + div {
+      border-left: 0;
+      border-top: 1px solid var(--rule);
+    }
+
+    .stress-chart {
+      height: 390px;
+    }
+  }
+</style>

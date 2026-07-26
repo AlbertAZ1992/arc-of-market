@@ -1,0 +1,180 @@
+{
+  "schema_version": 1,
+  "reviewed_at": "2026-07-26",
+  "review_basis": {
+    "fred_terms": "https://fred.stlouisfed.org/docs/api/terms_of_use.html",
+    "rule": "Only series without a FRED copyright note are approved in public macro files.",
+    "required_notice": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
+    "vintage_limit": "Latest revised values only; not approved for point-in-time backtests."
+  },
+  "series": [
+    {
+      "id": "SOFR",
+      "publisher": "Federal Reserve Bank of New York",
+      "release": "Secured Overnight Financing Rate Data",
+      "copyright_note": false,
+      "public": true
+    },
+    {
+      "id": "EFFR",
+      "publisher": "Federal Reserve Bank of New York",
+      "release": "Federal Funds Data",
+      "copyright_note": false,
+      "public": true
+    },
+    {
+      "id": "RRPONTSYD",
+      "publisher": "Federal Reserve Bank of New York",
+      "release": "Temporary Open Market Operations",
+      "copyright_note": false,
+      "public": true
+    },
+    {
+      "id": "WALCL",
+      "publisher": "Board of Governors of the Federal Reserve System",
+      "release": "H.4.1 Factors Affecting Reserve Balances",
+      "copyright_note": false,
+      "public": true
+    },
+    {
+      "id": "DGS2",
+      "publisher": "Board of Governors of the Federal Reserve System",
+      "release": "H.15 Selected Interest Rates",
+      "copyright_note": false,
+      "public": true
+    },
+    {
+      "id": "DGS10",
+      "publisher": "Board of Governors of the Federal Reserve System",
+      "release": "H.15 Selected Interest Rates",
+      "copyright_note": false,
+      "public": true
+    },
+    {
+      "id": "DGS30",
+      "publisher": "Board of Governors of the Federal Reserve System",
+      "release": "H.15 Selected Interest Rates",
+      "copyright_note": false,
+      "public": true
+    },
+    {
+      "id": "T10Y2Y",
+      "publisher": "Federal Reserve Bank of St. Louis",
+      "release": "Interest Rate Spreads",
+      "copyright_note": false,
+      "public": true
+    },
+    {
+      "id": "CPIAUCSL",
+      "publisher": "U.S. Bureau of Labor Statistics",
+      "release": "Consumer Price Index",
+      "copyright_note": false,
+      "public": true
+    },
+    {
+      "id": "PCEPILFE",
+      "publisher": "U.S. Bureau of Economic Analysis",
+      "release": "Personal Income and Outlays",
+      "copyright_note": false,
+      "public": true
+    },
+    {
+      "id": "PPIACO",
+      "publisher": "U.S. Bureau of Labor Statistics",
+      "release": "Producer Price Index",
+      "copyright_note": false,
+      "public": true
+    },
+    {
+      "id": "UNRATE",
+      "publisher": "U.S. Bureau of Labor Statistics",
+      "release": "Employment Situation",
+      "copyright_note": false,
+      "public": true
+    },
+    {
+      "id": "PAYEMS",
+      "publisher": "U.S. Bureau of Labor Statistics",
+      "release": "Employment Situation",
+      "copyright_note": false,
+      "public": true
+    },
+    {
+      "id": "GDPC1",
+      "publisher": "U.S. Bureau of Economic Analysis",
+      "release": "Gross Domestic Product",
+      "copyright_note": false,
+      "public": true
+    },
+    {
+      "id": "CP",
+      "publisher": "U.S. Bureau of Economic Analysis",
+      "release": "Gross Domestic Product",
+      "copyright_note": false,
+      "public": true
+    },
+    {
+      "id": "NCBEILQ027S",
+      "publisher": "Board of Governors of the Federal Reserve System",
+      "release": "Z.1 Financial Accounts of the United States",
+      "copyright_note": false,
+      "public": true
+    },
+    {
+      "id": "FBCELLQ027S",
+      "publisher": "Board of Governors of the Federal Reserve System",
+      "release": "Z.1 Financial Accounts of the United States",
+      "copyright_note": false,
+      "public": true
+    },
+    {
+      "id": "BCNSDODNS",
+      "publisher": "Board of Governors of the Federal Reserve System",
+      "release": "Z.1 Financial Accounts of the United States",
+      "copyright_note": false,
+      "public": true
+    },
+    {
+      "id": "CMDEBT",
+      "publisher": "Board of Governors of the Federal Reserve System",
+      "release": "Z.1 Financial Accounts of the United States",
+      "copyright_note": false,
+      "public": true
+    },
+    {
+      "id": "FGSDODNS",
+      "publisher": "Board of Governors of the Federal Reserve System",
+      "release": "Z.1 Financial Accounts of the United States",
+      "copyright_note": false,
+      "public": true
+    },
+    {
+      "id": "SLGSDODNS",
+      "publisher": "Board of Governors of the Federal Reserve System",
+      "release": "Z.1 Financial Accounts of the United States",
+      "copyright_note": false,
+      "public": true
+    },
+    {
+      "id": "WCMITCMFODNS",
+      "publisher": "Board of Governors of the Federal Reserve System",
+      "release": "Z.1 Financial Accounts of the United States",
+      "copyright_note": false,
+      "public": true
+    },
+    {
+      "id": "BAMLH0A0HYM2",
+      "publisher": "ICE Data Indices",
+      "release": "ICE BofA Indices",
+      "copyright_note": true,
+      "public": false
+    },
+    {
+      "id": "BAMLC0A0CM",
+      "publisher": "ICE Data Indices",
+      "release": "ICE BofA Indices",
+      "copyright_note": true,
+      "public": false
+    }
+  ]
+}

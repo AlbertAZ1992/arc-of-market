@@ -1,0 +1,32 @@
+ArcOfMarket Source Code License
+Copyright © 2026 ArcOfMarket. All rights reserved.
+
+ArcOfMarket independently authored source code is made available under the
+PolyForm Noncommercial License 1.0.0:
+
+https://polyformproject.org/licenses/noncommercial/1.0.0
+
+The copyright owner retains the right to operate this software commercially,
+grant separate commercial licenses, and offer the same work under different
+terms. The public repository license limits third-party use; it does not limit
+the copyright owner's own use of the original work.
+
+This license covers ArcOfMarket source code and original documentation only.
+It does not grant rights to:
+
+- market data, index values, filings, economic series, or other third-party facts;
+- provider names, trademarks, logos, or index brands;
+- third-party components distributed under their own licenses;
+- content whose source or attribution is identified separately.
+
+Third-party data remains subject to its provider's terms and the release rules
+recorded in this repository. See THIRD_PARTY_NOTICES.md and
+docs/DATA_LICENSE_MATRIX.md.
+
+ArcOfMarket original indicators, commentary, and editorial content remain the
+property of their respective copyright owner. Any commercial embedding,
+redistribution, or white-label use requires a separate written agreement.
+
+The software and content are provided for informational and educational
+purposes, without warranty. Nothing in the project is investment advice,
+a recommendation, or an offer to buy or sell a security.

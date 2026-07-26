@@ -1,0 +1,633 @@
+---
+import recessionsJson from "../../../../data/recessions.json";
+
+type Recession = {
+  peak_month: string;
+  trough_month: string;
+};
+
+type RecessionDataset = {
+  periods: Recession[];
+};
+
+const recentRecessions = (recessionsJson as RecessionDataset).periods.slice(-8).reverse();
+---
+
+<section class="macro-dashboard" aria-labelledby="macro-dashboard-title">
+  <header class="measure">
+    <p class="faint">MACRO · CURRENT READINGS</p>
+    <h2 id="macro-dashboard-title">宏观环境：利率、物价、增长与仓位</h2>
+    <p class="muted">
+      这些图描述当前宏观位置，不预测下一步方向。FRED 数据采用最新修订版本，
+      没有 ALFRED vintage 的历史回测不能声称是严格 point-in-time。
+    </p>
+  </header>
+
+  <div class="metric-grid measure-wide" aria-label="最新宏观读数">
+    <article>
+      <span class="faint">SOFR</span>
+      <strong data-metric="sofr">—</strong>
+      <small data-metric-date="sofr">读取中</small>
+    </article>
+    <article>
+      <span class="faint">10 年美债</span>
+      <strong data-metric="dgs10">—</strong>
+      <small data-metric-date="dgs10">读取中</small>
+    </article>
+    <article>
+      <span class="faint">10Y − 2Y</span>
+      <strong data-metric="t10y2y">—</strong>
+      <small data-metric-date="t10y2y">读取中</small>
+    </article>
+    <article>
+      <span class="faint">CPI 同比</span>
+      <strong data-metric="cpi_yoy">—</strong>
+      <small data-metric-date="cpi_yoy">读取中</small>
+    </article>
+    <article>
+      <span class="faint">失业率</span>
+      <strong data-metric="unrate">—</strong>
+      <small data-metric-date="unrate">读取中</small>
+    </article>
+    <article>
+      <span class="faint">股票配置占比</span>
+      <strong data-metric="equity_allocation">—</strong>
+      <small data-metric-date="equity_allocation">读取中</small>
+    </article>
+  </div>
+
+  <div class="chapter measure-wide" id="macro-policy-rates">
+    <div class="chapter__copy">
+      <p class="faint">01 · POLICY RATES</p>
+      <h3>SOFR × EFFR × 目标利率</h3>
+      <p class="muted">隔夜担保融资利率与有效联邦基金利率描述美国短端资金价格。</p>
+    </div>
+    <div
+      id="macro-policy-chart"
+      class="macro-chart"
+      role="img"
+      aria-label="SOFR 与有效联邦基金利率历史折线图"
+    >
+      <p class="muted" data-chart-status>正在读取政策利率数据…</p>
+    </div>
+  </div>
+
+  <div class="chapter measure-wide" id="macro-term-structure">
+    <div class="chapter__copy">
+      <p class="faint">02 · TREASURY CURVE</p>
+      <h3>期限结构</h3>
+      <p class="muted">2 年、10 年与 30 年美国国债收益率。</p>
+    </div>
+    <div
+      id="macro-rates-chart"
+      class="macro-chart"
+      role="img"
+      aria-label="美国国债收益率和期限利差历史折线图"
+    >
+      <p class="muted" data-chart-status>正在读取利率数据…</p>
+    </div>
+  </div>
+
+  <div class="chapter measure-wide" id="macro-yield-spread">
+    <div class="chapter__copy">
+      <p class="faint">03 · YIELD SPREAD</p>
+      <h3>10Y − 2Y 期限利差</h3>
+      <p class="muted">观察期限曲线倒挂、再陡峭化与经济周期位置。</p>
+    </div>
+    <div
+      id="macro-spread-chart"
+      class="macro-chart"
+      role="img"
+      aria-label="10 年与 2 年美国国债收益率利差历史折线图"
+    >
+      <p class="muted" data-chart-status>正在读取期限利差数据…</p>
+    </div>
+  </div>
+
+  <div class="chapter measure-wide" id="macro-prices">
+    <div class="chapter__copy">
+      <p class="faint">04 · PRICES</p>
+      <h3>物价压力</h3>
+      <p class="muted">
+        CPI、核心 PCE 与全部商品 PPI 同比。PPIACO 不是最终需求 PPI，不能混称。
+      </p>
+    </div>
+    <div
+      id="macro-prices-chart"
+      class="macro-chart"
+      role="img"
+      aria-label="CPI、核心 PCE 和全部商品 PPI 同比历史折线图"
+    >
+      <p class="muted" data-chart-status>正在读取物价数据…</p>
+    </div>
+  </div>
+
+  <div class="chapter measure-wide" id="macro-gdp">
+    <div class="chapter__copy">
+      <p class="faint">05 · GROWTH</p>
+      <h3>实际 GDP</h3>
+      <p class="muted">季度实际 GDP 环比年化增长率，历史值可能被后续修订。</p>
+    </div>
+    <div
+      id="macro-growth-chart"
+      class="macro-chart"
+      role="img"
+      aria-label="美国实际 GDP 环比年化和失业率历史折线图"
+    >
+      <p class="muted" data-chart-status>正在读取增长数据…</p>
+    </div>
+  </div>
+
+  <div class="chapter measure-wide" id="macro-employment">
+    <div class="chapter__copy">
+      <p class="faint">06 · EMPLOYMENT</p>
+      <h3>就业</h3>
+      <p class="muted">非农新增就业与失业率使用双轴并列观察。</p>
+    </div>
+    <div
+      id="macro-employment-chart"
+      class="macro-chart"
+      role="img"
+      aria-label="美国非农新增就业和失业率历史折线图"
+    >
+      <p class="muted" data-chart-status>正在读取就业数据…</p>
+    </div>
+  </div>
+
+  <div class="chapter measure-wide" id="macro-equity-allocation">
+    <div class="chapter__copy">
+      <p class="faint">07 · ALLOCATION</p>
+      <h3>美国金融资产股票配置占比</h3>
+      <p class="muted">
+        用美联储 Z.1 七个序列计算股票市值占股票市值与指定债务余额之和的比例。
+      </p>
+    </div>
+    <div
+      id="macro-equity-allocation-chart"
+      class="macro-chart"
+      role="img"
+      aria-label="美国金融资产股票配置占比历史折线图"
+    >
+      <p class="muted" data-chart-status>正在读取配置数据…</p>
+    </div>
+  </div>
+
+  <div class="chapter measure-wide" id="macro-positioning">
+    <div class="chapter__copy">
+      <p class="faint">09 · POSITIONING</p>
+      <h3>VIX 期货持仓</h3>
+      <p class="muted">
+        杠杆基金与资管机构净头寸占未平仓合约比例。周二持仓通常周五发布，
+        严格回测必须使用记录的首次观察时间。
+      </p>
+    </div>
+    <div
+      id="macro-cot-chart"
+      class="macro-chart"
+      role="img"
+      aria-label="CFTC VIX 期货杠杆基金与资管机构净头寸比例历史折线图"
+    >
+      <p class="muted" data-chart-status>正在读取 CFTC 数据…</p>
+    </div>
+  </div>
+
+  <aside class="cycle-note measure">
+    <p class="faint">NBER · RETROSPECTIVE DATING</p>
+    <h3>最近八次美国衰退</h3>
+    <p class="muted">
+      NBER 的高峰和低谷月份是事后认定，不是当时即可获得的交易信号。
+    </p>
+    <ol>
+      {
+        recentRecessions.map((period) => (
+          <li>
+            <time>{period.peak_month}</time>
+            <span>→</span>
+            <time>{period.trough_month}</time>
+          </li>
+        ))
+      }
+    </ol>
+  </aside>
+
+  <footer class="source-note measure">
+    <p class="faint">
+      This product uses the FRED® API but is not endorsed or certified by the Federal Reserve
+      Bank of St. Louis.
+    </p>
+    <p class="faint">
+      来源：
+      <a href="https://fred.stlouisfed.org/">FRED</a>、
+      <a href="https://www.cftc.gov/MarketReports/CommitmentsofTraders/index.htm">CFTC</a>、
+      <a href="https://www.nber.org/research/data/us-business-cycle-expansions-and-contractions">
+        NBER
+      </a>
+      。更新时间与单位以各数据文件为准。
+    </p>
+  </footer>
+</section>
+
+<script>
+  import { LineChart } from "echarts/charts";
+  import {
+    GridComponent,
+    LegendComponent,
+    TooltipComponent,
+  } from "echarts/components";
+  import * as echarts from "echarts/core";
+  import { CanvasRenderer } from "echarts/renderers";
+  import {
+    ARC_ECHARTS_THEME,
+    ARC_ECHARTS_THEME_DARK,
+  } from "../../lib/echarts-theme";
+
+  type MetricSeries = {
+    dates: string[];
+    values: number[];
+  };
+
+  type MacroRates = {
+    dgs2: MetricSeries;
+    dgs10: MetricSeries;
+    dgs30: MetricSeries;
+    effr: MetricSeries;
+    sofr: MetricSeries;
+    t10y2y: MetricSeries;
+  };
+
+  type MacroPrices = {
+    cpi_yoy: MetricSeries;
+    core_pce_yoy: MetricSeries;
+    ppi_yoy: MetricSeries;
+  };
+
+  type MacroGrowth = {
+    gdp_qoq: MetricSeries;
+    nfp: MetricSeries;
+    unrate: MetricSeries;
+  };
+
+  type EquityAllocationData = {
+    dates: string[];
+    values: number[];
+  };
+
+  type CotRow = {
+    date: string;
+    lev_net_pct_oi: number;
+    am_net_pct_oi: number;
+  };
+
+  type CotData = {
+    series: CotRow[];
+  };
+
+  echarts.use([
+    LineChart,
+    GridComponent,
+    LegendComponent,
+    TooltipComponent,
+    CanvasRenderer,
+  ]);
+  echarts.registerTheme("arc", ARC_ECHARTS_THEME);
+  echarts.registerTheme("arc-dark", ARC_ECHARTS_THEME_DARK);
+
+  const chartTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "arc-dark"
+    : "arc";
+
+  const points = (series: MetricSeries, multiplier = 1) =>
+    series.dates.map((date, index) => [date, (series.values[index] ?? 0) * multiplier]);
+
+  function latest(series: MetricSeries, suffix: string) {
+    const index = series.values.length - 1;
+    return {
+      date: series.dates[index] ?? "—",
+      value: `${(series.values[index] ?? 0).toFixed(2)}${suffix}`,
+    };
+  }
+
+  function setMetric(name: string, value: string, date: string) {
+    const valueElement = document.querySelector(`[data-metric="${name}"]`);
+    const dateElement = document.querySelector(`[data-metric-date="${name}"]`);
+    if (valueElement) valueElement.textContent = value;
+    if (dateElement) dateElement.textContent = date;
+  }
+
+  function createChart(id: string, option: object) {
+    const element = document.getElementById(id);
+    if (!element) return;
+    element.querySelector("[data-chart-status]")?.remove();
+    const chart = echarts.init(element, chartTheme);
+    chart.setOption({
+      animation: false,
+      tooltip: {
+        trigger: "axis",
+        valueFormatter: (value: number) => value.toFixed(2),
+      },
+      ...option,
+    });
+    const observer = new ResizeObserver(() => chart.resize());
+    observer.observe(element);
+  }
+
+  function renderRates(data: MacroRates) {
+    createChart("macro-policy-chart", {
+      legend: { data: ["SOFR", "EFFR"] },
+      xAxis: { type: "time" },
+      yAxis: { type: "value", name: "%" },
+      series: [
+        { name: "SOFR", type: "line", data: points(data.sofr), showSymbol: false },
+        { name: "EFFR", type: "line", data: points(data.effr), showSymbol: false },
+      ],
+    });
+    createChart("macro-rates-chart", {
+      legend: { data: ["2Y", "10Y", "30Y"] },
+      xAxis: { type: "time" },
+      yAxis: { type: "value", name: "%" },
+      series: [
+        { name: "2Y", type: "line", data: points(data.dgs2), showSymbol: false },
+        { name: "10Y", type: "line", data: points(data.dgs10), showSymbol: false },
+        { name: "30Y", type: "line", data: points(data.dgs30), showSymbol: false },
+      ],
+    });
+    createChart("macro-spread-chart", {
+      xAxis: { type: "time" },
+      yAxis: { type: "value", name: "百分点" },
+      series: [
+        {
+          name: "10Y−2Y",
+          type: "line",
+          data: points(data.t10y2y),
+          showSymbol: false,
+          lineStyle: { color: "#f60c3e", width: 1.4 },
+        },
+      ],
+    });
+  }
+
+  function renderPrices(data: MacroPrices) {
+    createChart("macro-prices-chart", {
+      legend: { data: ["CPI", "核心 PCE", "全部商品 PPI"] },
+      xAxis: { type: "time" },
+      yAxis: { type: "value", name: "同比 %" },
+      series: [
+        { name: "CPI", type: "line", data: points(data.cpi_yoy), showSymbol: false },
+        {
+          name: "核心 PCE",
+          type: "line",
+          data: points(data.core_pce_yoy),
+          showSymbol: false,
+        },
+        {
+          name: "全部商品 PPI",
+          type: "line",
+          data: points(data.ppi_yoy),
+          showSymbol: false,
+        },
+      ],
+    });
+  }
+
+  function renderGrowth(data: MacroGrowth) {
+    createChart("macro-growth-chart", {
+      xAxis: { type: "time" },
+      yAxis: { type: "value", name: "环比年化 %" },
+      series: [
+        {
+          name: "实际 GDP",
+          type: "line",
+          data: points(data.gdp_qoq),
+          showSymbol: false,
+        },
+      ],
+    });
+    createChart("macro-employment-chart", {
+      legend: { data: ["非农新增", "失业率"] },
+      xAxis: { type: "time" },
+      yAxis: [
+        { type: "value", name: "千人" },
+        { type: "value", name: "%", position: "right" },
+      ],
+      series: [
+        {
+          name: "非农新增",
+          type: "line",
+          data: points(data.nfp),
+          showSymbol: false,
+        },
+        {
+          name: "失业率",
+          type: "line",
+          data: points(data.unrate),
+          showSymbol: false,
+          yAxisIndex: 1,
+        },
+      ],
+    });
+  }
+
+  function renderEquityAllocation(data: EquityAllocationData) {
+    createChart("macro-equity-allocation-chart", {
+      legend: { data: ["股票配置"] },
+      xAxis: { type: "time" },
+      yAxis: { type: "value", name: "%", min: 0, max: 60 },
+      series: [
+        {
+          name: "股票配置",
+          type: "line",
+          data: points(data, 100),
+          showSymbol: false,
+        },
+      ],
+    });
+  }
+
+  function renderCot(data: CotData) {
+    createChart("macro-cot-chart", {
+      legend: { data: ["杠杆基金", "资管机构"] },
+      xAxis: { type: "time" },
+      yAxis: { type: "value", name: "占 OI %" },
+      series: [
+        {
+          name: "杠杆基金",
+          type: "line",
+          data: data.series.map((row) => [row.date, row.lev_net_pct_oi]),
+          showSymbol: false,
+        },
+        {
+          name: "资管机构",
+          type: "line",
+          data: data.series.map((row) => [row.date, row.am_net_pct_oi]),
+          showSymbol: false,
+        },
+      ],
+    });
+  }
+
+  function renderLatest(
+    rates: MacroRates,
+    prices: MacroPrices,
+    growth: MacroGrowth,
+    equityAllocation: EquityAllocationData,
+  ) {
+    for (const [name, metric] of [
+      ["sofr", latest(rates.sofr, "%")],
+      ["dgs10", latest(rates.dgs10, "%")],
+      ["t10y2y", latest(rates.t10y2y, "pp")],
+      ["cpi_yoy", latest(prices.cpi_yoy, "%")],
+      ["unrate", latest(growth.unrate, "%")],
+    ] as const) {
+      setMetric(name, metric.value, metric.date);
+    }
+    const allocationIndex = equityAllocation.values.length - 1;
+    const allocationValue = ((equityAllocation.values[allocationIndex] ?? 0) * 100).toFixed(2);
+    setMetric(
+      "equity_allocation",
+      `${allocationValue}%`,
+      equityAllocation.dates[allocationIndex] ?? "—",
+    );
+  }
+
+  async function renderMacroDashboard() {
+    const [ratesResponse, pricesResponse, growthResponse, allocationResponse, cotResponse] =
+      await Promise.all([
+        fetch("/data/macro_rates.json"),
+        fetch("/data/macro_prices.json"),
+        fetch("/data/macro_growth.json"),
+        fetch("/data/equity_allocation.json"),
+        fetch("/data/cot_vix.json"),
+      ]);
+    const responses = [
+      ratesResponse,
+      pricesResponse,
+      growthResponse,
+      allocationResponse,
+      cotResponse,
+    ];
+    if (responses.some((response) => !response.ok)) {
+      throw new Error("一个或多个宏观数据文件不可用");
+    }
+    const [rates, prices, growth, equityAllocation, cot] = await Promise.all([
+      ratesResponse.json() as Promise<MacroRates>,
+      pricesResponse.json() as Promise<MacroPrices>,
+      growthResponse.json() as Promise<MacroGrowth>,
+      allocationResponse.json() as Promise<EquityAllocationData>,
+      cotResponse.json() as Promise<CotData>,
+    ]);
+    renderLatest(rates, prices, growth, equityAllocation);
+    renderRates(rates);
+    renderPrices(prices);
+    renderGrowth(growth);
+    renderEquityAllocation(equityAllocation);
+    renderCot(cot);
+  }
+
+  renderMacroDashboard().catch((error: unknown) => {
+    document.querySelectorAll("[data-chart-status]").forEach((element) => {
+      element.textContent = `数据读取失败：${String(error)}`;
+    });
+  });
+</script>
+
+<style>
+  .macro-dashboard {
+    margin-block: var(--space-section);
+  }
+
+  .macro-dashboard > header h2 {
+    margin-block: 0.25rem 0.75rem;
+  }
+
+  .measure-wide {
+    margin-inline: auto;
+    max-width: var(--measure-wide);
+  }
+
+  .metric-grid {
+    display: grid;
+    gap: 1px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-block: 2.5rem 5rem;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+
+  .metric-grid article {
+    background: var(--paper);
+    display: grid;
+    padding: 1rem;
+  }
+
+  .metric-grid strong {
+    font-family: var(--font-serif);
+    font-size: 1.35rem;
+  }
+
+  .metric-grid small {
+    color: var(--ink-faint);
+  }
+
+  .chapter {
+    border-top: 1px solid var(--rule);
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: minmax(12rem, 0.35fr) minmax(0, 1fr);
+    padding-block: 2.5rem;
+  }
+
+  .chapter__copy h3 {
+    margin-block: 0.25rem 0.75rem;
+  }
+
+  .macro-chart {
+    height: 340px;
+    min-width: 0;
+  }
+
+  .cycle-note {
+    border-top: 1px solid var(--rule);
+    margin-block: 3rem;
+    padding-top: 2rem;
+  }
+
+  .cycle-note h3 {
+    margin-block: 0.25rem 0.75rem;
+  }
+
+  .cycle-note ol {
+    list-style: none;
+    padding: 0;
+  }
+
+  .cycle-note li {
+    border-top: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    padding-block: 0.55rem;
+  }
+
+  .cycle-note li time:last-child {
+    text-align: right;
+  }
+
+  .source-note {
+    border-top: 1px solid var(--rule);
+    padding-top: 1rem;
+  }
+
+  @media (max-width: 720px) {
+    .metric-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-bottom: 3rem;
+    }
+
+    .chapter {
+      grid-template-columns: 1fr;
+    }
+
+    .macro-chart {
+      height: 320px;
+    }
+  }
+</style>

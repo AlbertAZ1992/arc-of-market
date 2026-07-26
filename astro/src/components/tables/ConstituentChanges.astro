@@ -1,0 +1,287 @@
+---
+import datasetJson from "../../../../data/sp500_changes.json";
+
+type Company = {
+  ticker: string | null;
+  name: string | null;
+};
+
+type Change = {
+  effective_date: string;
+  addition: Company;
+  removal: Company;
+  reason: string | null;
+};
+
+type ChangesDataset = {
+  meta: {
+    count: number;
+    coverage_start: string;
+    coverage_end: string;
+    source: {
+      page: string;
+      revision: {
+        id: number;
+        timestamp: string;
+        url: string;
+      };
+    };
+    license: {
+      url: string;
+      attribution: string;
+      changes_made: string;
+    };
+  };
+  changes: Change[];
+};
+
+const dataset = datasetJson as ChangesDataset;
+const initialRows = 60;
+---
+
+<section class="changes" aria-labelledby="changes-title">
+  <div class="changes__heading">
+    <div>
+      <p class="faint">S&P 500 · INDEX METABOLISM</p>
+      <h2 id="changes-title">调入与调出的历史</h2>
+      <p class="muted">
+        记录每次成分变更的生效日期、加入、移除与公开原因。当前覆盖
+        {dataset.meta.coverage_start} 至 {dataset.meta.coverage_end}，共
+        {dataset.meta.count} 条。
+      </p>
+    </div>
+    <a class="download" href="/data/sp500_changes.json" download>下载 JSON</a>
+  </div>
+
+  <div class="changes__controls">
+    <label>
+      <span class="faint">搜索代码、公司或原因</span>
+      <input data-change-search type="search" placeholder="例如 NVDA、并购、Disney" />
+    </label>
+    <label>
+      <span class="faint">范围</span>
+      <select data-change-range>
+        <option value={initialRows}>最近 {initialRows} 条</option>
+        <option value="all">全部 {dataset.meta.count} 条</option>
+      </select>
+    </label>
+    <p class="faint changes__count" data-change-count aria-live="polite">
+      显示 {initialRows} / {dataset.meta.count}
+    </p>
+  </div>
+
+  <div class="changes__scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>生效日期</th>
+          <th>调入</th>
+          <th>调出</th>
+          <th>原因</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          dataset.changes.map((change, index) => (
+            <tr
+              data-change-row
+              data-index={index}
+              data-search={[
+                change.addition.ticker,
+                change.addition.name,
+                change.removal.ticker,
+                change.removal.name,
+                change.reason,
+              ]
+                .filter(Boolean)
+                .join(" ")
+                .toLocaleLowerCase()}
+              hidden={index >= initialRows}
+            >
+              <td class="changes__date">{change.effective_date}</td>
+              <td>
+                {change.addition.ticker ? (
+                  <>
+                    <strong>{change.addition.ticker}</strong>
+                    <span>{change.addition.name}</span>
+                  </>
+                ) : (
+                  <span class="faint">—</span>
+                )}
+              </td>
+              <td>
+                {change.removal.ticker ? (
+                  <>
+                    <strong>{change.removal.ticker}</strong>
+                    <span>{change.removal.name}</span>
+                  </>
+                ) : (
+                  <span class="faint">—</span>
+                )}
+              </td>
+              <td class="changes__reason">{change.reason ?? "—"}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <p class="changes__source faint">
+    来源：
+    <a href={dataset.meta.source.revision.url}>
+      Wikipedia contributors，固定版本 {dataset.meta.source.revision.id}
+    </a>
+    · <a href={dataset.meta.license.url}>CC BY-SA 4.0</a>
+    · {dataset.meta.license.changes_made}
+  </p>
+</section>
+
+<script>
+  const input = document.querySelector<HTMLInputElement>("[data-change-search]");
+  const range = document.querySelector<HTMLSelectElement>("[data-change-range]");
+  const count = document.querySelector<HTMLElement>("[data-change-count]");
+  const rows = Array.from(document.querySelectorAll<HTMLElement>("[data-change-row]"));
+
+  function updateRows() {
+    const query = input?.value.trim().toLocaleLowerCase() ?? "";
+    const limit = range?.value === "all" ? Number.POSITIVE_INFINITY : Number(range?.value ?? 60);
+    let visible = 0;
+    rows.forEach((row) => {
+      const matches = !query || (row.dataset["search"] ?? "").includes(query);
+      const withinRange = query ? true : Number(row.dataset["index"]) < limit;
+      row.hidden = !(matches && withinRange);
+      if (!row.hidden) visible += 1;
+    });
+    if (count) count.textContent = `显示 ${visible} / ${rows.length}`;
+  }
+
+  input?.addEventListener("input", updateRows);
+  range?.addEventListener("change", updateRows);
+</script>
+
+<style>
+  .changes {
+    margin: var(--space-section) auto;
+    max-width: var(--measure-wide);
+  }
+
+  .changes__heading {
+    align-items: end;
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .changes__heading h2 {
+    margin: 0.25rem 0 0.5rem;
+  }
+
+  .changes__heading p {
+    margin: 0;
+    max-width: 44rem;
+  }
+
+  .download {
+    border: 1px solid var(--rule);
+    padding: 0.65rem 0.9rem;
+  }
+
+  .changes__controls {
+    align-items: end;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 2rem 0 1rem;
+  }
+
+  .changes__controls label {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .changes__controls input,
+  .changes__controls select {
+    background: var(--paper-raised);
+    border: 1px solid var(--rule);
+    border-radius: 0;
+    color: var(--ink);
+    font: inherit;
+    min-height: 2.8rem;
+    padding: 0.55rem 0.7rem;
+  }
+
+  .changes__controls input {
+    min-width: min(22rem, 80vw);
+  }
+
+  .changes__count {
+    margin: 0 0 0.65rem auto;
+  }
+
+  .changes__scroll {
+    overflow-x: auto;
+  }
+
+  table {
+    border-collapse: collapse;
+    min-width: 58rem;
+    width: 100%;
+  }
+
+  th,
+  td {
+    border-bottom: 1px solid var(--rule);
+    padding: 0.75rem 0.65rem;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  th {
+    color: var(--ink-faint);
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  td strong {
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    margin-right: 0.35rem;
+  }
+
+  td span {
+    color: var(--ink-soft);
+    font-size: 0.85rem;
+  }
+
+  .changes__date {
+    font-family: var(--font-serif);
+    white-space: nowrap;
+  }
+
+  .changes__reason {
+    color: var(--ink-soft);
+    font-size: 0.88rem;
+    max-width: 30rem;
+  }
+
+  .changes__source {
+    margin-top: 1rem;
+  }
+
+  @media (max-width: 720px) {
+    .changes__heading {
+      align-items: start;
+      grid-template-columns: 1fr;
+    }
+
+    .download {
+      justify-self: start;
+    }
+
+    .changes__count {
+      margin-left: 0;
+    }
+  }
+</style>

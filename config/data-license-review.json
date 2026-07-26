@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "public_release_approved": true,
+  "subscriber_release_approved": false,
+  "reviewed_at": "2026-07-26",
+  "reviewed_by": "ArcOfMarket project owner",
+  "approval_reference": "config/public-data-policy.json@2026-07-26",
+  "blockers": [],
+  "scope": {
+    "public": "Only files explicitly approved by the default-deny public policy.",
+    "subscriber": "Not approved; paid product implementation and output review remain pending."
+  },
+  "excluded_from_public_release": [
+    "Yahoo Finance, official S&P/Nasdaq index values, and Cboe research files",
+    "ICE credit series and any future third-party valuation or sentiment inputs",
+    "unlicensed analyst-consensus EPS estimates"
+  ],
+  "notice": "This is a product-scope release decision, not a legal opinion."
+}

@@ -1,0 +1,218 @@
+{
+  "schema_version": 1,
+  "default": "deny",
+  "files": {
+    "source_catalog.json": {
+      "public": true,
+      "basis": "ArcOfMarket source-transparency registry"
+    },
+    "sp500_changes.json": {
+      "public": true,
+      "basis": "Wikipedia CC BY-SA 4.0 with revision-level attribution"
+    },
+    "sp500_constituents.json": {
+      "public": true,
+      "basis": "Current Wikipedia cross-section under CC BY-SA 4.0"
+    },
+    "recessions.json": {
+      "public": true,
+      "basis": "NBER official month-level chronology with citation"
+    },
+    "cot_vix.json": {
+      "public": true,
+      "basis": "CFTC government public-domain data with source acknowledgement"
+    },
+    "equity_allocation.json": {
+      "public": true,
+      "basis": "Reviewed FRED series with required API notice"
+    },
+    "macro_growth.json": {
+      "public": true,
+      "basis": "Reviewed BLS and BEA series delivered by FRED"
+    },
+    "macro_prices.json": {
+      "public": true,
+      "basis": "Reviewed BLS and BEA series delivered by FRED"
+    },
+    "macro_rates.json": {
+      "public": true,
+      "basis": "Reviewed Federal Reserve series delivered by FRED"
+    },
+    "financial_stress.json": {
+      "public": true,
+      "basis": "OFR federal work with requested credit and source disclaimer"
+    },
+    "macro_credit.json": {
+      "public": true,
+      "basis": "Public chart display with source attribution"
+    },
+    "sp500_annual.json": {
+      "public": true,
+      "basis": "Derived historical chart display with source attribution"
+    },
+    "sp500_bullbear.json": {
+      "public": true,
+      "basis": "Derived historical chart display with source attribution"
+    },
+    "sp500_century.json": {
+      "public": true,
+      "basis": "Derived historical chart display with source attribution"
+    },
+    "sp500_distribution.json": {
+      "public": true,
+      "basis": "Derived historical chart display with source attribution"
+    },
+    "sp500_drawdowns.json": {
+      "public": true,
+      "basis": "Derived historical chart display with source attribution"
+    },
+    "sp500_extremes.json": {
+      "public": true,
+      "basis": "Derived historical chart display with source attribution"
+    },
+    "sp500_holding.json": {
+      "public": true,
+      "basis": "Derived historical chart display with source attribution"
+    },
+    "sp500_intrayear.json": {
+      "public": true,
+      "basis": "Derived historical chart display with source attribution"
+    },
+    "sp500_rolling5y.json": {
+      "public": true,
+      "basis": "Derived historical chart display with source attribution"
+    },
+    "sp500_rollmatrix.json": {
+      "public": true,
+      "basis": "Derived historical chart display with source attribution"
+    },
+    "sp500_seasonality.json": {
+      "public": true,
+      "basis": "Derived historical chart display with source attribution"
+    },
+    "sp500_volatility.json": {
+      "public": true,
+      "basis": "Derived volatility chart display with source attribution"
+    },
+    "sp500_total_return.json": {
+      "public": true,
+      "basis": "Derived total-return chart display with source attribution"
+    },
+    "ixic_annual.json": {
+      "public": true,
+      "basis": "Derived historical chart display with source attribution"
+    },
+    "ixic_bullbear.json": {
+      "public": true,
+      "basis": "Derived historical chart display with source attribution"
+    },
+    "ixic_century.json": {
+      "public": true,
+      "basis": "Derived historical chart display with source attribution"
+    },
+    "ixic_distribution.json": {
+      "public": true,
+      "basis": "Derived historical chart display with source attribution"
+    },
+    "ixic_drawdowns.json": {
+      "public": true,
+      "basis": "Derived historical chart display with source attribution"
+    },
+    "ixic_extremes.json": {
+      "public": true,
+      "basis": "Derived historical chart display with source attribution"
+    },
+    "ixic_holding.json": {
+      "public": true,
+      "basis": "Derived historical chart display with source attribution"
+    },
+    "ixic_intrayear.json": {
+      "public": true,
+      "basis": "Derived historical chart display with source attribution"
+    },
+    "ixic_rolling5y.json": {
+      "public": true,
+      "basis": "Derived historical chart display with source attribution"
+    },
+    "ixic_rollmatrix.json": {
+      "public": true,
+      "basis": "Derived historical chart display with source attribution"
+    },
+    "ixic_seasonality.json": {
+      "public": true,
+      "basis": "Derived historical chart display with source attribution"
+    },
+    "ixic_volatility.json": {
+      "public": true,
+      "basis": "Derived volatility chart display with source attribution"
+    },
+    "ndx_annual.json": {
+      "public": true,
+      "basis": "Derived historical chart display with source attribution"
+    },
+    "ndx_bullbear.json": {
+      "public": true,
+      "basis": "Derived historical chart display with source attribution"
+    },
+    "ndx_century.json": {
+      "public": true,
+      "basis": "Derived historical chart display with source attribution"
+    },
+    "ndx_distribution.json": {
+      "public": true,
+      "basis": "Derived historical chart display with source attribution"
+    },
+    "ndx_drawdowns.json": {
+      "public": true,
+      "basis": "Derived historical chart display with source attribution"
+    },
+    "ndx_extremes.json": {
+      "public": true,
+      "basis": "Derived historical chart display with source attribution"
+    },
+    "ndx_holding.json": {
+      "public": true,
+      "basis": "Derived historical chart display with source attribution"
+    },
+    "ndx_intrayear.json": {
+      "public": true,
+      "basis": "Derived historical chart display with source attribution"
+    },
+    "ndx_rolling5y.json": {
+      "public": true,
+      "basis": "Derived historical chart display with source attribution"
+    },
+    "ndx_rollmatrix.json": {
+      "public": true,
+      "basis": "Derived historical chart display with source attribution"
+    },
+    "ndx_seasonality.json": {
+      "public": true,
+      "basis": "Derived historical chart display with source attribution"
+    },
+    "ndx_volatility.json": {
+      "public": true,
+      "basis": "Derived volatility chart display with source attribution"
+    },
+    "ndx_valuation_proxy.json": {
+      "public": true,
+      "basis": "QQQ trailing valuation proxy with explicit methodology label"
+    },
+    "vol_family.json": {
+      "public": true,
+      "basis": "Derived volatility chart display with source attribution"
+    },
+    "breadth_pulse.json": {
+      "public": true,
+      "basis": "ArcOfMarket research output"
+    },
+    "regime_rotation.json": {
+      "public": true,
+      "basis": "ArcOfMarket research output"
+    },
+    "rs_leaders.json": {
+      "public": true,
+      "basis": "ArcOfMarket research output"
+    }
+  }
+}

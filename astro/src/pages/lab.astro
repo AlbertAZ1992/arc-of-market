@@ -1,0 +1,484 @@
+---
+import MarketProxyCharts from "@/components/MarketProxyCharts.astro";
+import SolarIcon from "@/components/SolarIcon.astro";
+import ChartDataPending from "@/components/charts/ChartDataPending.astro";
+import FinancialStressChart from "@/components/charts/FinancialStressChart.astro";
+import RegimeChart from "@/components/charts/RegimeChart.astro";
+import TradingViewHeatmap from "@/components/charts/TradingViewHeatmap.astro";
+import SiteShell from "@/layouts/SiteShell.astro";
+
+const projects = [
+  {
+    date: "2026.07",
+    icon: "database-linear",
+    label: "DATA FOUNDATION",
+    title: "数据来源目录",
+    description:
+      "把来源、有效日期、抓取时间和修订记录写进同一份目录，确保每次读数都能重新计算。",
+    metrics: [["进度", "持续更新"], ["来源", "FRED · OFR · CFTC"], ["频率", "每日"]],
+    href: "/methodology/",
+  },
+  {
+    date: "2026.08",
+    icon: "chart-2-linear",
+    label: "MARKET ARCHIVE",
+    title: "百年市场档案",
+    description:
+      "把年度回报、回撤、滚动收益和衰退区间做成可复核的长期坐标，不把回填数据伪装成实时记录。",
+    metrics: [["进度", "整理中"], ["范围", "SPX · NDX"], ["输出", "历史图表"]],
+    href: "/archive/",
+  },
+  {
+    date: "2026.08",
+    icon: "buildings-2-linear",
+    label: "INDEX STRUCTURE",
+    title: "指数的新陈代谢",
+    description:
+      "记录当前行业结构与公开的成分变更事件，同时明确它们不能替代历史逐日 point-in-time 成分。",
+    metrics: [["进度", "已上线"], ["事件", "406"], ["范围", "S&P 500"]],
+    href: "/sp500/",
+  },
+  {
+    date: "NEXT",
+    icon: "graph-new-linear",
+    label: "ARC REGIME",
+    title: "原创市场环境分类",
+    description:
+      "把价格趋势、风险偏好、利率与压力转成不可逆的环境状态，保存公式版本、阈值和每次变化。",
+    metrics: [["进度", "验证中"], ["输出", "环境状态"], ["用途", "市场描述"]],
+    href: "/methodology/",
+  },
+  {
+    date: "NEXT",
+    icon: "round-graph-linear",
+    label: "ROTATION",
+    title: "ETF 相对强度与轮动",
+    description:
+      "围绕 SPY、QQQ、VTV、VOO 与行业 ETF 计算相对强弱、趋势持续性和状态迁移，不转售原始价格。",
+    metrics: [["进度", "验证中"], ["资产", "ETF"], ["输出", "相对强度"]],
+    href: "/themes/information-technology/",
+  },
+  {
+    date: "NEXT",
+    icon: "document-text-linear",
+    label: "SIGNAL LEDGER",
+    title: "每次读数都要能对账",
+    description:
+      "保存信号落点、之后不同持有期的结果、失败样本与方法修订，避免只展示最漂亮的一段回测。",
+    metrics: [["进度", "设计中"], ["版本", "Git"], ["记录", "全部信号"]],
+    href: "/methodology/",
+  },
+] as const;
+
+const dockItems = [
+  { href: "#market-environment", label: "市场环境总览" },
+  { href: "#market-index-etfs", label: "主要指数与 ETF" },
+  { href: "#market-temperature", label: "市场温度" },
+  { href: "#market-breadth", label: "涨跌家数与宽度" },
+  { href: "#market-heatmap", label: "市值加权热力图" },
+  { href: "#top10-decades", label: "各年代市值前十" },
+  { href: "#top10-longevity", label: "头部公司寿命" },
+  { href: "#top10-leaders", label: "领跑者更替" },
+  { href: "#top10-cooccurrence", label: "共同出现次数" },
+  { href: "#top10-outcomes", label: "进入前十后的结果" },
+  { href: "#arc-regime", label: "Arc Regime" },
+  { href: "#arc-breadth-pulse", label: "Breadth Pulse" },
+  { href: "#arc-relative-strength", label: "Relative Strength Leaders" },
+  { href: "#arc-signal-ledger", label: "Signal Ledger" },
+  { href: "#arc-daily-brief", label: "Daily Brief" },
+] as const;
+---
+
+<SiteShell
+  bodyClass="lab-page"
+  description="ArcOfMarket 的数据、图表和原创指标实验记录。"
+  pageNavigation={{ current: "Arc Lab", items: dockItems }}
+  title="Lab · ArcOfMarket"
+>
+  <main class="lab">
+    <header class="lab-header">
+      <p class="eyebrow">ARC.LAB · 研究实验室</p>
+      <h1>每一项研究，<br />都留下它是怎么长出来的。</h1>
+      <p>
+        Lab 不是功能预告墙，而是研究日志。每项实验记录研究问题、使用数据、计算方法和验证结果，
+        让原创指标如何形成保持可见。
+      </p>
+    </header>
+
+    <section class="lab-timeline" aria-label="研究时间线">
+      {
+        projects.map((project, index) => (
+          <article class:list={{ reverse: index % 2 === 1 }}>
+            <div class="lab-date">{project.date}</div>
+            <div class="lab-node"><i></i></div>
+            <div class="lab-card">
+              <header>
+                <SolarIcon name={project.icon} size={26} />
+                <span>{project.label}</span>
+              </header>
+              <h2>{project.title}</h2>
+              <p>{project.description}</p>
+              <dl>
+                {project.metrics.map(([label, value]) => (
+                  <div><dt>{label}</dt><dd>{value}</dd></div>
+                ))}
+              </dl>
+              <a href={project.href}>查看当前成果 →</a>
+            </div>
+          </article>
+        ))
+      }
+    </section>
+
+    <section class="lab-chart-intro">
+      <p class="eyebrow">MARKET DESK</p>
+      <h2>从市场全景到原创指标</h2>
+      <p>
+        先建立可复核的市场底图，再计算环境、宽度、相对强弱和信号台账。
+        每一项目录都对应下面的独立组件。
+      </p>
+    </section>
+
+    <div class="lab-charts">
+      <section class="lab-component" id="market-environment">
+        <FinancialStressChart />
+      </section>
+      <section class="lab-component" id="market-index-etfs">
+        <MarketProxyCharts />
+      </section>
+      <ChartDataPending
+        description="把趋势、波动、信用压力和市场宽度标准化为同一套环境刻度。"
+        id="market-temperature"
+        source="公开市场与宏观序列 · ArcOfMarket 计算"
+        title="市场温度"
+      />
+      <ChartDataPending
+        description="观察上涨家数、下跌家数、创新高新低和均线以上股票比例。"
+        id="market-breadth"
+        source="可复核的股票横截面快照 · ArcOfMarket 计算"
+        title="涨跌家数与宽度"
+      />
+      <TradingViewHeatmap
+        dataSource="SPX500"
+        description="按当前市值和涨跌幅观察 S&P 500 横截面，点击公司可查看明细。"
+        id="market-heatmap"
+        title="市值加权热力图"
+      />
+
+      <ChartDataPending
+        description="以固定年末观察日重建不同时代的美国上市公司市值前十。"
+        id="top10-decades"
+        source="历史公司市值快照"
+        title="各年代市值前十"
+      />
+      <ChartDataPending
+        description="计算公司停留在市值前十的累计年数和连续年数。"
+        id="top10-longevity"
+        source="历史公司市值快照 · ArcOfMarket 计算"
+        title="头部公司寿命"
+      />
+      <ChartDataPending
+        description="沿时间轴展示市值领导者如何从铁路、能源、金融迁移到科技平台。"
+        id="top10-leaders"
+        source="历史公司市值快照 · ArcOfMarket 计算"
+        title="领跑者更替"
+      />
+      <ChartDataPending
+        description="统计公司在各期市值前十榜单中共同出现的次数。"
+        id="top10-cooccurrence"
+        source="历史公司市值快照 · ArcOfMarket 计算"
+        title="共同出现次数"
+      />
+      <ChartDataPending
+        description="追踪公司进入市值前十之后的一年、三年和五年结果。"
+        id="top10-outcomes"
+        source="历史公司市值与复权价格 · ArcOfMarket 计算"
+        title="进入前十后的结果"
+      />
+
+      <RegimeChart />
+      <ChartDataPending
+        description="把市场宽度的方向、速度和极端程度转成可追溯的脉冲状态。"
+        id="arc-breadth-pulse"
+        source="市场宽度快照 · ArcOfMarket 计算"
+        title="Breadth Pulse"
+      />
+      <ChartDataPending
+        description="按统一窗口比较主要指数、风格和行业 ETF 的相对强度。"
+        id="arc-relative-strength"
+        source="ETF 复权价格 · ArcOfMarket 计算"
+        title="Relative Strength Leaders"
+      />
+      <ChartDataPending
+        description="保存每次信号、公式版本、触发读数和之后不同持有期的结果。"
+        id="arc-signal-ledger"
+        source="ArcOfMarket 指标版本与历史快照"
+        title="Signal Ledger"
+      />
+      <ChartDataPending
+        description="把宏观、指数、宽度和原创状态压缩成一页可复核的每日环境简报。"
+        id="arc-daily-brief"
+        source="ArcOfMarket 数据管线与原创指标"
+        title="Daily Brief"
+      />
+    </div>
+
+    <section class="lab-note">
+      <p class="eyebrow">OPEN NOTEBOOK</p>
+      <h2>当数据不够可靠，正确答案可以是“现在不做”。</h2>
+      <p>
+        研究进度不以页面数量衡量，而以每个读数能否被未来的我们重新计算来衡量。
+        只有数据、公式和验证过程都准备好的指标，才会进入正式页面。
+      </p>
+      <a href="/methodology/">查看数据政策 →</a>
+    </section>
+  </main>
+
+  <footer class="page-footer">
+    <span>Arc Lab · Open notebook</span><span>·</span>
+    <a href="/archive/">全部图表</a>
+  </footer>
+
+</SiteShell>
+
+<style>
+  .lab {
+    padding: 2rem 2.25rem 0 3rem;
+  }
+
+  .lab-header {
+    border-bottom: 1px dotted var(--rule);
+    padding-bottom: 2.4rem;
+    text-align: center;
+  }
+
+  .lab-header h1 {
+    font-size: 2.05rem;
+    line-height: 1.25;
+    margin: 0.8rem auto;
+    max-width: 66rem;
+  }
+
+  .lab-header > p:last-child {
+    color: var(--ink-soft);
+    margin-inline: auto;
+    max-width: 44rem;
+  }
+
+  .lab-timeline {
+    margin-inline: auto;
+    max-width: 74rem;
+    padding: 4rem 0;
+  }
+
+  .lab-timeline article {
+    display: grid;
+    grid-template-columns: 1fr 4rem 1fr;
+    min-height: 19rem;
+  }
+
+  .lab-date {
+    align-self: start;
+    color: var(--main);
+    font-family: var(--font-mono);
+    font-size: 0.73rem;
+    padding-top: 1rem;
+    text-align: right;
+  }
+
+  .lab-node {
+    display: flex;
+    justify-content: center;
+    position: relative;
+  }
+
+  .lab-node::before {
+    border-left: 1px solid var(--main);
+    bottom: 0;
+    content: "";
+    left: 50%;
+    position: absolute;
+    top: 0;
+  }
+
+  .lab-node i {
+    background: var(--main);
+    border: 0.42rem solid #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 0 1px var(--main);
+    height: 1rem;
+    margin-top: 0.9rem;
+    position: relative;
+    width: 1rem;
+    z-index: 1;
+  }
+
+  .lab-card {
+    border-top: 1px dotted var(--rule);
+    padding: 0.8rem 0 2.5rem;
+  }
+
+  .lab-card > header {
+    align-items: center;
+    color: var(--main);
+    display: flex;
+    gap: 0.55rem;
+  }
+
+  .lab-card > header span {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+  }
+
+  .lab-card h2 {
+    margin: 0.8rem 0 0.6rem;
+  }
+
+  .lab-card > p {
+    color: var(--ink-soft);
+    font-size: 0.82rem;
+  }
+
+  .lab-card dl {
+    border-bottom: 1px dotted var(--rule);
+    border-top: 1px dotted var(--rule);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin: 1.2rem 0;
+  }
+
+  .lab-card dl > div {
+    border-right: 1px dotted var(--rule);
+    padding: 0.5rem;
+  }
+
+  .lab-card dl > div:last-child {
+    border-right: 0;
+  }
+
+  .lab-card dt {
+    color: var(--ink-faint);
+    font-size: 0.58rem;
+  }
+
+  .lab-card dd {
+    color: var(--main);
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    margin: 0.1rem 0 0;
+  }
+
+  .lab-card > a {
+    border-bottom: 1px dotted var(--ink-faint);
+    font-size: 0.68rem;
+  }
+
+  .lab-timeline article:not(.reverse) .lab-card {
+    grid-column: 3;
+  }
+
+  .lab-timeline article.reverse .lab-date {
+    grid-column: 3;
+    text-align: left;
+  }
+
+  .lab-timeline article.reverse .lab-node {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .lab-timeline article.reverse .lab-card {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .lab-note {
+    border-bottom: 1px dotted var(--rule);
+    border-top: 1px dotted var(--rule);
+    margin-inline: auto;
+    max-width: 52rem;
+    padding: 4rem 0;
+    text-align: center;
+  }
+
+  .lab-chart-intro {
+    border-block: 1px dotted var(--rule);
+    margin: 0 auto;
+    max-width: 74rem;
+    padding-block: 3.5rem;
+    text-align: center;
+  }
+
+  .lab-chart-intro h2 {
+    margin: 0.45rem 0 0.75rem;
+  }
+
+  .lab-chart-intro p:last-child {
+    color: var(--ink-soft);
+    margin-inline: auto;
+    max-width: 46rem;
+  }
+
+  .lab-charts {
+    margin-inline: auto;
+    max-width: 78rem;
+  }
+
+  .lab-component {
+    scroll-margin-top: 6rem;
+  }
+
+  .lab-note p:not(.eyebrow) {
+    color: var(--ink-soft);
+  }
+
+  .lab-note a {
+    border-bottom: 1px dotted var(--ink-faint);
+    font-size: 0.72rem;
+  }
+
+  @media (max-width: 700px) {
+    .lab {
+      padding: 1.3rem 1rem 0;
+    }
+
+    .lab-header {
+      padding-bottom: 2.5rem;
+    }
+
+    .lab-header h1 {
+      font-size: 1.95rem;
+    }
+
+    .lab-timeline {
+      padding: 2.5rem 0;
+    }
+
+    .lab-timeline article {
+      grid-template-columns: 2.5rem 1fr;
+      min-height: 0;
+    }
+
+    .lab-date,
+    .lab-timeline article.reverse .lab-date {
+      grid-column: 2;
+      grid-row: 1;
+      padding-bottom: 0.6rem;
+      text-align: left;
+    }
+
+    .lab-node,
+    .lab-timeline article.reverse .lab-node {
+      grid-column: 1;
+      grid-row: 1 / span 2;
+    }
+
+    .lab-card,
+    .lab-timeline article:not(.reverse) .lab-card,
+    .lab-timeline article.reverse .lab-card {
+      grid-column: 2;
+      grid-row: 2;
+      margin-bottom: 2.5rem;
+    }
+  }
+</style>

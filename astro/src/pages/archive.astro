@@ -1,0 +1,343 @@
+---
+import SiteShell from "@/layouts/SiteShell.astro";
+import { chartCount, chartGroups } from "@/lib/chart-catalog";
+---
+
+<SiteShell
+  bodyClass="archive-page"
+  description={`按市场阅读顺序浏览 ${chartCount} 个图表组件与研究入口。`}
+  title="全部图表 · ArcOfMarket"
+>
+  <main class="archive">
+    <header class="archive-header">
+      <p class="eyebrow">ARC.ARCHIVE · 全部图表</p>
+      <h1>市场图表目录</h1>
+      <p>
+        每一项目录都对应专题页里的独立组件，并按“宏观 → 指数 → 七巨头 → 行业 → 实验室”排列。
+      </p>
+    </header>
+
+    <nav aria-label="图表分类" class="archive-tabs">
+      {
+        chartGroups.map((group, index) => (
+          <a href={`#group-${group.code.toLocaleLowerCase()}`}>
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            {group.title}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="archive-search">
+      <label>
+        <span>搜索图表</span>
+        <input
+          aria-label="搜索图表"
+          data-search
+          placeholder="输入宏观、指数、板块或图表名…"
+          type="search"
+        />
+      </label>
+      <p><strong data-result-count>{chartCount}</strong> 个图表组件</p>
+    </div>
+
+    <div class="archive-groups">
+      {
+        chartGroups.map((group, groupIndex) => (
+          <section
+            class="archive-group"
+            data-group={group.title}
+            id={`group-${group.code.toLocaleLowerCase()}`}
+          >
+            <header>
+              <span>{String(groupIndex + 1).padStart(2, "0")}</span>
+              <div>
+                <p>{group.code}</p>
+                <h2>{group.title}</h2>
+                <small>{group.description}</small>
+              </div>
+              <a href={group.href}>进入专题 →</a>
+            </header>
+            <ol>
+              {group.charts.map((chart, chartIndex) => (
+                <li
+                  data-item
+                  data-searchable={`${group.title} ${chart.title} ${chart.description}`}
+                >
+                  <a href={chart.href}>
+                    <span>{String(chartIndex + 1).padStart(2, "0")}</span>
+                    <div>
+                      <h3>{chart.title}</h3>
+                      <p>{chart.description}</p>
+                    </div>
+                    <i>打开 →</i>
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </section>
+        ))
+      }
+    </div>
+
+    <p class="archive-empty" data-empty hidden>没有找到匹配的图表。</p>
+  </main>
+
+  <footer class="page-footer">
+    <span>所有目录项都对应页面里的独立组件</span><span>·</span>
+    <a href="/methodology/">查看方法论</a>
+  </footer>
+</SiteShell>
+
+<script>
+  const search = document.querySelector<HTMLInputElement>("[data-search]");
+  const resultCount = document.querySelector<HTMLElement>("[data-result-count]");
+  const empty = document.querySelector<HTMLElement>("[data-empty]");
+
+  search?.addEventListener("input", () => {
+    const query = search.value.trim().toLocaleLowerCase("zh-CN");
+    let count = 0;
+
+    document.querySelectorAll<HTMLElement>("[data-item]").forEach((item) => {
+      const matched = (item.dataset["searchable"] ?? "")
+        .toLocaleLowerCase("zh-CN")
+        .includes(query);
+      item.hidden = !matched;
+      if (matched) count += 1;
+    });
+
+    document.querySelectorAll<HTMLElement>(".archive-group").forEach((group) => {
+      group.hidden = !group.querySelector("[data-item]:not([hidden])");
+    });
+
+    if (resultCount) resultCount.textContent = String(count);
+    if (empty) empty.hidden = count !== 0;
+  });
+</script>
+
+<style>
+  .archive {
+    padding: 2rem 2.25rem 0 3rem;
+  }
+
+  .archive-header {
+    border-bottom: 1px dotted var(--rule);
+    padding-bottom: 2rem;
+  }
+
+  .archive-header h1 {
+    font-size: 2.05rem;
+    margin: 0.4rem 0 0.55rem;
+  }
+
+  .archive-header p:last-child {
+    color: var(--ink-soft);
+    font-size: 0.82rem;
+    margin: 0;
+  }
+
+  .archive-tabs {
+    border-bottom: 1px dotted var(--rule);
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .archive-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .archive-tabs a {
+    align-items: center;
+    border-right: 1px dotted var(--rule);
+    display: flex;
+    flex: 0 0 auto;
+    font-size: 0.72rem;
+    gap: 0.35rem;
+    min-height: 3.2rem;
+    padding: 0 0.9rem;
+  }
+
+  .archive-tabs span {
+    color: var(--main);
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+  }
+
+  .archive-search {
+    align-items: end;
+    display: flex;
+    justify-content: space-between;
+    padding: 1.5rem 0 2.5rem;
+  }
+
+  .archive-search label span {
+    display: none;
+  }
+
+  .archive-search input {
+    border: 1px solid var(--rule);
+    border-radius: 0;
+    min-height: 2.9rem;
+    min-width: 22rem;
+    padding: 0.6rem 0.8rem;
+  }
+
+  .archive-search input:focus {
+    border-color: var(--main);
+    outline: 1px solid var(--main);
+  }
+
+  .archive-search p {
+    color: var(--ink-faint);
+    font-size: 0.68rem;
+    margin: 0;
+  }
+
+  .archive-search strong {
+    color: var(--main);
+    font-family: var(--font-mono);
+  }
+
+  .archive-group {
+    margin-bottom: 4rem;
+    scroll-margin-top: 6rem;
+  }
+
+  .archive-group > header {
+    align-items: center;
+    border-bottom: 1px solid var(--ink);
+    display: grid;
+    gap: 0.9rem;
+    grid-template-columns: auto 1fr auto;
+    padding-bottom: 0.8rem;
+  }
+
+  .archive-group > header > span {
+    background: var(--main);
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    padding: 0.35rem 0.55rem;
+  }
+
+  .archive-group > header p {
+    color: var(--main);
+    font-family: var(--font-mono);
+    font-size: 0.56rem;
+    margin: 0;
+  }
+
+  .archive-group > header h2 {
+    font-size: 1.25rem;
+    margin: 0.1rem 0;
+  }
+
+  .archive-group > header small {
+    color: var(--ink-faint);
+    font-size: 0.68rem;
+  }
+
+  .archive-group > header > a {
+    border-bottom: 1px dotted var(--rule);
+    font-size: 0.68rem;
+  }
+
+  .archive-group ol {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .archive-group li:nth-child(odd) {
+    border-right: 1px dotted var(--rule);
+    padding-right: 1rem;
+  }
+
+  .archive-group li:nth-child(even) {
+    padding-left: 1rem;
+  }
+
+  .archive-group li > a {
+    align-items: center;
+    border-bottom: 1px dotted var(--rule);
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: auto 1fr auto;
+    min-height: 4.3rem;
+    padding: 0.65rem 0;
+  }
+
+  .archive-group li > a > span {
+    color: var(--main);
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+  }
+
+  .archive-group li h3 {
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    font-weight: 500;
+    margin: 0;
+  }
+
+  .archive-group li p {
+    color: var(--ink-faint);
+    font-size: 0.65rem;
+    margin: 0.16rem 0 0;
+  }
+
+  .archive-group li i {
+    color: var(--ink-faint);
+    font-size: 0.58rem;
+    font-style: normal;
+  }
+
+  .archive-empty {
+    border: 1px dotted var(--rule);
+    color: var(--ink-faint);
+    padding: 3rem;
+    text-align: center;
+  }
+
+  @media (max-width: 700px) {
+    .archive {
+      padding: 1.3rem 1rem 0;
+    }
+
+    .archive-tabs {
+      margin-inline: -1rem;
+      padding-left: 1rem;
+    }
+
+    .archive-search {
+      align-items: stretch;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+
+    .archive-search input {
+      min-width: 0;
+      width: 100%;
+    }
+
+    .archive-group ol {
+      display: block;
+    }
+
+    .archive-group li {
+      border-right: 0 !important;
+      padding-inline: 0 !important;
+    }
+
+    .archive-group > header {
+      grid-template-columns: auto 1fr;
+    }
+
+    .archive-group > header > a {
+      grid-column: 2;
+    }
+  }
+</style>

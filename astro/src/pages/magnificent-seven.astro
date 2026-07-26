@@ -1,0 +1,104 @@
+---
+import ChartDataPending from "@/components/charts/ChartDataPending.astro";
+import TradingViewResearchSection from "@/components/charts/TradingViewResearchSection.astro";
+import SiteShell from "@/layouts/SiteShell.astro";
+
+const dockItems = [
+  { href: "#mag7-equal-weight", label: "七巨头等权代理" },
+  { href: "#mag7-members", label: "七家公司成员分化" },
+  { href: "#mag7-market-cap-share", label: "市值占比" },
+  { href: "#mag7-cash-capex", label: "现金与资本开支" },
+  { href: "#mag7-nvda-cisco", label: "NVDA 与 1999 Cisco" },
+  { href: "#mag7-correlation", label: "七只股票相关性" },
+] as const;
+---
+
+<SiteShell
+  bodyClass="chart-page"
+  description="从七巨头整体代理、成员分化，到集中度、资本开支与相关性。"
+  pageNavigation={{ current: "七巨头", items: dockItems }}
+  title="七巨头 · ArcOfMarket"
+>
+  <header class="page-header">
+    <div class="page-header__inner">
+      <p class="eyebrow">MAGNIFICENT SEVEN</p>
+      <h1>七巨头</h1>
+      <p class="muted">
+        先看整体市场代理，再拆开七家公司，最后观察集中度、资本开支和成员相关性。
+      </p>
+    </div>
+  </header>
+
+  <main class="mag7-main">
+    <TradingViewResearchSection
+      description="MAGS 是可交易 ETF 代理；与 QQQ、SPY 对照观察头部科技组合和大盘之间的价格差异。"
+      id="mag7-equal-weight"
+      symbols={[
+        ["Roundhill Magnificent Seven ETF", "NASDAQ:MAGS|1D"],
+        ["Invesco QQQ", "NASDAQ:QQQ|1D"],
+        ["SPDR S&P 500 ETF", "AMEX:SPY|1D"],
+      ]}
+      title="Magnificent 7 等权代理"
+    />
+    <TradingViewResearchSection
+      description="逐一观察七家公司各自的价格路径，不把这一面板当成自建等权指数。"
+      id="mag7-members"
+      symbols={[
+        ["Apple", "NASDAQ:AAPL|1D"],
+        ["Microsoft", "NASDAQ:MSFT|1D"],
+        ["Nvidia", "NASDAQ:NVDA|1D"],
+        ["Amazon", "NASDAQ:AMZN|1D"],
+        ["Alphabet", "NASDAQ:GOOGL|1D"],
+        ["Meta", "NASDAQ:META|1D"],
+        ["Tesla", "NASDAQ:TSLA|1D"],
+      ]}
+      title="七家公司成员分化"
+    />
+    <ChartDataPending
+      description="按统一观察日期计算七家公司合计市值占 S&P 500 总市值的比例。"
+      id="mag7-market-cap-share"
+      source="公司市值与 S&P 500 成分权重 · ArcOfMarket 计算"
+      title="市值占比"
+    />
+    <ChartDataPending
+      description="比较七家公司经营现金流、自由现金流和资本开支的年度变化。"
+      id="mag7-cash-capex"
+      source="SEC 公司申报文件 · ArcOfMarket 计算"
+      title="现金与资本开支"
+    />
+    <TradingViewResearchSection
+      description="在同一价格组件里查看 Nvidia 与 Cisco 的长期路径；跨时代比较需结合估值、盈利和拆股。"
+      id="mag7-nvda-cisco"
+      symbols={[
+        ["Nvidia", "NASDAQ:NVDA|1D"],
+        ["Cisco", "NASDAQ:CSCO|1D"],
+      ]}
+      title="NVDA 与 1999 Cisco"
+    />
+    <ChartDataPending
+      description="用滚动窗口展示七家公司日收益率相关性的中位数和区间。"
+      id="mag7-correlation"
+      source="七家公司复权价格 · ArcOfMarket 计算"
+      title="七只股票相关性"
+    />
+  </main>
+
+  <footer class="page-footer">
+    <a href="/archive/">全部图表</a><span>·</span>
+    <a href="/methodology/">方法论</a><span>·</span>
+    <span>仅供信息与教育</span>
+  </footer>
+
+</SiteShell>
+
+<style>
+  .mag7-main {
+    padding: 0 2.25rem 4.5rem 3rem;
+  }
+
+  @media (max-width: 900px) {
+    .mag7-main {
+      padding: 0 1rem 3.5rem;
+    }
+  }
+</style>

@@ -1,0 +1,108 @@
+---
+import IndexResearchCharts from "@/components/charts/IndexResearchCharts.astro";
+import TradingViewSymbolOverview from "@/components/TradingViewSymbolOverview.astro";
+import SiteShell from "@/layouts/SiteShell.astro";
+
+const dockItems = [
+  { href: "#nasdaq-price-proxy", label: "纳斯达克市场代理" },
+  { href: "#ixic-century", label: "综合指数长期价格" },
+  { href: "#ixic-annual", label: "综合指数年度回报" },
+  { href: "#ixic-bullbear", label: "综合指数牛熊周期" },
+  { href: "#ixic-extremes", label: "综合指数极端交易日" },
+  { href: "#ixic-distribution", label: "综合指数年度分布" },
+  { href: "#ixic-holding", label: "综合指数持有期结果" },
+  { href: "#ixic-rollmatrix", label: "综合指数多周期回报" },
+  { href: "#ixic-rolling5y", label: "综合指数五年回报" },
+  { href: "#ixic-intrayear", label: "综合指数年内回撤" },
+  { href: "#ixic-seasonality", label: "综合指数月份季节性" },
+  { href: "#ixic-drawdowns", label: "综合指数历史回撤" },
+  { href: "#ixic-volatility", label: "综合指数实现波动" },
+  { href: "#ndx-century", label: "Nasdaq-100 长期价格" },
+  { href: "#ndx-annual", label: "Nasdaq-100 年度回报" },
+  { href: "#ndx-bullbear", label: "Nasdaq-100 牛熊周期" },
+  { href: "#ndx-extremes", label: "Nasdaq-100 极端交易日" },
+  { href: "#ndx-distribution", label: "Nasdaq-100 年度分布" },
+  { href: "#ndx-holding", label: "Nasdaq-100 持有期结果" },
+  { href: "#ndx-rollmatrix", label: "Nasdaq-100 多周期回报" },
+  { href: "#ndx-rolling5y", label: "Nasdaq-100 五年回报" },
+  { href: "#ndx-intrayear", label: "Nasdaq-100 年内回撤" },
+  { href: "#ndx-seasonality", label: "Nasdaq-100 月份季节性" },
+  { href: "#ndx-drawdowns", label: "Nasdaq-100 历史回撤" },
+  { href: "#ndx-volatility", label: "Nasdaq-100 实现波动" },
+  { href: "#ndx-cross-section", label: "头部持仓与权重" },
+  { href: "#ndx-dynamic-pe", label: "动态估值代理" },
+] as const;
+---
+
+<SiteShell
+  bodyClass="chart-page"
+  description="从纳斯达克综合指数长期历史，到纳斯达克 100 回报、回撤、波动与集中度。"
+  pageNavigation={{ current: "纳斯达克", items: dockItems }}
+  title="纳斯达克市场编年史 · ArcOfMarket"
+>
+  <header class="page-header">
+    <div class="page-header__inner">
+      <p class="eyebrow">NASDAQ · GROWTH</p>
+      <h1>纳斯达克</h1>
+      <p class="muted">先看半个世纪的成长路径，再拆解年度回报、回撤、波动和头部权重。</p>
+    </div>
+  </header>
+
+  <main class="nasdaq-main">
+    <section class="proxy-section" id="nasdaq-price-proxy">
+      <header>
+        <p class="eyebrow">CURRENT PRICE VIEW</p>
+        <h2>纳斯达克市场代理</h2>
+        <p>用 QQQ、QQQM 与 ONEQ 比较大型成长和纳斯达克综合市场的价格路径。</p>
+      </header>
+      <TradingViewSymbolOverview
+        label="纳斯达克市场代理"
+        symbols={[
+          ["Invesco QQQ", "NASDAQ:QQQ|1D"],
+          ["Invesco QQQM", "NASDAQ:QQQM|1D"],
+          ["Fidelity Nasdaq Composite ETF", "NASDAQ:ONEQ|1D"],
+        ]}
+      />
+    </section>
+    <IndexResearchCharts index="ndx" />
+  </main>
+
+  <footer class="page-footer">
+    <a href="/archive/">全部图表</a><span>·</span>
+    <a href="/methodology/">方法论</a><span>·</span>
+    <span>仅供信息与教育</span>
+  </footer>
+
+</SiteShell>
+
+<style>
+  .nasdaq-main {
+    padding: 0 2.25rem 4.5rem 3rem;
+  }
+
+  .proxy-section {
+    border-bottom: 1px dotted var(--rule);
+    padding-block: 3.5rem;
+    scroll-margin-top: 6rem;
+  }
+
+  .proxy-section > header {
+    margin-bottom: 1.35rem;
+    max-width: 48rem;
+  }
+
+  .proxy-section h2 {
+    margin: 0.35rem 0 0.6rem;
+  }
+
+  .proxy-section header > p:last-child {
+    color: var(--ink-soft);
+    font-size: 0.8rem;
+  }
+
+  @media (max-width: 900px) {
+    .nasdaq-main {
+      padding: 0 1rem 3.5rem;
+    }
+  }
+</style>

@@ -1,0 +1,87 @@
+---
+import EditorialPage from "../layouts/EditorialPage.astro";
+---
+
+<EditorialPage
+  title="方法论与数据政策"
+  eyebrow="METHODOLOGY · PROVENANCE · REVISION"
+  description="ArcOfMarket 如何选择数据、解释指数、计算原创指标，并让每个公开读数可追溯。"
+>
+  <section>
+    <h2>先说产品是什么</h2>
+    <p>
+      市场档案、历史图表、数据来源和方法论免费开放。未来收费内容限于 ArcOfMarket
+      独立定义的指标、市场环境分类、版本化读数和解释服务。我们不把第三方原始数据包装后出售，
+      也不提供可替代上游数据商的下载接口。
+    </p>
+    <p>
+      “免费图表”与“付费原创指标”分层，不改变上游许可要求。每个输入仍须允许相应的公开展示、
+      商业服务器使用或衍生数据用途。
+    </p>
+  </section>
+
+  <section>
+    <p class="faint">S&P 500 · HOW THE INDEX IS ACTUALLY BUILT</p>
+    <h2>S&P 500 不是简单的市值前 500 名</h2>
+    <p>
+      按 S&P Dow Jones Indices 当前公开方法，S&P 500 用于衡量美国大盘股板块，由指数委员会
+      从合资格的美国股票范围中选择，并按自由流通市值加权。候选公司还要满足注册地、上市市场、
+      证券类型、自由流通比例、流动性、规模和财务可行性等条件。
+    </p>
+    <p>
+      选股由指数委员会酌情决定，并考虑行业代表性；指数没有按固定年度一次性重构，而会因并购、
+      退市、重组和市场变化按需调整。因此成分调入调出记录的是指数如何持续代表实体经济，
+      不是一个只按市值机械排序的榜单。
+    </p>
+    <p class="faint">
+      权威定义与会变化的门槛以
+      <a href="https://www.spglobal.com/spdji/en/documents/methodologies/methodology-sp-us-indices.pdf">
+        S&P U.S. Indices Methodology
+      </a>
+      为准。S&P、S&P 500 及相关标识属于其权利人；ArcOfMarket 未获其认可或认证。
+    </p>
+  </section>
+
+  <section>
+    <h2>四层数据架构</h2>
+    <ol>
+      <li>原始事实层：SEC、CFTC、原始政府机构和经授权的数据供应商。</li>
+      <li>标准化层：统一日期、单位、标识符、修订和 point-in-time 语义。</li>
+      <li>公开图表层：仅同步进入默认拒绝白名单的数据文件。</li>
+      <li>原创指标层：保存公式版本、输入许可范围、有效日期和不可逆衍生输出。</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>每张图必须回答六件事</h2>
+    <p><code>Source · As of · Retrieved at · Method · License/Terms · Revision</code></p>
+    <p>
+      如果数据陈旧、缺失或尚未获公开权利，页面应显示降级状态或保持空值，而不是用另一个近似
+      指标冒充。Forward PE 尤其不能由历史 EPS 趋势外推后改名得到。
+    </p>
+  </section>
+
+  <section>
+    <h2>原创指标如何收费</h2>
+    <p>
+      ArcOfMarket 可以对自己的公式、阈值、环境分类、版本化读数和解释服务收费，前提是输入合同
+      允许商业使用和相应的衍生输出。付费用户得到的是不可逆的原创读数与解释，不是第三方原始
+      价格、指数权重或一致预期明细。
+    </p>
+    <p>
+      指标只描述市场环境，不提供针对个人情况的投资建议，不保证收益，也不隐藏失败样本或历史
+      修订。
+    </p>
+  </section>
+
+  <section>
+    <h2>更新、修订与审计</h2>
+    <ul>
+      <li>日频与周频任务分开运行，数据失败不被静默吞掉。</li>
+      <li>核心失败阻断发布；可选源缺失保留旧值或明确显示空值。</li>
+      <li>数据文件进入质量审计和内容哈希链。</li>
+      <li>历史回填、事后修订和上线后的前向记录分开标记。</li>
+      <li>公开文件使用显式白名单，不以“抓得到”作为发布依据。</li>
+    </ul>
+  </section>
+</EditorialPage>

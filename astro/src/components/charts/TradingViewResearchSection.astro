@@ -1,0 +1,52 @@
+---
+import TradingViewSymbolOverview from "@/components/TradingViewSymbolOverview.astro";
+import type { SymbolDefinition } from "@/lib/market-themes";
+
+type Props = {
+  description: string;
+  id: string;
+  symbols: readonly SymbolDefinition[];
+  title: string;
+};
+
+const { description, id, symbols, title } = Astro.props;
+---
+
+<section class="research-section" id={id}>
+  <header>
+    <p class="eyebrow">MARKET COMPARISON</p>
+    <h2>{title}</h2>
+    <p>{description}</p>
+  </header>
+  <TradingViewSymbolOverview label={title} symbols={symbols} />
+  <footer>来源：TradingView 官方行情组件</footer>
+</section>
+
+<style>
+  .research-section {
+    border-bottom: 1px dotted var(--rule);
+    padding-block: 3.5rem;
+    scroll-margin-top: 6rem;
+  }
+
+  .research-section > header {
+    margin-bottom: 1.35rem;
+    max-width: 48rem;
+  }
+
+  .research-section h2 {
+    margin: 0.35rem 0 0.6rem;
+  }
+
+  .research-section header > p:last-child {
+    color: var(--ink-soft);
+    font-size: 0.8rem;
+  }
+
+  .research-section footer {
+    color: var(--ink-faint);
+    font-size: 0.62rem;
+    padding-top: 0.75rem;
+    text-align: right;
+  }
+</style>

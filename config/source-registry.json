@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "policy": {
+    "default_publication": "deny",
+    "note": "Free access does not make a commercial product non-commercial. Each dataset must have an approved public-use basis before frontend synchronization."
+  },
+  "sources": [
+    {
+      "id": "arc-methodology",
+      "name": "ArcOfMarket original methodology",
+      "url": "/methodology",
+      "role": "Original indicators, transformations, and commentary",
+      "public_status": "approved",
+      "required_notice": "ArcOfMarket original methodology; informational only, not investment advice."
+    },
+    {
+      "id": "wikipedia-sp500",
+      "name": "Wikipedia contributors — List of S&P 500 companies",
+      "url": "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies",
+      "role": "Current constituents and historical addition/removal events",
+      "public_status": "approved-with-attribution",
+      "terms_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "required_notice": "Adapted from Wikipedia contributors under CC BY-SA 4.0; changes are identified and the source revision is retained."
+    },
+    {
+      "id": "sec-edgar",
+      "name": "U.S. SEC EDGAR",
+      "url": "https://www.sec.gov/edgar",
+      "role": "Form 4, 13F, and company filings",
+      "public_status": "approved-with-fair-access",
+      "terms_url": "https://www.sec.gov/about/developer-resources",
+      "required_notice": "Source: U.S. SEC EDGAR. Automated requests declare ArcOfMarket and a monitored contact email and remain below 10 requests per second."
+    },
+    {
+      "id": "fred",
+      "name": "Federal Reserve Economic Data (FRED)",
+      "url": "https://fred.stlouisfed.org/",
+      "role": "Macroeconomic series delivery",
+      "public_status": "approved-with-attribution",
+      "terms_url": "https://fred.stlouisfed.org/docs/api/terms_of_use.html",
+      "required_notice": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
+    },
+    {
+      "id": "cftc",
+      "name": "U.S. Commodity Futures Trading Commission",
+      "url": "https://www.cftc.gov/MarketReports/CommitmentsofTraders/index.htm",
+      "role": "Commitments of Traders reports",
+      "public_status": "approved-with-attribution",
+      "terms_url": "https://www.cftc.gov/WebPolicy/index.htm",
+      "required_notice": "Source: U.S. CFTC. Derived classifications and calculations are ArcOfMarket's."
+    },
+    {
+      "id": "nber",
+      "name": "National Bureau of Economic Research",
+      "url": "https://www.nber.org/research/data/us-business-cycle-expansions-and-contractions",
+      "role": "U.S. business-cycle dates",
+      "public_status": "approved-with-attribution",
+      "terms_url": "https://www.nber.org/research/business-cycle-dating",
+      "required_notice": "Source: NBER Business Cycle Dating Committee."
+    },
+    {
+      "id": "ofr",
+      "name": "Office of Financial Research",
+      "url": "https://www.financialresearch.gov/financial-stress-index/",
+      "role": "Daily OFR Financial Stress Index and category contributions",
+      "public_status": "approved-with-attribution",
+      "terms_url": "https://www.financialresearch.gov/legal-notices/",
+      "required_notice": "Source: Office of Financial Research, “OFR Financial Stress Index,” refreshed daily. ArcOfMarket is not endorsed by the OFR or U.S. Treasury."
+    },
+    {
+      "id": "yahoo-finance",
+      "name": "Yahoo Finance via yfinance",
+      "url": "https://finance.yahoo.com/",
+      "role": "Research price history and ETF proxies",
+      "public_status": "internal-only",
+      "terms_url": "https://ranaroussi.github.io/yfinance/",
+      "required_notice": "Research-only input pending a commercial display and derived-data license."
+    },
+    {
+      "id": "sp-dji",
+      "name": "S&P Dow Jones Indices",
+      "url": "https://www.spglobal.com/spdji/",
+      "role": "S&P index levels, total return, constituents, and index earnings",
+      "public_status": "license-required",
+      "terms_url": "https://www.spglobal.com/spdji/en/about-us/data-index-licensing/",
+      "required_notice": "Do not publicly distribute S&P index data until written display and derived-data rights are recorded."
+    },
+    {
+      "id": "cboe",
+      "name": "Cboe Global Markets",
+      "url": "https://www.cboe.com/tradable_products/vix/vix_historical_data/",
+      "role": "VIX-family and SKEW history",
+      "public_status": "license-required",
+      "terms_url": "https://datashop.cboe.com/data-policies",
+      "required_notice": "Internal research pending confirmation of digital-media and derived-data rights."
+    },
+    {
+      "id": "nasdaq-index-data",
+      "name": "Nasdaq Global Index Data Services",
+      "url": "https://indexes.nasdaqomx.com/",
+      "role": "Nasdaq Composite and Nasdaq-100 index values",
+      "public_status": "license-required",
+      "required_notice": "Do not publicly display or commercialize official Nasdaq index values until the applicable index-data rights are recorded."
+    },
+    {
+      "id": "ice-data-indices",
+      "name": "ICE Data Indices",
+      "url": "https://www.ice.com/market-data/indices",
+      "role": "ICE BofA credit spread series delivered through FRED",
+      "public_status": "internal-only",
+      "required_notice": "Keep ICE-owned credit series internal until written commercial display and derived-output rights are recorded."
+    }
+  ]
+}

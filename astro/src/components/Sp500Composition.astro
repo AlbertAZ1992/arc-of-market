@@ -1,0 +1,403 @@
+---
+import datasetJson from "../../../data/sp500_constituents.json";
+
+type Sector = {
+  sector: string;
+  count: number;
+};
+
+type Constituent = {
+  ticker: string;
+  name: string;
+  sector: string;
+  sub: string;
+  added: string | null;
+};
+
+type ConstituentsDataset = {
+  meta: {
+    observed_at: string;
+    caveat: string;
+    source: {
+      revision: {
+        id: number;
+        url: string;
+      };
+    };
+    license: {
+      url: string;
+      changes_made: string;
+    };
+  };
+  rows: Constituent[];
+  sectors: Sector[];
+};
+
+const dataset = datasetJson as ConstituentsDataset;
+const initialRows = 80;
+const sectorLabels: Record<string, string> = {
+  "Communication Services": "通信服务",
+  "Consumer Discretionary": "可选消费",
+  "Consumer Staples": "必需消费",
+  Energy: "能源",
+  Financials: "金融",
+  "Health Care": "医疗保健",
+  Industrials: "工业",
+  "Information Technology": "信息科技",
+  Materials: "原材料",
+  "Real Estate": "房地产",
+  Utilities: "公用事业",
+};
+const sectorColors = [
+  "#9a3b2e",
+  "#4a7a4a",
+  "#6b8e9e",
+  "#c4a35a",
+  "#7a6a8e",
+  "#b8654f",
+  "#56756e",
+  "#a97845",
+  "#5f7294",
+  "#8a6d61",
+  "#71845b",
+];
+const maxCount = Math.max(...dataset.sectors.map((sector) => sector.count));
+---
+
+<section class="composition" aria-labelledby="composition-title">
+  <header class="measure">
+    <p class="faint">S&P 500 · CURRENT CROSS-SECTION</p>
+    <h2 id="composition-title">五百家公司现在分布在哪里</h2>
+    <p class="muted">
+      每个圆点代表当前截面中的一个证券，横条按证券数量计算。
+      这张图不是指数权重，也不能用来重建过去某一天的成分股。
+    </p>
+  </header>
+
+  <div class="sector-map measure-wide">
+    {
+      dataset.sectors.map((sector, index) => {
+        const share = (sector.count / dataset.rows.length) * 100;
+        const width = (sector.count / maxCount) * 100;
+        const color = sectorColors[index] ?? "#8a8074";
+        return (
+          <article
+            class="sector-row"
+            style={`--sector-color:${color};--sector-width:${width}%`}
+          >
+            <div class="sector-row__heading">
+              <div>
+                <strong>{sectorLabels[sector.sector] ?? sector.sector}</strong>
+                <span>{sector.sector}</span>
+              </div>
+              <p>
+                {sector.count} 个 · {share.toFixed(1)}%
+              </p>
+            </div>
+            <div class="sector-row__bar" aria-hidden="true">
+              <span />
+            </div>
+            <div class="sector-row__dots" aria-hidden="true">
+              {Array.from({ length: sector.count }, () => <i />)}
+            </div>
+          </article>
+        );
+      })
+    }
+  </div>
+
+  <p class="composition__note faint measure">
+    当前共 {dataset.rows.length} 个证券；公司数量可能少于证券数量。观察日期
+    {dataset.meta.observed_at}。来源：
+    <a href={dataset.meta.source.revision.url}>
+      Wikipedia 固定版本 {dataset.meta.source.revision.id}
+    </a>
+    · <a href={dataset.meta.license.url}>CC BY-SA 4.0</a>
+    · {dataset.meta.license.changes_made}
+  </p>
+</section>
+
+<section class="directory" aria-labelledby="directory-title">
+  <header class="directory__heading">
+    <div>
+      <p class="faint">CURRENT CONSTITUENTS</p>
+      <h2 id="directory-title">当前成分目录</h2>
+      <p class="muted">
+        可按代码、公司、行业和子行业搜索。加入日期为空不等于刚加入，也不推断缺失日期。
+      </p>
+    </div>
+    <a class="download" href="/data/sp500_constituents.json" download>下载 JSON</a>
+  </header>
+
+  <div class="directory__controls">
+    <label>
+      <span class="faint">搜索</span>
+      <input data-constituent-search type="search" placeholder="例如 NVDA、Semiconductors" />
+    </label>
+    <label>
+      <span class="faint">行业</span>
+      <select data-sector-filter>
+        <option value="">全部行业</option>
+        {
+          dataset.sectors.map((sector) => (
+            <option value={sector.sector}>{sectorLabels[sector.sector] ?? sector.sector}</option>
+          ))
+        }
+      </select>
+    </label>
+    <label>
+      <span class="faint">范围</span>
+      <select data-constituent-range>
+        <option value={initialRows}>前 {initialRows} 个</option>
+        <option value="all">全部 {dataset.rows.length} 个</option>
+      </select>
+    </label>
+    <p class="faint directory__count" data-constituent-count aria-live="polite">
+      显示 {initialRows} / {dataset.rows.length}
+    </p>
+  </div>
+
+  <div class="directory__scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>代码</th>
+          <th>公司</th>
+          <th>行业</th>
+          <th>子行业</th>
+          <th>加入日期</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          dataset.rows.map((row, index) => (
+            <tr
+              data-constituent-row
+              data-index={index}
+              data-sector={row.sector}
+              data-search={`${row.ticker} ${row.name} ${row.sector} ${row.sub}`.toLocaleLowerCase()}
+              hidden={index >= initialRows}
+            >
+              <td>
+                <strong>{row.ticker}</strong>
+              </td>
+              <td>{row.name}</td>
+              <td>{sectorLabels[row.sector] ?? row.sector}</td>
+              <td>{row.sub}</td>
+              <td>{row.added ?? "—"}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<script>
+  const search = document.querySelector<HTMLInputElement>("[data-constituent-search]");
+  const sector = document.querySelector<HTMLSelectElement>("[data-sector-filter]");
+  const range = document.querySelector<HTMLSelectElement>("[data-constituent-range]");
+  const count = document.querySelector<HTMLElement>("[data-constituent-count]");
+  const rows = Array.from(document.querySelectorAll<HTMLElement>("[data-constituent-row]"));
+
+  function updateConstituents() {
+    const query = search?.value.trim().toLocaleLowerCase() ?? "";
+    const selectedSector = sector?.value ?? "";
+    const limit = range?.value === "all" ? Number.POSITIVE_INFINITY : Number(range?.value ?? 80);
+    const filtering = Boolean(query || selectedSector);
+    let visible = 0;
+    rows.forEach((row) => {
+      const matchesQuery = !query || (row.dataset["search"] ?? "").includes(query);
+      const matchesSector = !selectedSector || row.dataset["sector"] === selectedSector;
+      const withinRange = filtering || Number(row.dataset["index"]) < limit;
+      row.hidden = !(matchesQuery && matchesSector && withinRange);
+      if (!row.hidden) visible += 1;
+    });
+    if (count) count.textContent = `显示 ${visible} / ${rows.length}`;
+  }
+
+  search?.addEventListener("input", updateConstituents);
+  sector?.addEventListener("change", updateConstituents);
+  range?.addEventListener("change", updateConstituents);
+</script>
+
+<style>
+  .composition,
+  .directory {
+    margin: var(--space-section) auto;
+    max-width: var(--measure-wide);
+  }
+
+  .composition header h2,
+  .directory__heading h2 {
+    margin-block: 0.25rem 0.75rem;
+  }
+
+  .measure-wide {
+    margin-inline: auto;
+    max-width: var(--measure-wide);
+  }
+
+  .sector-map {
+    border-top: 1px solid var(--rule);
+    margin-top: 2.5rem;
+  }
+
+  .sector-row {
+    border-bottom: 1px solid var(--rule);
+    display: grid;
+    gap: 0.7rem;
+    padding-block: 1rem;
+  }
+
+  .sector-row__heading {
+    align-items: baseline;
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+  }
+
+  .sector-row__heading div {
+    align-items: baseline;
+    display: flex;
+    gap: 0.7rem;
+  }
+
+  .sector-row__heading span,
+  .sector-row__heading p {
+    color: var(--ink-faint);
+    font-size: 0.8rem;
+    margin: 0;
+  }
+
+  .sector-row__bar {
+    background: var(--paper-deep);
+    height: 0.35rem;
+  }
+
+  .sector-row__bar span {
+    background: var(--sector-color);
+    display: block;
+    height: 100%;
+    width: var(--sector-width);
+  }
+
+  .sector-row__dots {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.22rem;
+  }
+
+  .sector-row__dots i {
+    background: var(--sector-color);
+    border-radius: 50%;
+    display: block;
+    height: 0.4rem;
+    width: 0.4rem;
+  }
+
+  .composition__note {
+    margin-top: 1rem;
+  }
+
+  .directory__heading {
+    align-items: end;
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .download {
+    border: 1px solid var(--rule);
+    padding: 0.65rem 0.9rem;
+  }
+
+  .directory__controls {
+    align-items: end;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 2rem 0 1rem;
+  }
+
+  .directory__controls label {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .directory__controls input,
+  .directory__controls select {
+    background: var(--paper-raised);
+    border: 1px solid var(--rule);
+    border-radius: 0;
+    color: var(--ink);
+    font: inherit;
+    min-height: 2.8rem;
+    padding: 0.55rem 0.7rem;
+  }
+
+  .directory__controls input {
+    min-width: min(22rem, 80vw);
+  }
+
+  .directory__count {
+    margin: 0 0 0.65rem auto;
+  }
+
+  .directory__scroll {
+    overflow-x: auto;
+  }
+
+  table {
+    border-collapse: collapse;
+    min-width: 52rem;
+    width: 100%;
+  }
+
+  th,
+  td {
+    border-bottom: 1px solid var(--rule);
+    padding: 0.7rem 0.6rem;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  th {
+    color: var(--ink-faint);
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  td {
+    color: var(--ink-soft);
+    font-size: 0.88rem;
+  }
+
+  td strong {
+    color: var(--ink);
+    font-family: var(--font-serif);
+    font-size: 1rem;
+  }
+
+  @media (max-width: 720px) {
+    .sector-row__heading div {
+      align-items: start;
+      display: grid;
+      gap: 0;
+    }
+
+    .directory__heading {
+      align-items: start;
+      grid-template-columns: 1fr;
+    }
+
+    .download {
+      justify-self: start;
+    }
+
+    .directory__count {
+      margin-left: 0;
+    }
+  }
+</style>

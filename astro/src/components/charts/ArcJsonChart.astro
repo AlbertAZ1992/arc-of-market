@@ -1,0 +1,121 @@
+---
+import type { ArcChartSpec } from "@/lib/arc-chart-types";
+
+type Props = ArcChartSpec & {
+  eyebrow?: string;
+  note?: string;
+};
+
+const {
+  dataPath,
+  description,
+  eyebrow = "HISTORICAL VIEW",
+  id,
+  kind,
+  note,
+  scaleType,
+  series,
+  source,
+  title,
+  valueKey,
+  valueLabel,
+  yUnit,
+} = Astro.props;
+---
+
+<section class="arc-chart-section" id={id}>
+  <header>
+    <p class="eyebrow">{eyebrow}</p>
+    <h2>{title}</h2>
+    <p>{description}</p>
+  </header>
+  <div
+    aria-label={`${title}图表`}
+    class="arc-json-chart"
+    data-arc-json-chart
+    data-data-path={dataPath}
+    data-kind={kind}
+    data-scale-type={scaleType}
+    data-series={series ? JSON.stringify(series) : undefined}
+    data-value-key={valueKey}
+    data-value-label={valueLabel}
+    data-y-unit={yUnit}
+    role="img"
+  >
+    <p data-chart-status>正在读取图表数据…</p>
+  </div>
+  <footer>
+    <span>来源：{source}</span>
+    {note && <span>{note}</span>}
+  </footer>
+</section>
+
+<script>
+  import { bootArcJsonCharts } from "@/lib/arc-json-chart";
+
+  bootArcJsonCharts();
+</script>
+
+<style>
+  .arc-chart-section {
+    border-bottom: 1px dotted var(--rule);
+    scroll-margin-top: 6rem;
+    padding-block: 3.5rem;
+  }
+
+  .arc-chart-section > header {
+    margin-bottom: 1.35rem;
+    max-width: 48rem;
+  }
+
+  .arc-chart-section h2 {
+    margin: 0.35rem 0 0.6rem;
+  }
+
+  .arc-chart-section header > p:last-child {
+    color: var(--ink-soft);
+    font-size: 0.8rem;
+  }
+
+  .arc-json-chart {
+    height: 28rem;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .arc-json-chart [data-chart-status] {
+    align-items: center;
+    border-block: 1px dotted var(--rule);
+    color: var(--ink-faint);
+    display: flex;
+    font-size: 0.72rem;
+    height: 100%;
+    justify-content: center;
+  }
+
+  .arc-chart-section footer {
+    border-top: 1px dotted var(--rule);
+    color: var(--ink-faint);
+    display: flex;
+    font-size: 0.62rem;
+    gap: 1rem;
+    justify-content: space-between;
+    padding-top: 0.75rem;
+  }
+
+  @media (max-width: 640px) {
+    .arc-chart-section {
+      padding-block: 2.6rem;
+    }
+
+    .arc-json-chart {
+      height: 23rem;
+    }
+
+    .arc-chart-section footer {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+  }
+</style>

@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "default": "deny",
+  "files": {
+    "source_catalog.json": {
+      "subscriber": true,
+      "basis": "ArcOfMarket source-transparency registry"
+    },
+    "sp500_changes.json": {
+      "subscriber": true,
+      "basis": "Public CC BY-SA 4.0 dataset also available to subscribers"
+    },
+    "sp500_constituents.json": {
+      "subscriber": true,
+      "basis": "Public current cross-section also available to subscribers"
+    },
+    "recessions.json": {
+      "subscriber": true,
+      "basis": "Public NBER chronology also available to subscribers"
+    },
+    "cot_vix.json": {
+      "subscriber": true,
+      "basis": "Public CFTC facts; paid value is ArcOfMarket interpretation"
+    },
+    "equity_allocation.json": {
+      "subscriber": true,
+      "basis": "Public macro input; paid value is ArcOfMarket interpretation"
+    },
+    "macro_growth.json": {
+      "subscriber": true,
+      "basis": "Public macro input; latest revised values are excluded from backtests"
+    },
+    "macro_prices.json": {
+      "subscriber": true,
+      "basis": "Public macro input; latest revised values are excluded from backtests"
+    },
+    "macro_rates.json": {
+      "subscriber": true,
+      "basis": "Public macro input; latest revised values are excluded from backtests"
+    },
+    "financial_stress.json": {
+      "subscriber": true,
+      "basis": "Public OFR stress input; paid value is ArcOfMarket interpretation"
+    }
+  }
+}

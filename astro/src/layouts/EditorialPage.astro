@@ -1,0 +1,55 @@
+---
+import SiteShell from "@/layouts/SiteShell.astro";
+
+type Props = {
+  title: string;
+  description: string;
+  eyebrow: string;
+};
+
+const { title, description, eyebrow } = Astro.props;
+---
+
+<SiteShell description={description} title={`${title} · ArcOfMarket`}>
+  <header class="page-header">
+    <div class="page-header__inner">
+      <p class="eyebrow">{eyebrow}</p>
+      <h1>{title}</h1>
+      <p class="muted">{description}</p>
+      <nav aria-label="文档导航">
+        <a href="/methodology/">方法论</a>
+        <a href="/terms/">服务条款</a>
+        <a href="/#sources-title">数据来源</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="editorial-main measure">
+    <slot />
+  </main>
+
+  <footer class="page-footer">
+    <a href="/">返回市场档案</a>
+    <span>·</span>
+    <span>仅供信息与教育，不构成投资建议</span>
+  </footer>
+</SiteShell>
+
+<style>
+  .editorial-main {
+    padding: 2.3rem 1rem 0;
+  }
+
+  .editorial-main :global(section) {
+    border-top: 1px dotted var(--rule);
+    padding-block: 1.5rem 2.3rem;
+  }
+
+  .editorial-main :global(section:first-child) {
+    border-top: 0;
+  }
+
+  .editorial-main :global(li) {
+    margin-block: 0.45rem;
+  }
+</style>

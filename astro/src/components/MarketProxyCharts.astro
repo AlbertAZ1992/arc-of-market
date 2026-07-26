@@ -1,0 +1,144 @@
+---
+import TradingViewSymbolOverview from "./TradingViewSymbolOverview.astro";
+import { marketThemes } from "../lib/market-themes";
+
+const marketProxies = [
+  ["SPDR S&P 500 ETF", "AMEX:SPY|1D"],
+  ["Invesco QQQ", "NASDAQ:QQQ|1D"],
+  ["Vanguard S&P 500 ETF", "AMEX:VOO|1D"],
+  ["Vanguard Value ETF", "AMEX:VTV|1D"],
+] as const;
+
+const sectorProxies = [
+  ["科技 XLK", "AMEX:XLK|1D"],
+  ["通信 XLC", "AMEX:XLC|1D"],
+  ["可选消费 XLY", "AMEX:XLY|1D"],
+  ["必需消费 XLP", "AMEX:XLP|1D"],
+  ["能源 XLE", "AMEX:XLE|1D"],
+  ["金融 XLF", "AMEX:XLF|1D"],
+  ["医疗 XLV", "AMEX:XLV|1D"],
+  ["工业 XLI", "AMEX:XLI|1D"],
+  ["原材料 XLB", "AMEX:XLB|1D"],
+  ["房地产 XLRE", "AMEX:XLRE|1D"],
+  ["公用事业 XLU", "AMEX:XLU|1D"],
+] as const;
+
+const megaSeven = [
+  ["Apple", "NASDAQ:AAPL|1D"],
+  ["Microsoft", "NASDAQ:MSFT|1D"],
+  ["Nvidia", "NASDAQ:NVDA|1D"],
+  ["Amazon", "NASDAQ:AMZN|1D"],
+  ["Alphabet", "NASDAQ:GOOGL|1D"],
+  ["Meta", "NASDAQ:META|1D"],
+  ["Tesla", "NASDAQ:TSLA|1D"],
+] as const;
+---
+
+<section class="market-proxies" aria-labelledby="market-proxies-title">
+  <header class="measure">
+    <p class="faint">市场代理</p>
+    <h2 id="market-proxies-title">大盘、成长与价值</h2>
+    <p class="muted">
+      这里用 SPY、VOO、QQQ 与 VTV 作为可交易 ETF 代理，比较大盘、科技成长和价值风格，
+      不把 ETF 当作官方指数点位。图表由 TradingView 官方组件直接展示；本站不下载、缓存或
+      转售组件中的行情，也不把组件数据用于自研指标计算。
+    </p>
+  </header>
+
+  <TradingViewSymbolOverview label="SPY、VOO、QQQ 和 VTV 历史价格图" symbols={marketProxies} />
+
+  <p class="chart-note faint measure">
+    交易所、延迟状态与可用市场由 TradingView 标示并负责。ETF 会有费用、跟踪误差和交易时段差异，
+    因此不等同于官方 S&P 500 或 Nasdaq-100 指数。
+  </p>
+
+  <div class="subsection measure">
+    <p class="faint">行业代理</p>
+    <h3>十一大板块</h3>
+    <p class="muted">
+      用 11 只 SPDR 行业 ETF 观察板块强弱。它们是可交易代理，不是 S&P GICS
+      官方行业指数；选择上方代码可切换时间序列。
+    </p>
+  </div>
+
+  <TradingViewSymbolOverview label="十一只行业 ETF 历史价格图" symbols={sectorProxies} />
+
+  <div class="subsection measure">
+    <p class="faint">集中度观察</p>
+    <h3>Magnificent 7 成员分化</h3>
+    <p class="muted">
+      这里并列七家公司各自的价格路径，不把它命名为等权指数。以后上线的集中度、扩散度和
+      相对强弱评分会采用 ArcOfMarket 自己的版本化方法。
+    </p>
+  </div>
+
+  <TradingViewSymbolOverview label="Magnificent 7 成员历史价格图" symbols={megaSeven} />
+
+  <nav class="theme-map measure" aria-label="市场主题页">
+    <p class="faint">独立主题页</p>
+    <h3>从板块进入产业链</h3>
+    <p class="muted">
+      十一大 GICS 板块都有独立观察页；消费页同时拆开必需与可选消费。
+      半导体和奢侈品作为跨行业专题保留，页面分别展示子行业代理与核心公司。
+    </p>
+    <div class="theme-links">
+      {
+        marketThemes.map((theme) => (
+          <a href={`/themes/${theme.slug}`}>{theme.title}</a>
+        ))
+      }
+    </div>
+  </nav>
+</section>
+
+<style>
+  .market-proxies {
+    margin-block: var(--space-section);
+  }
+
+  .market-proxies header {
+    margin-bottom: 2rem;
+  }
+
+  .market-proxies header h2 {
+    margin-block: 0.25rem 0.75rem;
+  }
+
+  .chart-note {
+    margin-top: 1rem;
+  }
+
+  .subsection {
+    margin-block: 4rem 1.5rem;
+  }
+
+  .subsection h3 {
+    margin-block: 0.25rem 0.75rem;
+  }
+
+  .theme-map {
+    margin-top: 4rem;
+  }
+
+  .theme-map h3 {
+    margin-block: 0.25rem 0.75rem;
+  }
+
+  .theme-links {
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 1.5rem;
+  }
+
+  .theme-links a {
+    border-top: 1px solid var(--rule);
+    padding-block: 0.75rem;
+  }
+
+  @media (max-width: 640px) {
+    .theme-links {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,22 @@
+{
+  "updated": "2026-07-26T16:30:04Z",
+  "changes": [],
+  "changed_files": [],
+  "delta": 0,
+  "reliable": true,
+  "deleted_files": [],
+  "retired_files": [],
+  "quality_issues": [
+    {
+      "severity": "warning",
+      "path": "meta.json",
+      "issue": "source insider: missing-sec-identity-or-edgartools"
+    },
+    {
+      "severity": "warning",
+      "path": "meta.json",
+      "issue": "source thirteenf: missing-sec-identity-or-edgartools"
+    }
+  ],
+  "note": "本报告记录当前工作区相对 Git HEAD 的数据变更，并检查必需文件、覆盖、新鲜度、日期及数组一致性；哈希链负责检测已发布链记录的删改。"
+}

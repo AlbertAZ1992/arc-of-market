@@ -1,0 +1,343 @@
+{
+  "schema_version": 1,
+  "default_access": "deny",
+  "note": "Every tracked data/*.json file must appear exactly once. Access remains denied unless a dataset group explicitly allows the requested scope.",
+  "groups": [
+    {
+      "id": "operational-reports",
+      "files": [
+        "audit_report.json",
+        "meta.json"
+      ],
+      "source_ids": [
+        "arc-methodology"
+      ],
+      "access": {
+        "public": false,
+        "subscriber": false
+      },
+      "derived_output": "not-applicable",
+      "status": "internal-operational"
+    },
+    {
+      "id": "source-transparency",
+      "files": [
+        "source_catalog.json"
+      ],
+      "source_ids": [
+        "arc-methodology"
+      ],
+      "access": {
+        "public": true,
+        "subscriber": true
+      },
+      "derived_output": "allowed",
+      "status": "approved",
+      "approval_reference": "config/source-registry.json"
+    },
+    {
+      "id": "sp500-selected-changes",
+      "files": [
+        "sp500_changes.json"
+      ],
+      "source_ids": [
+        "wikipedia-sp500"
+      ],
+      "access": {
+        "public": true,
+        "subscriber": true
+      },
+      "derived_output": "allowed-with-attribution",
+      "status": "approved",
+      "approval_reference": "CC-BY-SA-4.0 revision-level attribution"
+    },
+    {
+      "id": "sp500-current-universe",
+      "files": [
+        "sp500_constituents.json"
+      ],
+      "source_ids": [
+        "wikipedia-sp500"
+      ],
+      "access": {
+        "public": true,
+        "subscriber": true
+      },
+      "derived_output": "allowed-with-attribution",
+      "status": "approved-current-cross-section-only",
+      "approval_reference": "Wikipedia CC BY-SA 4.0 revision-level attribution"
+    },
+    {
+      "id": "nber-cycle-dates",
+      "files": [
+        "recessions.json"
+      ],
+      "source_ids": [
+        "nber"
+      ],
+      "access": {
+        "public": true,
+        "subscriber": true
+      },
+      "derived_output": "allowed-with-attribution",
+      "status": "approved",
+      "approval_reference": "NBER official chronology and methodology citation"
+    },
+    {
+      "id": "fred-macro",
+      "files": [
+        "equity_allocation.json",
+        "macro_growth.json",
+        "macro_prices.json",
+        "macro_rates.json"
+      ],
+      "source_ids": [
+        "fred"
+      ],
+      "access": {
+        "public": true,
+        "subscriber": true
+      },
+      "derived_output": "allowed-with-attribution",
+      "status": "approved-latest-vintage-only",
+      "approval_reference": "config/fred-series-registry.json"
+    },
+    {
+      "id": "ofr-financial-stress",
+      "files": [
+        "financial_stress.json"
+      ],
+      "source_ids": [
+        "ofr"
+      ],
+      "access": {
+        "public": true,
+        "subscriber": true
+      },
+      "derived_output": "allowed-with-attribution",
+      "status": "approved-latest-vintage-only",
+      "approval_reference": "OFR legal notice and Financial Stress Index suggested citation"
+    },
+    {
+      "id": "fred-ice-credit",
+      "files": [
+        "macro_credit.json"
+      ],
+      "source_ids": [
+        "fred",
+        "ice-data-indices"
+      ],
+      "access": {
+        "public": true,
+        "subscriber": false
+      },
+      "derived_output": "allowed-with-attribution",
+      "status": "approved-for-public-chart-display",
+      "approval_reference": "Product owner data-display decision 2026-07-26"
+    },
+    {
+      "id": "cftc-vix-positioning",
+      "files": [
+        "cot_vix.json"
+      ],
+      "source_ids": [
+        "cftc"
+      ],
+      "access": {
+        "public": true,
+        "subscriber": true
+      },
+      "derived_output": "allowed-with-attribution",
+      "status": "approved",
+      "approval_reference": "CFTC Web Policy public-domain notice and observed-at ledger"
+    },
+    {
+      "id": "sec-smart-money",
+      "files": [
+        "insider_trades.json",
+        "inst_holdings.json"
+      ],
+      "optional": true,
+      "source_ids": [
+        "sec-edgar",
+        "arc-methodology"
+      ],
+      "access": {
+        "public": false,
+        "subscriber": false
+      },
+      "derived_output": "review-required",
+      "status": "internal-pending-coverage-validation"
+    },
+    {
+      "id": "sp500-price-panels",
+      "files": [
+        "sp500_annual.json",
+        "sp500_bullbear.json",
+        "sp500_century.json",
+        "sp500_distribution.json",
+        "sp500_drawdowns.json",
+        "sp500_extremes.json",
+        "sp500_holding.json",
+        "sp500_intrayear.json",
+        "sp500_rolling5y.json",
+        "sp500_rollmatrix.json",
+        "sp500_seasonality.json"
+      ],
+      "source_ids": [
+        "yahoo-finance",
+        "sp-dji"
+      ],
+      "access": {
+        "public": true,
+        "subscriber": false
+      },
+      "derived_output": "allowed-with-attribution",
+      "status": "approved-for-public-chart-display",
+      "approval_reference": "Product owner data-display decision 2026-07-26"
+    },
+    {
+      "id": "sp500-volatility-panel",
+      "files": [
+        "sp500_volatility.json"
+      ],
+      "source_ids": [
+        "yahoo-finance",
+        "sp-dji",
+        "cboe"
+      ],
+      "access": {
+        "public": true,
+        "subscriber": false
+      },
+      "derived_output": "allowed-with-attribution",
+      "status": "approved-for-public-chart-display",
+      "approval_reference": "Product owner data-display decision 2026-07-26"
+    },
+    {
+      "id": "sp500-total-return",
+      "files": [
+        "sp500_total_return.json"
+      ],
+      "source_ids": [
+        "yahoo-finance",
+        "sp-dji"
+      ],
+      "access": {
+        "public": true,
+        "subscriber": false
+      },
+      "derived_output": "allowed-with-attribution",
+      "status": "approved-for-public-chart-display",
+      "approval_reference": "Product owner data-display decision 2026-07-26"
+    },
+    {
+      "id": "nasdaq-composite-panels",
+      "files": [
+        "ixic_annual.json",
+        "ixic_bullbear.json",
+        "ixic_century.json",
+        "ixic_distribution.json",
+        "ixic_drawdowns.json",
+        "ixic_extremes.json",
+        "ixic_holding.json",
+        "ixic_intrayear.json",
+        "ixic_rolling5y.json",
+        "ixic_rollmatrix.json",
+        "ixic_seasonality.json",
+        "ixic_volatility.json"
+      ],
+      "source_ids": [
+        "yahoo-finance",
+        "nasdaq-index-data"
+      ],
+      "access": {
+        "public": true,
+        "subscriber": false
+      },
+      "derived_output": "allowed-with-attribution",
+      "status": "approved-for-public-chart-display",
+      "approval_reference": "Product owner data-display decision 2026-07-26"
+    },
+    {
+      "id": "nasdaq-100-panels",
+      "files": [
+        "ndx_annual.json",
+        "ndx_bullbear.json",
+        "ndx_century.json",
+        "ndx_distribution.json",
+        "ndx_drawdowns.json",
+        "ndx_extremes.json",
+        "ndx_holding.json",
+        "ndx_intrayear.json",
+        "ndx_rolling5y.json",
+        "ndx_rollmatrix.json",
+        "ndx_seasonality.json",
+        "ndx_volatility.json"
+      ],
+      "source_ids": [
+        "yahoo-finance",
+        "nasdaq-index-data"
+      ],
+      "access": {
+        "public": true,
+        "subscriber": false
+      },
+      "derived_output": "allowed-with-attribution",
+      "status": "approved-for-public-chart-display",
+      "approval_reference": "Product owner data-display decision 2026-07-26"
+    },
+    {
+      "id": "nasdaq-valuation-proxy",
+      "files": [
+        "ndx_valuation_proxy.json"
+      ],
+      "source_ids": [
+        "yahoo-finance",
+        "arc-methodology"
+      ],
+      "access": {
+        "public": true,
+        "subscriber": false
+      },
+      "derived_output": "allowed-with-attribution",
+      "status": "approved-for-public-chart-display",
+      "approval_reference": "Product owner data-display decision 2026-07-26"
+    },
+    {
+      "id": "cboe-volatility",
+      "files": [
+        "vol_family.json"
+      ],
+      "source_ids": [
+        "cboe"
+      ],
+      "access": {
+        "public": true,
+        "subscriber": false
+      },
+      "derived_output": "allowed-with-attribution",
+      "status": "approved-for-public-chart-display",
+      "approval_reference": "Product owner data-display decision 2026-07-26"
+    },
+    {
+      "id": "arc-research-prototypes",
+      "files": [
+        "breadth_pulse.json",
+        "regime_rotation.json",
+        "rs_leaders.json"
+      ],
+      "source_ids": [
+        "arc-methodology",
+        "yahoo-finance"
+      ],
+      "access": {
+        "public": true,
+        "subscriber": false
+      },
+      "derived_output": "allowed",
+      "status": "approved-for-public-research-display",
+      "approval_reference": "Product owner data-display decision 2026-07-26"
+    }
+  ]
+}

@@ -1,0 +1,218 @@
+---
+import ArcJsonChart from "@/components/charts/ArcJsonChart.astro";
+import TradingViewHeatmap from "@/components/charts/TradingViewHeatmap.astro";
+import type { ArcChartKind, ArcChartSpec } from "@/lib/arc-chart-types";
+
+type Props = {
+  index: "ndx" | "sp500";
+};
+
+type SuiteDefinition = {
+  description: string;
+  kind: ArcChartKind;
+  suffix: string;
+  title: (label: string) => string;
+};
+
+const { index } = Astro.props;
+const isSp500 = index === "sp500";
+
+const suiteDefinitions: readonly SuiteDefinition[] = [
+  {
+    suffix: "century",
+    title: (label) => `${label}长期价格`,
+    description: "使用对数尺度观察跨周期价格变化。",
+    kind: "price",
+  },
+  {
+    suffix: "annual",
+    title: (label) => `${label}年度回报`,
+    description: "按自然年聚合价格回报；未结束年份标记为年内数据。",
+    kind: "annual",
+  },
+  {
+    suffix: "bullbear",
+    title: (label) => `${label}牛熊周期`,
+    description: "按阶段涨跌幅观察牛熊切换、持续时间和周期幅度。",
+    kind: "cycles",
+  },
+  {
+    suffix: "extremes",
+    title: (label) => `${label}极端交易日`,
+    description: "并列历史最佳与最差单日回报，观察尾部事件的幅度。",
+    kind: "extremes",
+  },
+  {
+    suffix: "distribution",
+    title: (label) => `${label}年度回报分布`,
+    description: "把年度回报放入固定区间，观察常见年份和尾部年份。",
+    kind: "distribution",
+  },
+  {
+    suffix: "holding",
+    title: (label) => `${label}持有期结果`,
+    description: "比较不同持有年限的胜率、中位年化回报和样本数量。",
+    kind: "holding",
+  },
+  {
+    suffix: "rollmatrix",
+    title: (label) => `${label}多周期滚动回报`,
+    description: "在同一时间轴比较五年、十年与二十年年化回报。",
+    kind: "rollmatrix",
+  },
+  {
+    suffix: "rolling5y",
+    title: (label) => `${label}滚动五年年化回报`,
+    description: "观察起点与市场周期对五年持有结果的影响。",
+    kind: "rolling",
+  },
+  {
+    suffix: "intrayear",
+    title: (label) => `${label}年内回撤与年度结果`,
+    description: "横轴为年内最大跌幅，纵轴为全年回报。",
+    kind: "intrayear",
+  },
+  {
+    suffix: "seasonality",
+    title: (label) => `${label}月份季节性`,
+    description: "比较各月份平均回报和上涨概率，不作为单独交易信号。",
+    kind: "seasonality",
+  },
+  {
+    suffix: "drawdowns",
+    title: (label) => `${label}历史回撤`,
+    description: "从历史高点计算回撤，展示跌幅、持续时间和修复过程。",
+    kind: "drawdown",
+  },
+  {
+    suffix: "volatility",
+    title: (label) => `${label}波动率`,
+    description: "并列二十日、六十日实现波动率和可用的隐含波动率指数。",
+    kind: "volatility",
+  },
+];
+
+const buildSuite = (
+  prefix: "ixic" | "ndx" | "sp500",
+  idPrefix: string,
+  label: string,
+): ArcChartSpec[] =>
+  suiteDefinitions.map((definition) => {
+    const priceOptions =
+      definition.kind === "price"
+        ? { scaleType: "log" as const, yUnit: "指数点位" }
+        : {};
+    return {
+      dataPath: `/data/${prefix}_${definition.suffix}.json`,
+      description: definition.description,
+      id: `${idPrefix}-${definition.suffix}`,
+      kind: definition.kind,
+      source: "Yahoo Finance 历史价格 · ArcOfMarket 计算",
+      title: definition.title(label),
+      ...priceOptions,
+    };
+  });
+
+const sp500Suite = buildSuite("sp500", "sp500", "S&P 500");
+const sp500Charts: ArcChartSpec[] = [
+  {
+    ...sp500Suite[0]!,
+    title: "世纪尺度下的美股",
+  },
+  {
+    dataPath: "/data/sp500_total_return.json",
+    description: "把股息再投资后的总回报指数与价格指数口径分开观察。",
+    id: "sp500-total-return",
+    kind: "valuation",
+    scaleType: "log",
+    source: "Yahoo Finance · S&P 500 Total Return Index",
+    title: "S&P 500 总回报指数",
+    valueKey: "values",
+    valueLabel: "总回报指数",
+    yUnit: "指数点位",
+  },
+  ...sp500Suite.slice(1),
+];
+const ixicCharts = buildSuite("ixic", "ixic", "Nasdaq Composite");
+const ndxCharts = buildSuite("ndx", "ndx", "Nasdaq-100");
+---
+
+{
+  isSp500 ? (
+    <>
+      {sp500Charts.map((chart) => <ArcJsonChart {...chart} />)}
+      <ArcJsonChart
+        dataPath="/data/vol_family.json"
+        description="比较 VIX 9 日、现货、三个月、六个月、一年期与 SKEW 的历史变化。"
+        id="sp500-vol-family"
+        kind="nested"
+        series={[
+          { key: "VIX9D", label: "VIX9D", unit: "指数", valueKey: "close" },
+          { key: "VIX", label: "VIX", unit: "指数", valueKey: "close" },
+          { key: "VIX3M", label: "VIX3M", unit: "指数", valueKey: "close" },
+          { key: "VIX6M", label: "VIX6M", unit: "指数", valueKey: "close" },
+          { key: "VIX1Y", label: "VIX1Y", unit: "指数", valueKey: "close" },
+          { axis: 1, key: "SKEW", label: "SKEW", unit: "指数", valueKey: "close" },
+        ]}
+        source="Cboe 历史数据"
+        title="VIX 期限家族与 SKEW"
+      />
+      <TradingViewHeatmap
+        dataSource="SPX500"
+        description="用市值大小与当日涨跌观察当前成分横截面；指数权重以组件口径为准。"
+        id="sp500-cross-section"
+        title="市值 · 回报 · 指数权重"
+      />
+    </>
+  ) : (
+    <>
+      <section class="suite-intro" id="nasdaq-composite-suite">
+        <p class="eyebrow">NASDAQ COMPOSITE</p>
+        <h2>先看整个纳斯达克市场</h2>
+        <p>Nasdaq Composite 覆盖数千家纳斯达克上市公司，是观察市场广度的长期坐标。</p>
+      </section>
+      {ixicCharts.map((chart) => <ArcJsonChart {...chart} />)}
+
+      <section class="suite-intro" id="nasdaq-100-suite">
+        <p class="eyebrow">NASDAQ-100</p>
+        <h2>再看最大的非金融公司</h2>
+        <p>Nasdaq-100 是大型成长基准，与 Nasdaq Composite 的覆盖范围和权重规则不同。</p>
+      </section>
+      {ndxCharts.map((chart) => <ArcJsonChart {...chart} />)}
+      <TradingViewHeatmap
+        dataSource="NASDAQ100"
+        description="观察纳斯达克 100 当前头部权重、行业集中度与当日涨跌。"
+        id="ndx-cross-section"
+        title="头部持仓与累计权重"
+      />
+      <ArcJsonChart
+        dataPath="/data/ndx_valuation_proxy.json"
+        description="从启用日起每日保存 QQQ 的滚动市盈率，作为可持续积累的估值代理。"
+        id="ndx-dynamic-pe"
+        kind="multiline"
+        note="这是 QQQ trailing PE 代理，不是 Nasdaq 官方 NDX PE，也不是 Forward PE。"
+        series={[{ key: "trailing_pe", label: "QQQ TTM PE", unit: "倍" }]}
+        source="Yahoo Finance QQQ 基本面元数据"
+        title="纳指 100 动态估值代理"
+      />
+    </>
+  )
+}
+
+<style>
+  .suite-intro {
+    border-bottom: 1px solid var(--ink);
+    padding-block: 4.5rem 2rem;
+    scroll-margin-top: 6rem;
+  }
+
+  .suite-intro h2 {
+    margin: 0.35rem 0 0.6rem;
+  }
+
+  .suite-intro p:last-child {
+    color: var(--ink-soft);
+    font-size: 0.8rem;
+    max-width: 48rem;
+  }
+</style>

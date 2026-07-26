@@ -1,0 +1,160 @@
+name: update-data
+
+on:
+  workflow_call:
+    inputs:
+      profile:
+        description: Data update profile
+        required: true
+        type: string
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate profile
+        run: |
+          case "${{ inputs.profile }}" in
+            daily|weekly|full) ;;
+            *) echo "Unsupported profile: ${{ inputs.profile }}" >&2; exit 1 ;;
+          esac
+
+      - name: Prepare automated data branch
+        run: |
+          if git ls-remote --exit-code --heads origin \
+            refs/heads/data/automated-updates >/dev/null; then
+            git fetch origin data/automated-updates
+            git switch --create data/automated-updates --track origin/data/automated-updates
+            git merge --no-edit "$GITHUB_SHA"
+          else
+            git switch --create data/automated-updates
+          fi
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          version: "0.10.11"
+
+      - name: Install Python
+        run: uv python install 3.13
+
+      - name: Install Python dependencies
+        run: uv sync --locked --group dev
+
+      - name: Validate Python
+        run: |
+          uv run ruff check scripts tests
+          uv run ty check scripts
+          uv run pytest -q
+
+      - name: Update data
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+          SEC_IDENTITY: ${{ secrets.SEC_IDENTITY }}
+          SP500_FORWARD_EPS_NTM: ${{ secrets.SP500_FORWARD_EPS_NTM }}
+          SP500_FORWARD_EPS_AS_OF: ${{ vars.SP500_FORWARD_EPS_AS_OF }}
+          SP500_FORWARD_EPS_SOURCE: ${{ vars.SP500_FORWARD_EPS_SOURCE }}
+          SP500_FORWARD_EPS_LICENSE_SCOPE: ${{ vars.SP500_FORWARD_EPS_LICENSE_SCOPE }}
+        run: uv run python -m scripts.update --profile "${{ inputs.profile }}"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+          version: "10.24.0"
+
+      - name: Install frontend dependencies
+        working-directory: astro
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate and build frontend
+        working-directory: astro
+        run: |
+          pnpm check
+          pnpm lint
+          pnpm build
+
+      - name: Commit validated data
+        run: |
+          git config user.name "arc-of-market-bot"
+          git config user.email "bot@arcofmarket.com"
+          git add data
+          if git diff --cached --quiet; then
+            echo "No data changes to commit"
+          else
+            git commit -m "data: ${{ inputs.profile }} update $(date -u +%F)"
+            git push origin HEAD:data/automated-updates
+          fi
+
+  publish:
+    if: vars.PUBLIC_DATA_APPROVED == 'true'
+    needs: update
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: data/automated-updates
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          version: "0.10.11"
+
+      - name: Enforce tracked license approval
+        run: uv run python -m scripts.license_gate
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+          version: "10.24.0"
+
+      - name: Build public site
+        working-directory: astro
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+
+  deploy:
+    if: vars.PUBLIC_DATA_APPROVED == 'true'
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

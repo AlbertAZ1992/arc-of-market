@@ -1,0 +1,108 @@
+<section class="measure-wide regime-section" id="arc-regime">
+  <p class="eyebrow">ORIGINAL RESEARCH</p>
+  <h2>Arc Regime</h2>
+  <p class="muted">
+    QQQ/TQQQ 六状态机：NORMAL / BEAR_CASH / ZONE_BATTLE_DEFEND / ZONE_BATTLE_ATTACK /
+    ZONE_DESPAIR_TQQQ / TOP_ESCAPE。基于 MA200/MA20/ATH 回撤/60 日量能。
+    研究回测未计交易成本、税费、滑点和现金收益，不代表可交易业绩。
+  </p>
+  <div id="regime-chart" style="height: 420px;">
+    <p class="muted" data-chart-status>正在读取数据…</p>
+  </div>
+</section>
+
+<script>
+  import { LineChart } from "echarts/charts";
+  import {
+    GridComponent,
+    LegendComponent,
+    TooltipComponent,
+  } from "echarts/components";
+  import * as echarts from "echarts/core";
+  import { CanvasRenderer } from "echarts/renderers";
+  import { ARC_ECHARTS_THEME } from "../../lib/echarts-theme";
+
+  type EquityPoint = {
+    date: string;
+    equity: number;
+    qqq_equity: number;
+  };
+
+  echarts.use([
+    LineChart,
+    GridComponent,
+    LegendComponent,
+    TooltipComponent,
+    CanvasRenderer,
+  ]);
+  echarts.registerTheme("arc", ARC_ECHARTS_THEME);
+
+  async function render() {
+    const el = document.getElementById("regime-chart");
+    if (!el) return;
+    const status = el.querySelector("[data-chart-status]");
+
+    const res = await fetch("/data/regime_rotation.json");
+    if (!res.ok) {
+      if (status) status.textContent = "数据尚未生成，请先运行数据更新管线。";
+      return;
+    }
+    const data = (await res.json()) as { equity_curve?: EquityPoint[] };
+    const eq = data.equity_curve ?? [];
+    if (status) status.remove();
+
+    const chart = echarts.init(el, "arc");
+    chart.setOption({
+      tooltip: { trigger: "axis" },
+      legend: { data: ["策略研究曲线", "QQQ 基准"] },
+      xAxis: {
+        type: "category",
+        data: eq.map((row) => row.date),
+      },
+      yAxis: { type: "value", scale: true },
+      series: [
+        {
+          name: "策略研究曲线",
+          type: "line",
+          showSymbol: false,
+          smooth: false,
+          lineStyle: { width: 1.4, color: "#9a3b2e" },
+          data: eq.map((row) => row.equity),
+        },
+        {
+          name: "QQQ 基准",
+          type: "line",
+          showSymbol: false,
+          smooth: false,
+          lineStyle: { width: 1.1, color: "#777" },
+          data: eq.map((row) => row.qqq_equity),
+        },
+      ],
+    });
+    window.addEventListener("resize", () => chart.resize());
+  }
+
+  render().catch((error: unknown) => {
+    const status = document.querySelector("[data-chart-status]");
+    if (status) {
+      status.textContent = `数据读取失败：${String(error)}`;
+    }
+  });
+</script>
+
+<style>
+  .measure-wide {
+    max-width: var(--measure-wide);
+    margin-inline: auto;
+  }
+
+  .regime-section {
+    border-bottom: 1px dotted var(--rule);
+    padding-block: 3.5rem;
+    scroll-margin-top: 6rem;
+  }
+
+  .regime-section h2 {
+    margin: 0.35rem 0 0.6rem;
+  }
+</style>

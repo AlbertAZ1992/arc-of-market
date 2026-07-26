@@ -1,0 +1,49 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches-ignore:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          version: "0.10.11"
+
+      - name: Install Python
+        run: uv python install 3.13
+
+      - name: Validate Python
+        run: |
+          uv sync --locked --group dev
+          uv run ruff check scripts tests
+          uv run ty check scripts
+          uv run pytest -q
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+          version: "10.24.0"
+
+      - name: Validate frontend
+        working-directory: astro
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm check
+          pnpm lint
+          pnpm build

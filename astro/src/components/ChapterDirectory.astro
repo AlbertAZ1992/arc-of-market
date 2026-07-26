@@ -1,0 +1,81 @@
+<section class="chapters" aria-labelledby="chapters-title">
+  <header class="measure">
+    <p class="faint">READING PATH</p>
+    <h2 id="chapters-title">从四个入口读市场</h2>
+    <p class="muted">
+      先看结构和宏观，再进入行业与方法；每个页面都保留来源、更新时间和口径边界。
+    </p>
+  </header>
+
+  <div class="chapter-grid">
+    <a href="/sp500/">
+      <span class="faint">01 · STRUCTURE</span>
+      <strong>S&P 500</strong>
+      <p>当前行业结构、503 个证券目录与调入调出历史。</p>
+    </a>
+    <a href="/macro/">
+      <span class="faint">02 · ENVIRONMENT</span>
+      <strong>宏观环境</strong>
+      <p>利率、物价、增长、股票配置、CFTC 仓位与 OFR 金融压力。</p>
+    </a>
+    <a href="/themes/information-technology/">
+      <span class="faint">03 · THEMES</span>
+      <strong>行业主题</strong>
+      <p>完整 11 个 GICS 板块，并含半导体与奢侈品专题。</p>
+    </a>
+    <a href="/methodology/">
+      <span class="faint">04 · METHOD</span>
+      <strong>方法与数据</strong>
+      <p>数据来源、公开白名单、修订政策与原创指标边界。</p>
+    </a>
+  </div>
+</section>
+
+<style>
+  .chapters {
+    margin-block: var(--space-section);
+  }
+
+  .chapters header h2 {
+    margin-block: 0.25rem 0.75rem;
+  }
+
+  .chapter-grid {
+    display: grid;
+    gap: 1px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 2rem;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+
+  .chapter-grid a {
+    background: var(--paper);
+    border: 0;
+    color: inherit;
+    min-height: 9rem;
+    padding: 1.25rem;
+  }
+
+  .chapter-grid a:hover {
+    background: var(--paper-raised);
+  }
+
+  .chapter-grid strong {
+    display: block;
+    font-family: var(--font-serif);
+    font-size: 1.3rem;
+    margin-top: 0.35rem;
+  }
+
+  .chapter-grid p {
+    color: var(--ink-soft);
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 640px) {
+    .chapter-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

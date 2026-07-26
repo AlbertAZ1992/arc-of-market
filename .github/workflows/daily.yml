@@ -1,0 +1,22 @@
+name: daily-update
+
+on:
+  schedule:
+    - cron: "17 22 * * 1-5"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: data-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    uses: ./.github/workflows/update-data.yml
+    with:
+      profile: daily
+    secrets: inherit

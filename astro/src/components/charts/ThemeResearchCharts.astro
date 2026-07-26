@@ -1,0 +1,53 @@
+---
+import ChartDataPending from "@/components/charts/ChartDataPending.astro";
+import TradingViewResearchSection from "@/components/charts/TradingViewResearchSection.astro";
+import { themeResearch } from "@/lib/theme-research";
+
+type Props = {
+  slug: string;
+};
+
+const { slug } = Astro.props;
+const entries = themeResearch[slug] ?? [];
+---
+
+{
+  slug === "consumer" && (
+    <TradingViewResearchSection
+      description="把防守型必需消费与周期型可选消费放在同一张图里比较。"
+      id="consumer-xlp-xly"
+      symbols={[
+        ["必需消费 XLP", "AMEX:XLP|1D"],
+        ["可选消费 XLY", "AMEX:XLY|1D"],
+      ]}
+      title="XLP × XLY"
+    />
+  )
+}
+
+{
+  slug === "financials" && (
+    <TradingViewResearchSection
+      description="并列观察大型银行、保险与投行在金融危机前后的长期价格路径。"
+      id="financial-crisis-2008"
+      symbols={[
+        ["JPMorgan", "NYSE:JPM|1D"],
+        ["Bank of America", "NYSE:BAC|1D"],
+        ["Goldman Sachs", "NYSE:GS|1D"],
+        ["AIG", "NYSE:AIG|1D"],
+      ]}
+      title="2008 金融危机横截面"
+    />
+  )
+}
+
+{
+  entries.map((entry) => (
+    <ChartDataPending
+      description={entry.description}
+      id={entry.id}
+      source={entry.source}
+      title={entry.title}
+    />
+  ))
+}

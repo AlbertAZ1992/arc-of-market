@@ -1,0 +1,25 @@
+---
+import solar from "@iconify-json/solar/icons.json";
+
+type Props = {
+  class?: string;
+  label?: string;
+  name: keyof typeof solar.icons;
+  size?: number;
+};
+
+const { class: className, label, name, size = 24 } = Astro.props;
+const icon = solar.icons[name];
+---
+
+<svg
+  aria-hidden={label ? undefined : "true"}
+  aria-label={label}
+  class={className}
+  height={size}
+  role={label ? "img" : undefined}
+  viewBox={`0 0 ${solar.width ?? 24} ${solar.height ?? 24}`}
+  width={size}
+>
+  <g set:html={icon.body} />
+</svg>

@@ -1,0 +1,47 @@
+---
+import PageSectionNav from "@/components/PageSectionNav.astro";
+import SiteNav from "@/components/SiteNav.astro";
+import "@/styles/theme.css";
+
+type PageNavigation = {
+  current: string;
+  items: readonly {
+    href: string;
+    label: string;
+  }[];
+};
+
+type Props = {
+  bodyClass?: string;
+  description: string;
+  pageNavigation?: PageNavigation;
+  title: string;
+};
+
+const { bodyClass = "", description, pageNavigation, title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f60c3e" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+  </head>
+  <body class={bodyClass}>
+    <SiteNav />
+    <div class="site-page">
+      {
+        pageNavigation && (
+          <PageSectionNav
+            current={pageNavigation.current}
+            items={pageNavigation.items}
+          />
+        )
+      }
+      <slot />
+    </div>
+  </body>
+</html>

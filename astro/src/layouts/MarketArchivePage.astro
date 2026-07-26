@@ -1,0 +1,104 @@
+---
+import TradingViewSymbolOverview from "@/components/TradingViewSymbolOverview.astro";
+import SiteShell from "@/layouts/SiteShell.astro";
+
+type SymbolDefinition = readonly [label: string, symbol: string];
+
+type Section = {
+  description: string;
+  heading: string;
+  symbols: readonly SymbolDefinition[];
+};
+
+type Props = {
+  description: string;
+  eyebrow: string;
+  sections: readonly Section[];
+  title: string;
+};
+
+const { description, eyebrow, sections, title } = Astro.props;
+const dockItems = sections.map((section, index) => ({
+  href: `#section-${index + 1}`,
+  label: section.heading,
+}));
+---
+
+<SiteShell
+  bodyClass="chart-page"
+  description={description}
+  pageNavigation={{ current: title, items: dockItems }}
+  title={`${title} · ArcOfMarket`}
+>
+  <header class="page-header">
+    <div class="page-header__inner">
+      <p class="eyebrow">{eyebrow}</p>
+      <h1>{title}</h1>
+      <p class="muted">{description}</p>
+    </div>
+  </header>
+
+  <main class="market-archive">
+    {
+      sections.map((section, index) => (
+        <section id={`section-${index + 1}`}>
+          <div class="section-copy">
+            <p class="eyebrow">{String(index + 1).padStart(2, "0")} · PRICE VIEW</p>
+            <h2>{section.heading}</h2>
+            <p>{section.description}</p>
+          </div>
+          <TradingViewSymbolOverview label={section.heading} symbols={section.symbols} />
+        </section>
+      ))
+    }
+
+    <p class="market-note">
+      行情图由 TradingView 官方组件提供。页面用于比较价格路径，不构成指数授权数据、
+      实时交易报价或投资建议。
+    </p>
+  </main>
+
+  <footer class="page-footer">
+    <a href="/archive/">全部图表</a><span>·</span>
+    <a href="/methodology/">方法论</a><span>·</span>
+    <span>仅供信息与教育</span>
+  </footer>
+
+</SiteShell>
+
+<style>
+  .market-archive {
+    padding: 0 2.25rem 4.5rem 3rem;
+  }
+
+  .market-archive section {
+    border-bottom: 1px dotted var(--rule);
+    padding-block: 3.5rem;
+  }
+
+  .section-copy {
+    margin-bottom: 1.5rem;
+    max-width: 46rem;
+  }
+
+  .section-copy h2 {
+    margin-bottom: 0.55rem;
+  }
+
+  .section-copy p:last-child,
+  .market-note {
+    color: var(--ink-soft);
+    font-size: 0.8rem;
+  }
+
+  .market-note {
+    margin: 3rem auto;
+    max-width: 46rem;
+  }
+
+  @media (max-width: 900px) {
+    .market-archive {
+      padding: 0 1rem 3.5rem;
+    }
+  }
+</style>

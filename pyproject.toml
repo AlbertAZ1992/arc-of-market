@@ -1,0 +1,40 @@
+[project]
+name = "arcofmarket"
+version = "0.0.1"
+description = "ArcOfMarket — 每个交易日自动更新的美股百年图表档案与读数台账"
+requires-python = ">=3.13"
+dependencies = [
+  "yfinance>=0.2.60,<1.5",
+  "pandas",
+  "requests",
+  "lxml",
+  "openpyxl",
+  "edgartools",
+  "httpx",
+  "scipy>=1.18.0",
+]
+
+[dependency-groups]
+dev = [
+  "pytest",
+  "ruff",
+  "ty",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+src = ["scripts"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.ty.environment]
+python-version = "3.13"
+root = ["."]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]

@@ -1,0 +1,165 @@
+---
+import catalogJson from "../../../data/source_catalog.json";
+
+type Source = {
+  id: string;
+  name: string;
+  role: string;
+  terms_url?: string;
+  url?: string;
+};
+
+type Catalog = {
+  sources: Source[];
+};
+
+const catalog = catalogJson as Catalog;
+const publicSourceIds = [
+  "arc-methodology",
+  "fred",
+  "cftc",
+  "nber",
+  "ofr",
+  "wikipedia-sp500",
+  "yahoo-finance",
+  "sp-dji",
+  "nasdaq-index-data",
+  "cboe",
+  "ice-data-indices",
+];
+const sourceUse: Record<string, string> = {
+  "arc-methodology": "原创环境状态、研究指标、转换与文字解释",
+  fred: "利率、通胀、增长、就业与居民股票配置",
+  cftc: "VIX 期货持仓",
+  nber: "美国经济衰退起止日期",
+  ofr: "全球金融压力指数",
+  "wikipedia-sp500": "标普 500 当前成分与成分变更记录",
+  "yahoo-finance": "长期价格研究输入与回报、回撤等派生统计",
+  "sp-dji": "S&P 指数定义与历史研究口径",
+  "nasdaq-index-data": "Nasdaq Composite 与 Nasdaq-100 指数研究口径",
+  cboe: "VIX、VXN 与波动率历史研究",
+  "ice-data-indices": "通过 FRED 获取的 ICE BofA 信用利差序列",
+};
+const publicSources = publicSourceIds
+  .map((id) => catalog.sources.find((source) => source.id === id))
+  .filter((source): source is Source => Boolean(source));
+---
+
+<section class="sources" aria-labelledby="sources-title">
+  <p class="eyebrow">DATA SOURCES</p>
+  <h2 id="sources-title">这些图表的数据从哪里来</h2>
+  <p class="sources__intro">
+    每张图在图表下方标注具体来源、数据日期和计算口径。这里列出本站当前页面实际使用的来源。
+  </p>
+
+  <div class="source-grid">
+    {
+      publicSources.map((source) => (
+        <article>
+          <h3>
+            {source.url ? (
+              <a href={source.url} rel="noreferrer">
+                {source.name}
+              </a>
+            ) : (
+              source.name
+            )}
+          </h3>
+          <p>{sourceUse[source.id] ?? source.role}</p>
+          {source.terms_url && <a class="source-link" href={source.terms_url}>来源说明 →</a>}
+        </article>
+      ))
+    }
+    <article>
+      <h3>
+        <a href="https://www.tradingview.com/markets/" rel="noreferrer">
+          TradingView
+        </a>
+      </h3>
+      <p>ETF、指数代理与代表性公司的交互行情图</p>
+      <a class="source-link" href="https://www.tradingview.com/widget-docs/">
+        组件说明 →
+      </a>
+    </article>
+  </div>
+
+  <p class="fred-notice">
+    This product uses the FRED® API but is not endorsed or certified by the Federal
+    Reserve Bank of St. Louis.
+  </p>
+</section>
+
+<style>
+  .sources {
+    margin-block: 2rem 0;
+  }
+
+  .sources > h2 {
+    margin-bottom: 0.55rem;
+  }
+
+  .sources__intro {
+    color: var(--ink-soft);
+    font-size: 0.8rem;
+    max-width: 43rem;
+  }
+
+  .source-grid {
+    border-top: 1px solid var(--ink);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 1.5rem;
+  }
+
+  .source-grid article {
+    border-bottom: 1px dotted var(--rule);
+    border-right: 1px dotted var(--rule);
+    min-height: 9rem;
+    padding: 1rem 1rem 1rem 0;
+  }
+
+  .source-grid article:nth-child(3n + 2),
+  .source-grid article:nth-child(3n + 3) {
+    padding-left: 1rem;
+  }
+
+  .source-grid article:nth-child(3n) {
+    border-right: 0;
+  }
+
+  .source-grid h3 {
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    margin-bottom: 0.45rem;
+  }
+
+  .source-grid p {
+    color: var(--ink-soft);
+    font-size: 0.7rem;
+    margin-bottom: 0.7rem;
+  }
+
+  .source-link {
+    border-bottom: 1px dotted var(--rule);
+    color: var(--ink-faint);
+    font-size: 0.63rem;
+  }
+
+  .fred-notice {
+    color: var(--ink-faint);
+    font-size: 0.62rem;
+    margin-top: 1rem;
+  }
+
+  @media (max-width: 700px) {
+    .source-grid {
+      display: block;
+    }
+
+    .source-grid article {
+      border-right: 0;
+      min-height: 0;
+      padding: 1rem 0 !important;
+    }
+  }
+</style>

@@ -1,0 +1,107 @@
+---
+type Props = {
+  dataSource: "NASDAQ100" | "SPX500";
+  description: string;
+  id: string;
+  title: string;
+};
+
+const { dataSource, description, id, title } = Astro.props;
+const widgetConfig = JSON.stringify({
+  colorTheme: "light",
+  dataSource,
+  blockSize: "market_cap_basic",
+  blockColor: "change",
+  grouping: "sector",
+  locale: "zh_CN",
+  symbolUrl: "",
+  hasTopBar: true,
+  isDataSetEnabled: true,
+  isZoomEnabled: true,
+  hasSymbolTooltip: true,
+  isMonoSize: false,
+  width: "100%",
+  height: "100%",
+});
+---
+
+<section class="heatmap-section" id={id}>
+  <header>
+    <p class="eyebrow">CURRENT CROSS-SECTION</p>
+    <h2>{title}</h2>
+    <p>{description}</p>
+  </header>
+  <div aria-label={`${title}图表`} class="heatmap-frame">
+    <div class="tradingview-widget-container">
+      <div class="tradingview-widget-container__widget"></div>
+      <div class="tradingview-widget-copyright">
+        <a href="https://www.tradingview.com/markets/" rel="noopener nofollow" target="_blank">
+          Market data
+        </a>
+        by TradingView
+      </div>
+      <script
+        async
+        is:inline
+        set:html={widgetConfig}
+        src="https://s3.tradingview.com/external-embedding/embed-widget-stock-heatmap.js"
+        type="text/javascript"
+      ></script>
+    </div>
+  </div>
+  <footer>来源：TradingView Stock Heatmap</footer>
+</section>
+
+<style>
+  .heatmap-section {
+    border-bottom: 1px dotted var(--rule);
+    padding-block: 3.5rem;
+    scroll-margin-top: 6rem;
+  }
+
+  .heatmap-section > header {
+    margin-bottom: 1.35rem;
+    max-width: 48rem;
+  }
+
+  .heatmap-section h2 {
+    margin: 0.35rem 0 0.6rem;
+  }
+
+  .heatmap-section header > p:last-child {
+    color: var(--ink-soft);
+    font-size: 0.8rem;
+  }
+
+  .heatmap-frame {
+    height: 34rem;
+  }
+
+  .tradingview-widget-container,
+  .tradingview-widget-container__widget {
+    height: 100%;
+    width: 100%;
+  }
+
+  .tradingview-widget-copyright,
+  .heatmap-section footer {
+    color: var(--ink-faint);
+    font-size: 0.62rem;
+    text-align: right;
+  }
+
+  .heatmap-section footer {
+    border-top: 1px dotted var(--rule);
+    padding-top: 0.75rem;
+  }
+
+  @media (max-width: 640px) {
+    .heatmap-section {
+      padding-block: 2.6rem;
+    }
+
+    .heatmap-frame {
+      height: 28rem;
+    }
+  }
+</style>

@@ -1,0 +1,119 @@
+---
+import SiteShell from "@/layouts/SiteShell.astro";
+import { marketThemes } from "@/lib/market-themes";
+---
+
+<SiteShell
+  bodyClass="sectors-page"
+  description="从十一大 GICS 行业进入子行业与代表性公司图表。"
+  title="行业板块 · ArcOfMarket"
+>
+  <main class="sectors">
+    <header>
+      <p class="eyebrow">SECTORS · INDUSTRIES</p>
+      <h1>行业板块</h1>
+      <p>先比较板块，再进入子行业和代表性公司。每个入口都对应已经可以打开的图表页面。</p>
+    </header>
+
+    <div class="sector-directory">
+      {
+        marketThemes.map((theme, index) => (
+          <a href={`/themes/${theme.slug}/`}>
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <div>
+              <h2>{theme.title}</h2>
+              <p>{theme.description}</p>
+              <small>{theme.groups.length} 组图表</small>
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </main>
+
+  <footer class="page-footer">
+    <a href="/archive/">全部图表</a><span>·</span>
+    <a href="/methodology/">方法论</a>
+  </footer>
+</SiteShell>
+
+<style>
+  .sectors {
+    padding: 2rem 2.25rem 0 3rem;
+  }
+
+  .sectors > header {
+    border-bottom: 1px dotted var(--rule);
+    padding-bottom: 2rem;
+  }
+
+  .sectors h1 {
+    font-size: 2.05rem;
+    margin: 0.4rem 0 0.55rem;
+  }
+
+  .sectors > header > p:last-child {
+    color: var(--ink-soft);
+    font-size: 0.82rem;
+    margin: 0;
+  }
+
+  .sector-directory {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 1.5rem;
+  }
+
+  .sector-directory > a {
+    border-bottom: 1px dotted var(--rule);
+    display: grid;
+    gap: 0.8rem;
+    grid-template-columns: auto 1fr;
+    min-height: 8rem;
+    padding: 1.1rem 1.2rem 1.1rem 0;
+  }
+
+  .sector-directory > a:nth-child(odd) {
+    border-right: 1px dotted var(--rule);
+  }
+
+  .sector-directory > a:nth-child(even) {
+    padding-left: 1.2rem;
+  }
+
+  .sector-directory > a > span {
+    color: var(--main);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+  }
+
+  .sector-directory h2 {
+    font-size: 1rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .sector-directory p,
+  .sector-directory small {
+    color: var(--ink-faint);
+    font-size: 0.68rem;
+  }
+
+  .sector-directory p {
+    margin-bottom: 0.45rem;
+  }
+
+  @media (max-width: 700px) {
+    .sectors {
+      padding: 1.3rem 1rem 0;
+    }
+
+    .sector-directory {
+      display: block;
+    }
+
+    .sector-directory > a {
+      border-right: 0 !important;
+      padding-inline: 0 !important;
+    }
+  }
+</style>
