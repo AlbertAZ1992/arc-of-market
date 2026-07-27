@@ -15,7 +15,7 @@
     "format": "oxfmt ."
   },
   "dependencies": {
-    "astro": "^4.16.0",
+    "astro": "^7.1.0",
     "echarts": "^5.5.0",
     "@iconify-json/solar": "^1.2.0"
   },
