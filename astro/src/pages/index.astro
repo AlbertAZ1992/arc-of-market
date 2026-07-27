@@ -4,6 +4,7 @@ import MarketBriefChart from "@/components/MarketBriefChart.astro";
 import SolarIcon from "@/components/SolarIcon.astro";
 import SiteShell from "@/layouts/SiteShell.astro";
 import { loadMarketBrief } from "@/lib/market-brief";
+import { signalPublication } from "@/lib/signal-publication";
 
 const brief = loadMarketBrief();
 const displayDate = brief.asOf.replaceAll("-", ".");
@@ -65,16 +66,16 @@ const chapters = [
     <section class="signal-preview" id="strategy-signals">
       <div class="signal-intro">
         <p class="eyebrow">STRATEGY SIGNALS</p>
-        <h2>四项策略正在持续验证</h2>
-        <strong>最新执行信号仅在验证完成后开放</strong>
-        <p>方法与历史验证保持公开</p>
+        <h2>{signalPublication.previewTitle}</h2>
+        <strong>{signalPublication.previewStatus}</strong>
+        <p>{signalPublication.previewDetail}</p>
       </div>
       <div class="signal-lock">
         <div class="strategy-names">
           <strong>四项策略</strong>
           <span>{strategies.join(" ／ ")}</span>
         </div>
-        <div class="locked-fields" aria-label="订阅后可见字段">
+        <div class="locked-fields" aria-label="尚未启用的执行字段">
           {
             ["方向", "仓位", "下一触发"].map((label) => (
               <span>
@@ -86,9 +87,9 @@ const chapters = [
         </div>
       </div>
       <div class="signal-actions">
-        <a class="primary-action" href="/signals/">查看策略信号</a>
+        <a class="primary-action" href="/signals/">查看策略框架</a>
         <a class="secondary-action" href="/signals/#validation">
-          查看历史验证
+          查看上线门禁
           <SolarIcon name="arrow-right-linear" size={19} />
         </a>
       </div>
@@ -139,9 +140,9 @@ const chapters = [
       <div>
         <p class="eyebrow">CHANGE ALERTS</p>
         <h2>当判断发生变化时提醒我。</h2>
-        <p>获得策略状态、触发条件、失效条件与仓位更新；公开研究始终可以免费阅读。</p>
+        <p>策略公式尚未确认，订阅暂不开放；完成验证后再提供状态与变化提醒。</p>
       </div>
-      <a href="/signals/">查看 Strategy Signals</a>
+      <a href="/signals/">查看 Strategy Signals 研究框架</a>
     </section>
   </main>
 

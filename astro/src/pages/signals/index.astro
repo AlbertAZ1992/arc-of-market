@@ -1,6 +1,7 @@
 ---
 import SolarIcon from "@/components/SolarIcon.astro";
 import SiteShell from "@/layouts/SiteShell.astro";
+import { signalPublication } from "@/lib/signal-publication";
 
 const strategies = [
   {
@@ -42,10 +43,10 @@ const strategies = [
   <main class="signals">
     <header class="signals-hero">
       <p class="eyebrow">STRATEGY SIGNALS</p>
-      <h1>从长期环境，走到今天可以执行的动作。</h1>
+      <h1>先定义，再验证，最后才谈执行。</h1>
       <p>
-        四项策略回答不同时间尺度的问题。方法、历史验证、失败样本和版本保持公开；
-        只有通过验证门槛后，最新方向、仓位与触发条件才会进入订阅。
+        四项策略目前只有产品目标和时间尺度，具体公式、参数、交易规则与验证标准
+        尚未由产品负责人确认。现阶段不会生成、发布或收费提供任何执行信号。
       </p>
     </header>
 
@@ -60,7 +61,7 @@ const strategies = [
             </div>
             <p class="strategy-answer">{strategy.answer}</p>
             <p class="strategy-cadence">{strategy.cadence}</p>
-            <span class="strategy-state">验证中</span>
+            <span class="strategy-state">待定义</span>
           </article>
         ))
       }
@@ -70,7 +71,7 @@ const strategies = [
       <div>
         <p class="eyebrow">CURRENT EXECUTION</p>
         <h2 id="locked-title">当前执行状态</h2>
-        <p>策略完成样本外验证并发布版本记录后，这里会显示最新执行变化。</p>
+        <p>公式和回测尚未就绪，因此这里没有可以发布的今日方向或仓位。</p>
       </div>
       <div class="locked-values" aria-label="当前订阅字段">
         {
@@ -87,49 +88,49 @@ const strategies = [
           )
         }
       </div>
-      <p class="validation-gate">尚未开放订阅 · 先完成验证，再决定价格与提醒渠道</p>
+      <p class="validation-gate">{signalPublication.gateLabel}</p>
     </section>
 
     <section class="validation" id="validation">
       <header>
         <p class="eyebrow">PUBLIC VALIDATION</p>
-        <h2>免费内容先证明策略是否值得信任。</h2>
+        <h2>上线必须依次通过四道门禁。</h2>
       </header>
       <div class="validation-grid">
         <article>
           <span>01</span>
-          <h3>方法与状态体系</h3>
-          <p>说明策略解决的问题、输入数据、状态定义、触发逻辑与无法覆盖的情形。</p>
+          <h3>公式确认</h3>
+          <p>由产品负责人确认输入数据、状态定义、触发逻辑、仓位与无法覆盖的情形。</p>
         </article>
         <article>
           <span>02</span>
-          <h3>历史表现与基准</h3>
-          <p>展示净值、基准、年化收益、最大回撤与风险调整后收益，不只挑选漂亮区间。</p>
+          <h3>历史与样本外验证</h3>
+          <p>固定版本后展示基准、收益、回撤和失败区间，再进行不改规则的样本外观察。</p>
         </article>
         <article>
           <span>03</span>
-          <h3>失败样本与修订</h3>
-          <p>保留错误信号、失效环境、版本差异和修改日期，让未来表现可以复核。</p>
+          <h3>模拟运行</h3>
+          <p>每日保存输入、输出与生成时间，连续运行后确认数据更新和状态迁移可靠。</p>
         </article>
         <article>
           <span>04</span>
-          <h3>时间戳与延迟记录</h3>
-          <p>记录每次信号的生成时间与数据日期；公开延迟信号，避免事后重写历史。</p>
+          <h3>发布审批</h3>
+          <p>确认版本、数据许可、免责声明和提醒流程后，才允许启用订阅与当前信号。</p>
         </article>
       </div>
     </section>
 
     <section class="boundary">
       <p class="eyebrow">THE PRODUCT BOUNDARY</p>
-      <h2>免费卖信任，订阅卖及时性、精确性与执行性。</h2>
+      <h2>研究框架可以公开，未验证的执行结果不能出售。</h2>
       <div>
         <article>
           <h3>始终公开</h3>
-          <p>策略用途、方法、历史验证、失败样本、版本记录与延迟信号。</p>
+          <p>策略用途；公式确认后再公开方法、历史验证、失败样本和版本记录。</p>
         </article>
         <article>
-          <h3>验证后订阅</h3>
-          <p>最新方向、目标仓位、状态变化、下一触发、失效条件与变化提醒。</p>
+          <h3>验证后再决定订阅</h3>
+          <p>只有发布审批通过后，才讨论方向、仓位、触发条件和变化提醒。</p>
         </article>
       </div>
       <a href="/methodology/">
