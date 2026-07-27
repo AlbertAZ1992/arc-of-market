@@ -6,6 +6,7 @@ from scripts.index_statistics import (
     holding_period_summary,
     market_cycles,
     rolling_cagr_payload,
+    volatility_history,
 )
 
 
@@ -87,3 +88,17 @@ def test_extreme_day_summary_counts_all_returns_once() -> None:
     assert result["days_total"] == 3
     assert sum(bucket["count"] for bucket in result["hist"]) == 3
     assert result["worst"][0] == {"date": "2025-01-02", "ret": -6.0}
+
+
+def test_volatility_history_omits_incomplete_rolling_windows() -> None:
+    close = pd.Series(
+        range(100, 180),
+        index=pd.date_range("2025-01-01", periods=80, freq="D"),
+        dtype=float,
+    )
+
+    result = volatility_history(close)
+
+    assert result["dates"]
+    assert len(result["dates"]) == len(result["vol20"]) == len(result["vol60"])
+    assert all(pd.notna(value) for value in result["vol60"])
