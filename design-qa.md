@@ -1,84 +1,38 @@
-# ArcOfMarket Anyway-style redesign QA
+# ArcOfMarket homepage design QA
 
-Date: 2026-07-26
+Final result: passed
 
-## Scope
+## Comparison
 
-- Homepage
-- About
-- Archive
-- Lab
-- Macro and S&P 500 chart pages
-- Nasdaq, Dow Jones and Magnificent Seven chart pages
-- Sector archive and twelve sector/topic pages
-- Floating chart directory
-- Desktop sidebar and mobile navigation states
+- Reference: `/Users/albertaz/Downloads/微信图片_20260727211421_224_2.png`
+- Implementation: `http://127.0.0.1:4323/`
+- Viewport: `1488 × 1058`
+- Side-by-side image:
+  `/Users/albertaz/.codex/visualizations/2026/07/27/arc-of-market-redesign/comparison.jpg`
 
-## Reference contract
+## Visual review
 
-- Layout reference: `anyway.fm`
-- Brand and content: ArcOfMarket
-- Typography:
-  - Serif: Noto Serif SC / Source Han Serif SC / Merriweather
-  - Sans: Noto Sans SC / Source Han Sans SC / Open Sans
-  - Mono: Fira Mono
-- Icons: Solar Iconify collection
-- Illustrations: intentionally omitted at the product owner's request
+| Area | Result | Notes |
+| --- | --- | --- |
+| Red frame and fixed sidebar | Passed | Frame, sidebar width, logo block and navigation rhythm align with the reference. |
+| Typography | Passed | Uses the requested Noto Serif / Merriweather and Noto Sans / Open Sans stacks. |
+| Hero hierarchy | Passed | Date, kicker, judgment, summary and three evidence items follow the same reading order. |
+| Strategy strip | Passed | Uses the same horizontal editorial structure and keeps execution fields locked. |
+| Evidence chart | Passed | Chart and right-hand interpretation column match the reference proportions. |
+| Spacing and rules | Passed | Major horizontal divisions and content insets visually align at the target viewport. |
+| Icons | Passed | Solar icon assets are used; no handmade SVG or placeholder assets are present. |
 
-## Visual comparison
+## Product and behavior review
 
-Desktop comparisons use the same 1280 × 720 viewport with the source on the left
-and ArcOfMarket on the right:
+- The homepage judgment is generated from checked-in market datasets.
+- The placeholder breadth dataset is not used in a production-facing claim.
+- The key chart loads S&P 500 and VIX data and fails closed if either dataset is unavailable.
+- The Strategy Signals and historical-validation links navigate to working destinations.
+- The Signals page distinguishes public validation from future execution-only subscription fields.
+- Type checks, lint, production build and chart-catalog audit pass without warnings.
 
-- `product-audit/comparisons/00-home-source-local-v2.jpg`
-- `product-audit/comparisons/10-about-source-local-v2.jpg`
-- `product-audit/comparisons/20-archive-source-local-v2.jpg`
-- `product-audit/comparisons/30-lab-source-local-v2.jpg`
+## Resolved findings
 
-Mobile breakpoint comparisons use a 390 × 844 canvas:
-
-- `product-audit/comparisons/40-home-mobile-source-local.jpg`
-- `product-audit/comparisons/50-about-mobile-source-local.jpg`
-- `product-audit/comparisons/60-archive-mobile-source-local.jpg`
-- `product-audit/comparisons/70-lab-mobile-source-local.jpg`
-
-Checked:
-
-- Red viewport frame and white editorial surface
-- 173 px fixed desktop sidebar
-- 40 px mobile header and red full-screen menu styling
-- Dotted dividers and column boundaries
-- Heading scale and content start positions
-- Market tabs follow the intended reading order:
-  Macro, S&P 500, Nasdaq, Dow Jones, Magnificent Seven, Sectors, Lab
-- Archive contains only currently openable chart and research entries
-- Two-column archive density and mobile single-column rules
-- Alternating Lab timeline
-- Fixed bottom chart directory, shadow, plain-language metadata and expanded panel
-- No raster illustrations or copied site artwork
-
-## Interaction checks
-
-- Archive search for `全球金融压力` returns one matching chart.
-- Floating chart directory opens, lists six macro charts and closes.
-- All seven category tabs are present in the expected order.
-- Nasdaq loads both TradingView chart panels.
-- Sector archive links to all twelve sector/topic pages.
-- Mobile archive has no document-level horizontal overflow at 390 px.
-- Twenty-four static routes build successfully.
-- Browser console shows no application errors.
-
-## Automated checks
-
-- `pnpm check`: passed with zero errors, warnings or hints.
-- `pnpm lint`: passed with zero errors or warnings.
-- `pnpm build`: passed; twenty-four routes generated.
-
-## Result
-
-The implementation matches the reference layout system while preserving
-ArcOfMarket branding, the intended market-reading sequence, source transparency
-and the requested no-illustration constraint. Public pages no longer expose
-internal data-audit or authorization labels.
-
-final result: passed
+- P1: Removed the duplicate ECharts legend below the editorial legend.
+- P1: Prevented the Signals page headline from leaving a single orphaned character.
+- P2: Shortened the trend evidence label so it remains on one line at the reference viewport.
