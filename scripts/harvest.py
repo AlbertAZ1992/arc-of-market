@@ -125,7 +125,15 @@ def pin(name: str, obj, license_tag: str = LICENSE_TAG) -> None:
                 if key not in {"_license", "_provenance"}
             },
         }
-    serialized = json.dumps(payload, ensure_ascii=False, separators=(",", ":")) + "\n"
+    serialized = (
+        json.dumps(
+            payload,
+            ensure_ascii=False,
+            separators=(",", ":"),
+            allow_nan=False,
+        )
+        + "\n"
+    )
     temporary = destination.with_name(f".{destination.name}.tmp")
     temporary.write_text(serialized, encoding="utf-8")
     temporary.replace(destination)

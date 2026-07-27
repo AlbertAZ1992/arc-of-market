@@ -193,7 +193,7 @@ def volatility_history(
     )
     measures = measures.dropna(how="all")
     week_keys = pd.DatetimeIndex(measures.index).to_period("W-SUN")
-    weekly = measures.groupby(week_keys).tail(1).dropna(subset=["vol20"])
+    weekly = measures.groupby(week_keys).tail(1).dropna(subset=["vol20", "vol60"])
     payload: dict[str, Any] = {
         "dates": [_timestamp(date).strftime("%Y-%m-%d") for date in weekly.index],
         "vol20": [round(float(value), 2) for value in weekly["vol20"]],

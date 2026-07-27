@@ -1,4 +1,5 @@
 import json
+import math
 from datetime import UTC, datetime
 from types import SimpleNamespace
 from typing import cast
@@ -6,6 +7,24 @@ from typing import cast
 import pandas as pd
 import pytest
 from scripts import harvest
+
+
+def test_pin_rejects_non_finite_values(monkeypatch, tmp_path) -> None:
+    monkeypatch.setattr(harvest, "DATA", tmp_path)
+    monkeypatch.setattr(
+        harvest,
+        "dataset_record",
+        lambda _name: {
+            "group": "test",
+            "source_ids": ["test"],
+            "access": {"public": False, "subscriber": False},
+            "derived_output": "not-applicable",
+            "status": "internal-operational",
+        },
+    )
+
+    with pytest.raises(ValueError, match="Out of range float values"):
+        harvest.pin("invalid.json", {"value": math.nan})
 
 
 def test_fetch_history_uses_yfinance_managed_session(monkeypatch) -> None:
