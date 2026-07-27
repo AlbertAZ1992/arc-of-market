@@ -44,6 +44,7 @@ jobs:
         working-directory: astro
         run: |
           pnpm install --frozen-lockfile
+          pnpm data:sync
           pnpm check
           pnpm lint
           pnpm build

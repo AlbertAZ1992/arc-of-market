@@ -1,0 +1,143 @@
+<div
+  aria-label="S&P 500 收盘价与 VIX 历史对照图"
+  class="market-brief-chart"
+  data-market-brief-chart
+  role="img"
+>
+  <p data-chart-status>正在读取已验证数据…</p>
+</div>
+
+<script>
+  import { LineChart } from "echarts/charts";
+  import {
+    AriaComponent,
+    GridComponent,
+    TooltipComponent,
+  } from "echarts/components";
+  import * as echarts from "echarts/core";
+  import { CanvasRenderer } from "echarts/renderers";
+
+  type PriceData = {
+    close: number[];
+    dates: string[];
+  };
+
+  type VolatilityData = {
+    VIX: PriceData;
+  };
+
+  echarts.use([
+    AriaComponent,
+    CanvasRenderer,
+    GridComponent,
+    LineChart,
+    TooltipComponent,
+  ]);
+
+  function threeYearStart(latestDate: string): string {
+    const date = new Date(`${latestDate}T00:00:00Z`);
+    date.setUTCFullYear(date.getUTCFullYear() - 3);
+    return date.toISOString().slice(0, 10);
+  }
+
+  function points(data: PriceData, start: string): Array<[string, number]> {
+    return data.dates.flatMap((date, index) => {
+      const value = data.close[index];
+      return date >= start && value !== undefined ? [[date, value]] : [];
+    });
+  }
+
+  async function renderMarketBriefChart(element: HTMLElement) {
+    const [priceResponse, volatilityResponse] = await Promise.all([
+      fetch("/data/sp500_century.json"),
+      fetch("/data/vol_family.json"),
+    ]);
+    if (!priceResponse.ok || !volatilityResponse.ok) {
+      throw new Error("verified datasets unavailable");
+    }
+
+    const prices = (await priceResponse.json()) as PriceData;
+    const volatility = (await volatilityResponse.json()) as VolatilityData;
+    const latestDate = prices.dates.at(-1) ?? "";
+    const start = threeYearStart(latestDate);
+    element.querySelector("[data-chart-status]")?.remove();
+
+    const chart = echarts.init(element);
+    chart.setOption({
+      animation: false,
+      aria: { enabled: true },
+      grid: { bottom: 48, containLabel: true, left: 4, right: 8, top: 18 },
+      tooltip: { trigger: "axis" },
+      xAxis: {
+        axisLabel: { color: "#595959", hideOverlap: true },
+        axisLine: { lineStyle: { color: "#bdbdbd" } },
+        splitLine: { show: false },
+        type: "time",
+      },
+      yAxis: [
+        {
+          axisLabel: { color: "#595959" },
+          splitLine: { lineStyle: { color: "#dedede", type: "dashed" } },
+          type: "value",
+        },
+        {
+          axisLabel: { color: "#f60c3e", formatter: "{value}" },
+          splitLine: { show: false },
+          type: "value",
+        },
+      ],
+      series: [
+        {
+          data: points(prices, start),
+          lineStyle: { color: "#272727", width: 1.7 },
+          name: "S&P 500 收盘价",
+          sampling: "lttb",
+          showSymbol: false,
+          type: "line",
+        },
+        {
+          data: points(volatility.VIX, start),
+          lineStyle: { color: "#f60c3e", width: 1.5 },
+          name: "VIX",
+          sampling: "lttb",
+          showSymbol: false,
+          type: "line",
+          yAxisIndex: 1,
+        },
+      ],
+    });
+
+    new ResizeObserver(() => chart.resize()).observe(element);
+  }
+
+  document
+    .querySelectorAll<HTMLElement>("[data-market-brief-chart]")
+    .forEach((element) => {
+      renderMarketBriefChart(element).catch(() => {
+        element.hidden = true;
+      });
+    });
+</script>
+
+<style>
+  .market-brief-chart {
+    height: 25rem;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .market-brief-chart [data-chart-status] {
+    align-items: center;
+    color: var(--ink-faint);
+    display: flex;
+    font-size: 0.72rem;
+    height: 100%;
+    justify-content: center;
+  }
+
+  @media (max-width: 700px) {
+    .market-brief-chart {
+      height: 21rem;
+    }
+  }
+</style>

@@ -1,491 +1,600 @@
 ---
-import DataSourceRegistry from "@/components/DataSourceRegistry.astro";
-import FinancialStressChart from "@/components/charts/FinancialStressChart.astro";
+import HomeMarketStory from "@/components/HomeMarketStory.astro";
+import MarketBriefChart from "@/components/MarketBriefChart.astro";
+import SolarIcon from "@/components/SolarIcon.astro";
 import SiteShell from "@/layouts/SiteShell.astro";
-import { chartCount, chartGroups } from "@/lib/chart-catalog";
+import { loadMarketBrief } from "@/lib/market-brief";
+import { strategyLenses } from "@/lib/strategy-lenses";
 
-const featured = chartGroups.flatMap((group) =>
-  group.charts.slice(0, 1).map((chart) => ({ ...chart, group: group.title })),
-);
-
-const editions = chartGroups.map((group, index) => ({
-  description: group.description,
-  href: group.href,
-  number: String(index + 1).padStart(2, "0"),
-  title: group.title,
-}));
+const brief = loadMarketBrief();
+const displayDate = brief.asOf.replaceAll("-", ".");
+const chapters = [
+  { href: "#today-brief", label: "今日结论" },
+  { href: "#strategy-signals", label: "策略信号" },
+  { href: "#key-evidence", label: "关键证据" },
+  { href: "#market-story", label: "五幕市场" },
+  { href: "#subscribe", label: "变化提醒" },
+] as const;
 ---
 
 <SiteShell
-  bodyClass="home-page"
-  description="每天自动更新的市场研究刊物、图表档案与原创指标实验室。"
-  title="ArcOfMarket · 市场编年史"
+  bodyClass="market-brief-page"
+  description="每天收盘后更新的市场判断、证据与 ArcOfMarket 策略研究。"
+  title="ArcOfMarket · 今日市场判断"
 >
-  <main class="home">
-    <section class="home-lead">
-      <div class="home-intro">
-        <p class="eyebrow">ARC OF MARKET · VOL. 001</p>
-        <h1>把市场每天的变化，放回历史的坐标里。</h1>
-        <p>
-          ArcOfMarket 是一份持续更新的市场研究刊物。我们整理公开、可追溯的数据，
-          解释今天处于什么环境，也把每个原创读数的版本和失效记录留下来。
-        </p>
-        <a class="lead-link" href="/about/">我们为什么做这件事 →</a>
-      </div>
+  <nav aria-label="今日市场章节" class="chapter-rail">
+    {
+      chapters.map((chapter, index) => (
+        <a
+          aria-label={chapter.label}
+          aria-current={index === 0 ? "location" : undefined}
+          data-brief-chapter
+          href={chapter.href}
+        >
+          <span></span>
+          <strong>{chapter.label}</strong>
+        </a>
+      ))
+    }
+  </nav>
 
-      <aside class="home-numbers" aria-label="档案数字">
-        <div><strong>{chartCount}</strong><span>当前可浏览入口</span></div>
-        <div><strong>7</strong><span>研究分类</span></div>
-        <div><strong>12</strong><span>行业与专题</span></div>
-        <div><strong>1D</strong><span>更新频率</span></div>
-      </aside>
-    </section>
+  <main class="market-brief">
+    <section class="brief-hero" id="today-brief">
+      <p class="eyebrow">MARKET BRIEF · {displayDate} · 盘后</p>
+      <p class="brief-kicker">一句话今日判断</p>
+      <h1>{brief.headline}</h1>
+      <p class="brief-summary">{brief.summary}</p>
 
-    <section class="market-ribbon" aria-label="今日状态">
-      <div>
-        <span>数据日期</span>
-        <strong>最新已验证批次</strong>
-      </div>
-      <div>
-        <span>主要来源</span>
-        <strong>FRED · OFR · CFTC · TradingView</strong>
-      </div>
-      <div>
-        <span>阅读顺序</span>
-        <strong>宏观 → 指数 → 行业</strong>
-      </div>
-      <a href="/methodology/">查看口径 →</a>
-    </section>
-
-    <div class="home-columns">
-      <section class="latest-column">
-        <header class="column-title">
-          <p>市场阅读顺序</p>
-          <a href="/archive/">全部图表</a>
-        </header>
-        <ol class="edition-list">
-          {
-            editions.map((edition) => (
-              <li>
-                <a href={edition.href}>
-                  <span>{edition.number}</span>
-                  <div>
-                    <h2>{edition.title}</h2>
-                    <p>{edition.description}</p>
-                  </div>
-                </a>
-              </li>
-            ))
-          }
-        </ol>
-      </section>
-
-      <aside class="status-column">
-        <header class="column-title"><p>本期目录</p></header>
-        <dl>
-          {
-            chartGroups.map((group) => (
+      <div class="evidence-strip" aria-label="三项关键证据">
+        {
+          brief.evidence.map((evidence) => (
+            <article data-tone={evidence.tone}>
+              <span class="evidence-icon">
+                <SolarIcon name={evidence.icon} size={28} />
+              </span>
               <div>
-                <dt>{group.title}</dt>
-                <dd>{group.charts.length} 项</dd>
+                <h2><span>{evidence.label}</span><strong>{evidence.state}</strong></h2>
+                <p>{evidence.detail}</p>
               </div>
-            ))
-          }
-        </dl>
-        <a class="text-link" href="/archive/">查看完整目录</a>
-      </aside>
-
-      <section class="featured-column">
-        <header class="column-title"><p>正在阅读</p></header>
-        <div class="feature-list">
-          {
-            featured.map((chart, index) => (
-              <a href={chart.href}>
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <div>
-                  <small>{chart.group}</small>
-                  <h3>{chart.title}</h3>
-                  <p>{chart.description}</p>
-                </div>
-              </a>
-            ))
-          }
-        </div>
-      </section>
-    </div>
-
-    <section class="home-chart">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">LIVE CHART · 01</p>
-          <h2>压力不是新闻标题，而是一组可以复核的时间序列。</h2>
-        </div>
-        <a href="/macro/">进入宏观档案 →</a>
+            </article>
+          ))
+        }
       </div>
-      <FinancialStressChart />
     </section>
 
-    <section class="source-section">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">PROVENANCE</p>
-          <h2>所有公开图表，都应该说清楚数据从哪里来。</h2>
-        </div>
-        <a href="/methodology/">阅读方法论 →</a>
+    <section class="signal-preview" id="strategy-signals">
+      <div class="signal-intro">
+        <p class="eyebrow">STRATEGY SIGNALS</p>
+        <h2>四个坐标，读懂市场正在往哪里走。</h2>
+        <p>从主要趋势到长期周期，把分散的市场变化放进同一张观察地图。</p>
       </div>
-      <DataSourceRegistry />
+      <div class="signal-lenses" aria-label="四个市场观察维度">
+        {
+          strategyLenses.map((strategy) => (
+            <article>
+              <span>{strategy.code}</span>
+              <strong>{strategy.title}</strong>
+              <p>{strategy.dimension}</p>
+            </article>
+          ))
+        }
+      </div>
+      <div class="signal-actions">
+        <a class="primary-action" href="/signals/">了解四个观察维度</a>
+        <a class="secondary-action" href="/methodology/">
+          判断如何计算
+          <SolarIcon name="arrow-right-linear" size={19} />
+        </a>
+      </div>
+    </section>
+
+    <section class="key-evidence" id="key-evidence">
+      <div class="evidence-main">
+        <header>
+          <p>今日关键证据</p>
+          <h2>{brief.evidenceTitle}</h2>
+          <p>
+            <span class="legend-line legend-line--price"></span>S&P 500 收盘价（左轴）
+            <span class="legend-line legend-line--risk"></span>VIX（右轴）
+          </p>
+        </header>
+        <MarketBriefChart />
+      </div>
+      <aside class="evidence-notes">
+        <section>
+          <h3>结论</h3>
+          <p>{brief.summary}</p>
+        </section>
+        <section>
+          <h3>为什么重要</h3>
+          <p>
+            价格趋势需要波动率和金融压力共同确认。VIX 当前为
+            {brief.vix.toFixed(1)}，尚不足以单独证明系统性风险已经扩散。
+          </p>
+        </section>
+        <section>
+          <h3>什么会改变判断</h3>
+          <ul>
+            <li>价格跌破长期趋势并持续</li>
+            <li>OFR FSI 回到历史均值上方</li>
+            <li>VIX 与信用压力同步放大</li>
+          </ul>
+        </section>
+        <a href="#story-health">
+          下一幕：上涨是否由整个市场推动
+          <SolarIcon name="arrow-right-linear" size={19} />
+        </a>
+      </aside>
+    </section>
+
+    <HomeMarketStory />
+
+    <section class="subscribe-panel" id="subscribe">
+      <div>
+        <p class="eyebrow">NEXT READING</p>
+        <h2>把今天的判断，放回更长的市场历史。</h2>
+        <p>继续查看长期回报、回撤、估值、宏观环境与指数结构。</p>
+      </div>
+      <a href="/archive/">进入全部图表</a>
     </section>
   </main>
 
-  <footer class="page-footer">
-    <span>© 2026 ArcOfMarket</span><span>·</span>
-    <span>仅供信息与教育，不构成投资建议</span><span>·</span>
-    <a href="/terms/">服务条款</a>
+  <footer class="page-footer brief-footer">
+    <span>价格 {brief.sourceDates.price}</span><span>·</span>
+    <span>VIX {brief.sourceDates.volatility}</span><span>·</span>
+    <span>OFR FSI {brief.sourceDates.stress}</span><span>·</span>
+    <a href="/methodology/">方法与数据说明</a>
   </footer>
 </SiteShell>
 
+<script>
+  const chapterLinks = Array.from(
+    document.querySelectorAll<HTMLAnchorElement>("[data-brief-chapter]"),
+  );
+  const chaptersById = chapterLinks.flatMap((link) => {
+    const target = document.querySelector<HTMLElement>(link.hash);
+    return target ? [{ link, target }] : [];
+  });
+  const updateCurrentChapter = (active: HTMLAnchorElement) => {
+    chapterLinks.forEach((link) => {
+      if (link === active) link.setAttribute("aria-current", "location");
+      else link.removeAttribute("aria-current");
+    });
+  };
+  const chapterObserver = new IntersectionObserver(
+    (entries) => {
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((left, right) => left.boundingClientRect.top - right.boundingClientRect.top);
+      const match = chaptersById.find(({ target }) => target === visible[0]?.target);
+      if (match) updateCurrentChapter(match.link);
+    },
+    { rootMargin: "-18% 0px -72% 0px" },
+  );
+  chaptersById.forEach(({ target }) => chapterObserver.observe(target));
+</script>
+
 <style>
-  .home {
-    padding: 2rem 2.25rem 0 3rem;
+  .market-brief {
+    padding: 2rem 2.25rem 0 5.2rem;
   }
 
-  .home-lead {
-    align-items: end;
+  .chapter-rail {
     display: grid;
-    gap: 2rem;
-    grid-template-columns: minmax(0, 2.1fr) minmax(16rem, 0.9fr);
-    padding-bottom: 1.5rem;
+    gap: 1.15rem;
+    left: calc(var(--frame) + var(--side-width) + 1.35rem);
+    position: fixed;
+    top: 15.5rem;
+    z-index: 70;
   }
 
-  .home-intro h1 {
-    font-size: clamp(2rem, 3.2vw, 3.25rem);
-    margin: 0.2rem 0 0.65rem;
-    max-width: 67rem;
+  .chapter-rail a {
+    align-items: center;
+    display: flex;
+    min-height: 0.35rem;
+    position: relative;
   }
 
-  .home-intro > p:not(.eyebrow) {
-    color: var(--ink-soft);
-    font-size: 0.82rem;
-    margin-bottom: 0.55rem;
-    max-width: 43rem;
-  }
-
-  .lead-link {
-    border-bottom: 1px dotted var(--ink-faint);
-    font-size: 0.82rem;
-  }
-
-  .home-numbers {
-    align-self: end;
-    border-left: 1px dotted var(--rule);
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .home-numbers div {
-    border-bottom: 1px dotted var(--rule);
-    min-height: 3.8rem;
-    padding: 0.45rem 0 0.45rem 1rem;
-  }
-
-  .home-numbers div:nth-child(odd) {
-    border-right: 1px dotted var(--rule);
-  }
-
-  .home-numbers strong,
-  .home-numbers span {
+  .chapter-rail span {
+    border-top: 2px solid var(--rule);
     display: block;
+    width: 1.25rem;
   }
 
-  .home-numbers strong {
-    color: var(--main);
-    font-family: var(--font-mono);
-    font-size: 1.35rem;
-  }
-
-  .home-numbers span {
-    color: var(--ink-faint);
-    font-size: 0.7rem;
-  }
-
-  .market-ribbon {
-    align-items: stretch;
+  .chapter-rail strong {
     background: var(--ink);
     color: #fff;
+    font-size: 0.62rem;
+    font-weight: 500;
+    left: 2rem;
+    opacity: 0;
+    padding: 0.3rem 0.45rem;
+    pointer-events: none;
+    position: absolute;
+    transform: translateX(-0.25rem);
+    transition: 150ms ease;
+    white-space: nowrap;
+  }
+
+  .chapter-rail a:hover strong,
+  .chapter-rail a:focus-visible strong {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .chapter-rail a[aria-current="location"] span {
+    border-color: var(--ink);
+    border-width: 4px;
+    width: 1.75rem;
+  }
+
+  .brief-hero {
+    border-bottom: 1px dotted var(--rule);
+    padding-bottom: 2.4rem;
+    scroll-margin-top: 2rem;
+  }
+
+  .brief-kicker {
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 1.4rem 0 0.75rem;
+  }
+
+  .brief-hero h1 {
+    font-size: clamp(2.65rem, 4.15vw, 4.45rem);
+    line-height: 1.2;
+    margin-bottom: 0.8rem;
+    max-width: 71rem;
+  }
+
+  .brief-summary {
+    color: var(--ink-soft);
+    font-size: 1rem;
+    margin-bottom: 2rem;
+    max-width: 61rem;
+  }
+
+  .evidence-strip {
     display: grid;
-    grid-template-columns: 1fr 1.4fr 1fr auto;
-    margin-inline: -2.25rem;
-    min-height: 4.7rem;
-    padding-inline: 2.25rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  .market-ribbon > * {
-    border-right: 1px dotted rgb(255 255 255 / 35%);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 0.75rem 1rem;
+  .evidence-strip article {
+    align-items: center;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: auto 1fr;
+    min-height: 5.3rem;
+    padding: 0 2rem;
   }
 
-  .market-ribbon > *:first-child {
+  .evidence-strip article:first-child {
     padding-left: 0;
   }
 
-  .market-ribbon span {
-    color: #aaa;
-    font-size: 0.65rem;
+  .evidence-strip article + article {
+    border-left: 1px solid var(--rule);
   }
 
-  .market-ribbon strong {
-    font-size: 0.77rem;
-    font-weight: 500;
-  }
-
-  .market-ribbon > a {
+  .evidence-icon {
     align-items: center;
-    border: 0;
-    flex-direction: row;
-    font-size: 0.72rem;
-    padding-right: 0;
+    border: 1.5px solid var(--main);
+    border-radius: 50%;
+    color: var(--main);
+    display: flex;
+    height: 3.25rem;
+    justify-content: center;
+    width: 3.25rem;
   }
 
-  .market-ribbon > a:hover {
+  .evidence-strip h2 {
+    align-items: baseline;
+    display: flex;
+    font-size: 1.05rem;
+    gap: 0.7rem;
+    margin-bottom: 0.15rem;
+  }
+
+  .evidence-strip h2 span {
+    border-right: 1px solid var(--rule);
+    padding-right: 0.7rem;
+  }
+
+  .evidence-strip h2 strong {
+    font-weight: 900;
+  }
+
+  .evidence-strip p {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    margin: 0;
+  }
+
+  .signal-preview {
+    border-bottom: 1px dotted var(--rule);
+    display: grid;
+    grid-template-columns: minmax(16rem, 0.8fr) minmax(32rem, 1.7fr) minmax(12rem, 0.55fr);
+    min-height: 10.5rem;
+    scroll-margin-top: 2rem;
+  }
+
+  .signal-preview > * {
+    padding: 1.5rem 1.5rem;
+  }
+
+  .signal-preview > *:first-child {
+    padding-left: 0;
+  }
+
+  .signal-preview > * + * {
+    border-left: 1px solid var(--rule);
+  }
+
+  .signal-intro h2 {
+    font-size: 1.15rem;
+    margin: 0.25rem 0 0.2rem;
+  }
+
+  .signal-intro > p:last-child {
+    color: var(--ink-soft);
+    font-size: 0.72rem;
+    margin: 0.45rem 0 0;
+  }
+
+  .signal-lenses {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .signal-lenses article {
+    padding: 0.2rem 1rem 0.8rem;
+  }
+
+  .signal-lenses article:nth-child(odd) {
+    border-right: 1px solid var(--rule);
+  }
+
+  .signal-lenses article:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .signal-lenses span {
+    color: var(--main);
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+  }
+
+  .signal-lenses strong {
+    display: block;
+    font-family: var(--font-serif);
+    font-size: 0.88rem;
+    margin-top: 0.2rem;
+  }
+
+  .signal-lenses p {
+    color: var(--ink-faint);
+    font-size: 0.65rem;
+    margin: 0.15rem 0 0;
+  }
+
+  .signal-actions {
+    align-items: center;
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .primary-action {
+    background: var(--main);
+    color: #fff;
+    font-family: var(--font-serif);
+    font-weight: 700;
+    padding: 0.75rem 1rem;
+    text-align: center;
+  }
+
+  .primary-action:hover {
     color: #fff;
   }
 
-  .home-columns {
+  .secondary-action {
+    align-items: center;
+    display: flex;
+    font-size: 0.75rem;
+    gap: 0.35rem;
+    justify-content: center;
+  }
+
+  .key-evidence {
     border-bottom: 1px dotted var(--rule);
     display: grid;
-    grid-template-columns: minmax(23rem, 2fr) minmax(12rem, 0.85fr) minmax(18rem, 1.2fr);
+    grid-template-columns: minmax(0, 3fr) minmax(17rem, 0.9fr);
+    scroll-margin-top: 2rem;
   }
 
-  .home-columns > * {
-    border-right: 1px dotted var(--rule);
-    padding: 1.35rem 1.3rem 2rem 0;
+  .evidence-main {
+    padding: 2rem 2rem 2rem 0;
   }
 
-  .home-columns > * + * {
-    padding-left: 1.3rem;
-  }
-
-  .home-columns > *:last-child {
-    border-right: 0;
-    padding-right: 0;
-  }
-
-  .column-title {
-    align-items: center;
-    border-bottom: 1px solid var(--ink);
-    display: flex;
-    justify-content: space-between;
-    min-height: 2.1rem;
-  }
-
-  .column-title p {
+  .evidence-main > header > p:first-child {
+    font-family: var(--font-serif);
+    font-size: 0.95rem;
     font-weight: 700;
-    margin: 0;
+    margin-bottom: 0.5rem;
   }
 
-  .column-title a {
-    color: var(--ink-faint);
-    font-size: 0.68rem;
+  .evidence-main h2 {
+    font-size: clamp(1.45rem, 2.25vw, 2.25rem);
+    margin-bottom: 0.55rem;
   }
 
-  .edition-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .edition-list a {
-    align-items: start;
-    border-bottom: 1px dotted var(--rule);
-    display: grid;
-    gap: 1rem;
-    grid-template-columns: 2.7rem 1fr;
-    padding: 1rem 0;
-  }
-
-  .edition-list a > span {
-    color: var(--main);
-    font-family: var(--font-mono);
-    font-size: 1.2rem;
-    font-weight: 500;
-  }
-
-  .edition-list h2 {
-    font-size: 1.14rem;
-    margin-bottom: 0.12rem;
-  }
-
-  .edition-list p,
-  .feature-list p {
-    color: var(--ink-faint);
-    font-size: 0.71rem;
-    margin: 0;
-  }
-
-  .status-column dl {
-    margin: 0 0 1.4rem;
-  }
-
-  .status-column dl div {
+  .evidence-main > header > p:last-child {
     align-items: center;
-    border-bottom: 1px dotted var(--rule);
     display: flex;
-    font-size: 0.7rem;
-    justify-content: space-between;
-    min-height: 2.7rem;
+    font-size: 0.72rem;
+    gap: 0.55rem;
   }
 
-  .status-column dd {
-    color: var(--main);
-    font-family: var(--font-mono);
+  .legend-line {
+    border-top: 2px solid var(--ink);
+    display: inline-block;
+    width: 1.75rem;
+  }
+
+  .legend-line--risk {
+    border-color: var(--main);
+    margin-left: 1rem;
+  }
+
+  .evidence-notes {
+    border-left: 1px solid var(--rule);
+    padding: 2rem 0 2rem 1.8rem;
+  }
+
+  .evidence-notes section {
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 1rem;
+  }
+
+  .evidence-notes section + section {
+    padding-top: 1rem;
+  }
+
+  .evidence-notes h3 {
+    font-size: 0.95rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .evidence-notes p,
+  .evidence-notes li {
+    font-size: 0.75rem;
+  }
+
+  .evidence-notes ul {
+    margin: 0;
+    padding-left: 1.1rem;
+  }
+
+  .evidence-notes > a {
+    align-items: center;
+    display: flex;
+    font-family: var(--font-serif);
+    font-size: 0.8rem;
+    font-weight: 700;
+    gap: 0.3rem;
+    padding-top: 1rem;
+  }
+
+  .subscribe-panel {
+    align-items: center;
+    background: var(--ink);
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    margin-inline: -2.25rem;
+    padding: 2rem 2.25rem 2rem 5.2rem;
+    scroll-margin-top: 2rem;
+  }
+
+  .subscribe-panel h2 {
+    margin: 0.3rem 0;
+  }
+
+  .subscribe-panel p:last-child {
+    color: #bdbdbd;
+    font-size: 0.78rem;
     margin: 0;
   }
 
-  .status-column .text-link {
-    font-size: 0.68rem;
+  .subscribe-panel > a {
+    background: var(--main);
+    color: #fff;
+    font-family: var(--font-serif);
+    font-weight: 700;
+    padding: 0.8rem 1.2rem;
   }
 
-  .feature-list > a {
-    border-bottom: 1px dotted var(--rule);
-    display: grid;
-    gap: 0.65rem;
-    grid-template-columns: 1.5rem 1fr;
-    padding: 0.8rem 0;
+  .brief-footer {
+    margin-top: 0;
+    padding-left: 5.2rem;
   }
 
-  .feature-list > a > span {
-    color: var(--main);
-    font-family: var(--font-mono);
-    font-size: 0.65rem;
-  }
-
-  .feature-list small {
-    color: var(--main);
-    font-size: 0.6rem;
-  }
-
-  .feature-list h3 {
-    font-size: 0.85rem;
-    margin: 0.1rem 0 0.15rem;
-  }
-
-  .home-chart,
-  .source-section {
-    border-bottom: 1px dotted var(--rule);
-    padding: 3.5rem 0;
-  }
-
-  .section-heading {
-    align-items: end;
-    display: flex;
-    gap: 2rem;
-    justify-content: space-between;
-    margin-bottom: 1.8rem;
-  }
-
-  .section-heading h2 {
-    margin-bottom: 0;
-    max-width: 45rem;
-  }
-
-  .section-heading > a {
-    border-bottom: 1px dotted var(--ink-faint);
-    flex: 0 0 auto;
-    font-size: 0.72rem;
-  }
-
-  @media (max-width: 1080px) {
-    .home-columns {
-      grid-template-columns: 1.6fr 0.8fr;
+  @media (max-width: 1100px) {
+    .signal-preview {
+      grid-template-columns: 1fr 1.7fr;
     }
 
-    .featured-column {
-      border-top: 1px dotted var(--rule);
+    .signal-actions {
+      border-left: 0;
+      border-top: 1px solid var(--rule);
       grid-column: 1 / -1;
-      padding-left: 0 !important;
-    }
-
-    .feature-list {
-      display: grid;
       grid-template-columns: 1fr 1fr;
     }
 
-    .feature-list > a:nth-child(odd) {
-      border-right: 1px dotted var(--rule);
-      padding-right: 1rem;
+  }
+
+  @media (max-width: 900px) {
+    .market-brief {
+      padding: 1.3rem 1rem 0;
     }
 
-    .feature-list > a:nth-child(even) {
+    .chapter-rail {
+      display: none;
+    }
+
+    .brief-hero h1 {
+      font-size: 2.45rem;
+    }
+
+    .subscribe-panel {
+      margin-inline: -1rem;
+      padding: 2rem 1rem;
+    }
+
+    .brief-footer {
       padding-left: 1rem;
     }
   }
 
   @media (max-width: 700px) {
-    .home {
-      padding: 1.3rem 1rem 0;
+    .evidence-strip,
+    .key-evidence,
+    .signal-preview {
+      display: block;
     }
 
-    .home-lead {
-      gap: 1.8rem;
+    .evidence-strip article {
+      padding: 1rem 0;
+    }
+
+    .evidence-strip article + article,
+    .signal-preview > * + * {
+      border-left: 0;
+      border-top: 1px solid var(--rule);
+    }
+
+    .signal-preview > * {
+      padding-inline: 0;
+    }
+
+    .signal-actions {
       grid-template-columns: 1fr;
     }
 
-    .home-intro h1 {
-      font-size: 2.15rem;
+    .evidence-main {
+      padding-right: 0;
     }
 
-    .home-numbers {
+    .evidence-notes {
       border-left: 0;
+      border-top: 1px solid var(--rule);
+      padding-left: 0;
     }
 
-    .home-numbers div {
-      padding-left: 0.8rem;
-    }
-
-    .market-ribbon {
-      grid-template-columns: 1fr 1fr;
-      margin-inline: -1rem;
-      padding-inline: 1rem;
-    }
-
-    .market-ribbon > * {
-      border-bottom: 1px dotted rgb(255 255 255 / 35%);
-    }
-
-    .market-ribbon > *:nth-child(2) {
-      border-right: 0;
-    }
-
-    .market-ribbon > a {
-      justify-content: flex-end;
-    }
-
-    .home-columns {
-      display: block;
-    }
-
-    .home-columns > * {
-      border-bottom: 1px dotted var(--rule);
-      border-right: 0;
-      padding: 1.4rem 0 2rem !important;
-    }
-
-    .feature-list {
-      display: block;
-    }
-
-    .feature-list > a {
-      border-right: 0 !important;
-      padding-inline: 0 !important;
-    }
-
-    .section-heading {
-      align-items: start;
-      flex-direction: column;
-      gap: 0.8rem;
+    .subscribe-panel {
+      align-items: flex-start;
+      display: grid;
+      gap: 1rem;
     }
   }
 </style>

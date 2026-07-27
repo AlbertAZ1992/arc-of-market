@@ -28,6 +28,8 @@ jobs:
 
       - name: Prepare automated data branch
         run: |
+          git config user.name "arc-of-market-bot"
+          git config user.email "bot@arcofmarket.com"
           if git ls-remote --exit-code --heads origin \
             refs/heads/data/automated-updates >/dev/null; then
             git fetch origin data/automated-updates
@@ -81,24 +83,22 @@ jobs:
       - name: Validate and build frontend
         working-directory: astro
         run: |
+          pnpm data:sync
           pnpm check
           pnpm lint
           pnpm build
 
       - name: Commit validated data
         run: |
-          git config user.name "arc-of-market-bot"
-          git config user.email "bot@arcofmarket.com"
           git add data
           if git diff --cached --quiet; then
             echo "No data changes to commit"
           else
             git commit -m "data: ${{ inputs.profile }} update $(date -u +%F)"
-            git push origin HEAD:data/automated-updates
           fi
+          git push origin HEAD:data/automated-updates
 
   publish:
-    if: vars.PUBLIC_DATA_APPROVED == 'true'
     needs: update
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -144,7 +144,6 @@ jobs:
           path: dist
 
   deploy:
-    if: vars.PUBLIC_DATA_APPROVED == 'true'
     needs: publish
     runs-on: ubuntu-latest
     permissions:

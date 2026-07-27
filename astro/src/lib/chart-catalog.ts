@@ -42,24 +42,9 @@ const extendedSectorCharts = marketThemes
 
 const sectorCharts = [
   entry(
-    "费城半导体的三十年弧",
-    "SOX、SMH 与 SOXX 的周期路径。",
+    "半导体行业代理",
+    "SMH 与 SOXX 的周期路径。",
     "/themes/semiconductors/#theme-group-1",
-  ),
-  entry(
-    "半导体年度涨跌",
-    "年度回报与分布。",
-    "/themes/semiconductors/#semiconductor-annual",
-  ),
-  entry(
-    "年内最大跌幅",
-    "板块回撤与年终回报。",
-    "/themes/semiconductors/#semiconductor-intrayear",
-  ),
-  entry(
-    "SMH 与 SOXX 权重差异",
-    "两种 ETF 编制的暴露差异。",
-    "/themes/semiconductors/#semiconductor-weights",
   ),
   entry(
     "领涨与落后",
@@ -67,24 +52,9 @@ const sectorCharts = [
     "/themes/semiconductors/#theme-group-2",
   ),
   entry(
-    "XLK 的二十七年弧",
-    "科技板块长期价格路径。",
+    "信息科技板块与子行业",
+    "XLK、软件、云和网络安全代理。",
     "/themes/information-technology/#theme-group-1",
-  ),
-  entry(
-    "XLK 年度涨跌",
-    "年度回报与极端年份。",
-    "/themes/information-technology/#xlk-annual",
-  ),
-  entry(
-    "XLK 年内最大跌幅",
-    "板块回撤与修复。",
-    "/themes/information-technology/#xlk-intrayear",
-  ),
-  entry(
-    "XLK 头部持仓",
-    "集中度和公司权重。",
-    "/themes/information-technology/#xlk-holdings",
   ),
   entry(
     "软件、云与安全",
@@ -92,50 +62,34 @@ const sectorCharts = [
     "/themes/information-technology/#theme-group-2",
   ),
   entry(
-    "XLF 的二十七年弧",
-    "金融板块长期路径。",
+    "金融板块与子行业",
+    "XLF、银行、区域银行和保险代理。",
     "/themes/financials/#theme-group-1",
   ),
   entry(
-    "金融板块年度涨跌",
-    "年度回报与分布。",
-    "/themes/financials/#xlf-annual",
-  ),
-  entry(
-    "收益率曲线 × XLF",
-    "期限利差与板块表现。",
-    "/themes/financials/#xlf-yield-curve",
+    "金融核心公司",
+    "大行、投行、资管、券商和支付网络。",
+    "/themes/financials/#theme-group-2",
   ),
   entry(
     "2008 金融危机横截面",
     "银行、保险与券商的路径。",
     "/themes/financials/#financial-crisis-2008",
   ),
-  entry("XLF 头部持仓", "板块集中度。", "/themes/financials/#xlf-holdings"),
+  entry(
+    "必需消费",
+    "XLP 与核心防守型消费公司。",
+    "/themes/consumer/#theme-group-1",
+  ),
   entry(
     "XLP × XLY",
     "防守与周期消费的相对强弱。",
     "/themes/consumer/#consumer-xlp-xly",
   ),
   entry(
-    "消费板块年度回报",
-    "必需与可选消费年度分化。",
-    "/themes/consumer/#consumer-annual",
-  ),
-  entry(
     "零售与住宅链",
     "XRT、XHB 与核心公司。",
     "/themes/consumer/#theme-group-2",
-  ),
-  entry(
-    "等权组合回报",
-    "避免头部权重遮盖内部变化。",
-    "/themes/consumer/#consumer-equal-weight",
-  ),
-  entry(
-    "消费龙头回撤",
-    "个股历史回撤与修复。",
-    "/themes/consumer/#consumer-drawdowns",
   ),
   ...extendedSectorCharts,
 ];
@@ -447,21 +401,6 @@ export const chartGroups: readonly ChartGroup[] = [
         "/magnificent-seven/#mag7-members",
       ),
       entry(
-        "市值占比",
-        "七巨头在大盘中的集中度。",
-        "/magnificent-seven/#mag7-market-cap-share",
-      ),
-      entry(
-        "现金与资本开支",
-        "AI 基建投入与现金创造。",
-        "/magnificent-seven/#mag7-cash-capex",
-      ),
-      entry(
-        "七只股票相关性",
-        "共振与分化的滚动变化。",
-        "/magnificent-seven/#mag7-correlation",
-      ),
-      entry(
         "NVDA 与 1999 Cisco",
         "两个算力周期的历史类比。",
         "/magnificent-seven/#mag7-nvda-cisco",
@@ -478,7 +417,7 @@ export const chartGroups: readonly ChartGroup[] = [
   {
     code: "LAB",
     title: "实验室指标",
-    description: "最后查看市场底图、历史榜单与 ArcOfMarket 原创指标。",
+    description: "最后查看市场底图、主要 ETF 与当日横截面。",
     href: "/lab/",
     charts: [
       entry(
@@ -492,58 +431,10 @@ export const chartGroups: readonly ChartGroup[] = [
         "/lab/#market-index-etfs",
       ),
       entry(
-        "市场温度",
-        "原创环境分值与历史百分位。",
-        "/lab/#market-temperature",
-      ),
-      entry(
-        "涨跌家数与宽度",
-        "指数内部参与度与均线广度。",
-        "/lab/#market-breadth",
-      ),
-      entry(
         "市值加权热力图",
         "成分涨跌与权重的横截面。",
         "/lab/#market-heatmap",
       ),
-      entry(
-        "各年代市值前十",
-        "每十年市值前十的行业更替。",
-        "/lab/#top10-decades",
-      ),
-      entry(
-        "头部公司寿命",
-        "跨周期持续留在榜单的公司。",
-        "/lab/#top10-longevity",
-      ),
-      entry("领跑者更替", "每个时代的主导公司。", "/lab/#top10-leaders"),
-      entry(
-        "共同出现次数",
-        "哪些公司在榜单中相遇。",
-        "/lab/#top10-cooccurrence",
-      ),
-      entry(
-        "进入前十后的结果",
-        "上榜后的延续、衰落与退出。",
-        "/lab/#top10-outcomes",
-      ),
-      entry("Arc Regime", "市场环境分类、版本与输入台账。", "/lab/#arc-regime"),
-      entry(
-        "Breadth Pulse",
-        "广度、趋势和风险偏好的不可逆读数。",
-        "/lab/#arc-breadth-pulse",
-      ),
-      entry(
-        "Relative Strength Leaders",
-        "ETF 轮动与相对强度状态。",
-        "/lab/#arc-relative-strength",
-      ),
-      entry(
-        "Signal Ledger",
-        "每次信号、落点和后续表现。",
-        "/lab/#arc-signal-ledger",
-      ),
-      entry("Daily Brief", "盘前盘后市场环境简报。", "/lab/#arc-daily-brief"),
     ],
   },
 ] as const;

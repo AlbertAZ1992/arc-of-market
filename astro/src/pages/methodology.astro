@@ -1,87 +1,108 @@
 ---
 import EditorialPage from "../layouts/EditorialPage.astro";
+import { MARKET_BRIEF_THRESHOLDS } from "../lib/market-brief";
 ---
 
 <EditorialPage
-  title="方法论与数据政策"
-  eyebrow="METHODOLOGY · PROVENANCE · REVISION"
-  description="ArcOfMarket 如何选择数据、解释指数、计算原创指标，并让每个公开读数可追溯。"
+  title="方法论"
+  eyebrow="METHODOLOGY · CALCULATION · UPDATE"
+  description="首页判断如何计算、数据何时更新，以及每张图应该怎样阅读。"
 >
   <section>
-    <h2>先说产品是什么</h2>
+    <p class="faint">DAILY MARKET BRIEF</p>
+    <h2>“一句话今日判断”不是 AI 写的</h2>
     <p>
-      市场档案、历史图表、数据来源和方法论免费开放。未来收费内容限于 ArcOfMarket
-      独立定义的指标、市场环境分类、版本化读数和解释服务。我们不把第三方原始数据包装后出售，
-      也不提供可替代上游数据商的下载接口。
+      它是一组固定规则对最新数据做出的市场状态分类。每次更新使用同一套输入、顺序和阈值，
+      因而任何人都可以根据页面上的数据重新得到相同结论。它描述当前环境，不预测下一交易日涨跌。
+    </p>
+    <ol>
+      <li>
+        先比较 S&P 500 收盘价与 {MARKET_BRIEF_THRESHOLDS.longTrendDays}
+        日均线，判断长期价格趋势。
+      </li>
+      <li>
+        再读取 OFR 金融压力指数；高于 {MARKET_BRIEF_THRESHOLDS.stressAverage}
+        代表压力高于历史均值。
+      </li>
+      <li>
+        最后读取 VIX；{MARKET_BRIEF_THRESHOLDS.vixCaution}
+        是当前版本区分常态与压力升温的观察线。
+      </li>
+    </ol>
+    <p>
+      当价格低于 {MARKET_BRIEF_THRESHOLDS.longTrendDays}
+      日均线，页面显示长期趋势转弱；当价格仍在均线上方、但 OFR FSI 高于
+      {MARKET_BRIEF_THRESHOLDS.stressAverage} 或 VIX 不低于
+      {MARKET_BRIEF_THRESHOLDS.vixCaution}
+      ，页面显示趋势仍在但风险升温；其余情况显示趋势向上且系统性压力暂未升温。
+    </p>
+  </section>
+
+  <section>
+    <p class="faint">DAILY UPDATE</p>
+    <h2>每个美股交易日收盘后更新</h2>
+    <p>
+      日更任务在 UTC 22:17 运行，对应北京时间次日 06:17。系统先更新价格、波动率和金融压力，
+      检查日期与数值，再重新生成网站。某个核心输入更新失败时，网站保留上一份完整结果，
+      不用缺失值拼出新的判断。
     </p>
     <p>
-      “免费图表”与“付费原创指标”分层，不改变上游许可要求。每个输入仍须允许相应的公开展示、
-      商业服务器使用或衍生数据用途。
+      三类数据的发布日期并不完全相同：价格和 VIX 通常对应最近一个交易日，OFR FSI
+      通常滞后两个工作日。因此首页分别标出三者的数据日期，而不是用一个日期掩盖时间差。
     </p>
+  </section>
+
+  <section>
+    <p class="faint">CHART CONVENTIONS</p>
+    <h2>图表使用什么口径</h2>
+    <ul>
+      <li>价格趋势使用日收盘序列；均线只使用当日及之前的数据。</li>
+      <li>回报按相邻有效交易日计算，不用自然日填充休市日期。</li>
+      <li>回撤从此前历史高点计算，最低点为该轮回撤的谷值。</li>
+      <li>滚动收益只在完整窗口存在时显示，不用更短区间代替。</li>
+      <li>月度、季度和年度数据保留原始频率，不伪装成日频更新。</li>
+    </ul>
   </section>
 
   <section>
     <p class="faint">S&P 500 · HOW THE INDEX IS ACTUALLY BUILT</p>
     <h2>S&P 500 不是简单的市值前 500 名</h2>
     <p>
-      按 S&P Dow Jones Indices 当前公开方法，S&P 500 用于衡量美国大盘股板块，由指数委员会
-      从合资格的美国股票范围中选择，并按自由流通市值加权。候选公司还要满足注册地、上市市场、
-      证券类型、自由流通比例、流动性、规模和财务可行性等条件。
+      S&P 500 由指数委员会从合资格的美国股票中选择，并按自由流通市值加权。候选公司还需满足
+      上市市场、证券类型、流动性、规模和财务可行性等要求，行业代表性也会被纳入考虑。
     </p>
     <p>
-      选股由指数委员会酌情决定，并考虑行业代表性；指数没有按固定年度一次性重构，而会因并购、
-      退市、重组和市场变化按需调整。因此成分调入调出记录的是指数如何持续代表实体经济，
-      不是一个只按市值机械排序的榜单。
+      指数会因并购、退市、重组和市场变化按需调整。因此调入调出记录展示的是指数如何持续代表
+      美国大盘股市场，并不是一份只按市值机械排序的名单。
     </p>
     <p class="faint">
-      权威定义与会变化的门槛以
+      详细定义见
       <a href="https://www.spglobal.com/spdji/en/documents/methodologies/methodology-sp-us-indices.pdf">
         S&P U.S. Indices Methodology
-      </a>
-      为准。S&P、S&P 500 及相关标识属于其权利人；ArcOfMarket 未获其认可或认证。
+      </a>。
     </p>
   </section>
 
   <section>
-    <h2>四层数据架构</h2>
-    <ol>
-      <li>原始事实层：SEC、CFTC、原始政府机构和经授权的数据供应商。</li>
-      <li>标准化层：统一日期、单位、标识符、修订和 point-in-time 语义。</li>
-      <li>公开图表层：仅同步进入默认拒绝白名单的数据文件。</li>
-      <li>原创指标层：保存公式版本、输入许可范围、有效日期和不可逆衍生输出。</li>
-    </ol>
-  </section>
-
-  <section>
-    <h2>每张图必须回答六件事</h2>
-    <p><code>Source · As of · Retrieved at · Method · License/Terms · Revision</code></p>
-    <p>
-      如果数据陈旧、缺失或尚未获公开权利，页面应显示降级状态或保持空值，而不是用另一个近似
-      指标冒充。Forward PE 尤其不能由历史 EPS 趋势外推后改名得到。
-    </p>
-  </section>
-
-  <section>
-    <h2>原创指标如何收费</h2>
-    <p>
-      ArcOfMarket 可以对自己的公式、阈值、环境分类、版本化读数和解释服务收费，前提是输入合同
-      允许商业使用和相应的衍生输出。付费用户得到的是不可逆的原创读数与解释，不是第三方原始
-      价格、指数权重或一致预期明细。
-    </p>
-    <p>
-      指标只描述市场环境，不提供针对个人情况的投资建议，不保证收益，也不隐藏失败样本或历史
-      修订。
-    </p>
-  </section>
-
-  <section>
-    <h2>更新、修订与审计</h2>
+    <p class="faint">SOURCES</p>
+    <h2>主要数据来源</h2>
     <ul>
-      <li>日频与周频任务分开运行，数据失败不被静默吞掉。</li>
-      <li>核心失败阻断发布；可选源缺失保留旧值或明确显示空值。</li>
-      <li>数据文件进入质量审计和内容哈希链。</li>
-      <li>历史回填、事后修订和上线后的前向记录分开标记。</li>
-      <li>公开文件使用显式白名单，不以“抓得到”作为发布依据。</li>
+      <li><a href="https://fred.stlouisfed.org/">FRED</a>：利率、通胀、增长与流动性。</li>
+      <li><a href="https://www.financialresearch.gov/financial-stress-index/">OFR</a>：金融压力指数。</li>
+      <li><a href="https://www.cboe.com/tradable_products/vix/">Cboe</a>：VIX 与波动率资料。</li>
+      <li><a href="https://www.sec.gov/edgar/search/">SEC EDGAR</a>：公司与机构公开申报。</li>
+      <li><a href="https://www.cftc.gov/MarketReports/CommitmentsofTraders/index.htm">CFTC</a>：交易者持仓报告。</li>
+      <li><a href="https://www.nber.org/research/data/us-business-cycle-expansions-and-contractions">NBER</a>：美国经济周期日期。</li>
     </ul>
+    <p>每张图同时标注自身的数据日期、单位与来源；来源频率不同，不强行对齐为同一天。</p>
+  </section>
+
+  <section>
+    <p class="faint">REVISIONS</p>
+    <h2>数据修订时会发生什么</h2>
+    <p>
+      宏观和金融压力数据可能被发布机构修订。网站会使用最新公开版本重新计算，并保留更新时间。
+      如果计算规则发生变化，会更新方法说明和版本日期，让新旧读数的差异可以解释。
+    </p>
   </section>
 </EditorialPage>

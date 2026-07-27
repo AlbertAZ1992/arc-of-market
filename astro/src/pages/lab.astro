@@ -1,9 +1,7 @@
 ---
 import MarketProxyCharts from "@/components/MarketProxyCharts.astro";
 import SolarIcon from "@/components/SolarIcon.astro";
-import ChartDataPending from "@/components/charts/ChartDataPending.astro";
 import FinancialStressChart from "@/components/charts/FinancialStressChart.astro";
-import RegimeChart from "@/components/charts/RegimeChart.astro";
 import TradingViewHeatmap from "@/components/charts/TradingViewHeatmap.astro";
 import SiteShell from "@/layouts/SiteShell.astro";
 
@@ -14,8 +12,8 @@ const projects = [
     label: "DATA FOUNDATION",
     title: "数据来源目录",
     description:
-      "把来源、有效日期、抓取时间和修订记录写进同一份目录，确保每次读数都能重新计算。",
-    metrics: [["进度", "持续更新"], ["来源", "FRED · OFR · CFTC"], ["频率", "每日"]],
+      "把宏观、指数与风险数据放进同一份地图，快速找到每张图的来源和最近日期。",
+    metrics: [["范围", "宏观 · 指数"], ["来源", "FRED · OFR · CFTC"], ["频率", "每日"]],
     href: "/methodology/",
   },
   {
@@ -24,8 +22,8 @@ const projects = [
     label: "MARKET ARCHIVE",
     title: "百年市场档案",
     description:
-      "把年度回报、回撤、滚动收益和衰退区间做成可复核的长期坐标，不把回填数据伪装成实时记录。",
-    metrics: [["进度", "整理中"], ["范围", "SPX · NDX"], ["输出", "历史图表"]],
+      "把年度回报、回撤、滚动收益和衰退区间做成长期坐标，比较今天与过去的相似和不同。",
+    metrics: [["跨度", "近百年"], ["范围", "SPX · NDX"], ["视角", "回报 · 风险"]],
     href: "/archive/",
   },
   {
@@ -34,58 +32,26 @@ const projects = [
     label: "INDEX STRUCTURE",
     title: "指数的新陈代谢",
     description:
-      "记录当前行业结构与公开的成分变更事件，同时明确它们不能替代历史逐日 point-in-time 成分。",
-    metrics: [["进度", "已上线"], ["事件", "406"], ["范围", "S&P 500"]],
+      "记录当前行业结构与成分变更，观察一家公司如何进入或离开主要指数。",
+    metrics: [["记录", "406"], ["维度", "调入 · 调出"], ["范围", "S&P 500"]],
     href: "/sp500/",
   },
   {
-    date: "NEXT",
-    icon: "graph-new-linear",
-    label: "ARC REGIME",
-    title: "原创市场环境分类",
-    description:
-      "把价格趋势、风险偏好、利率与压力转成不可逆的环境状态，保存公式版本、阈值和每次变化。",
-    metrics: [["进度", "验证中"], ["输出", "环境状态"], ["用途", "市场描述"]],
-    href: "/methodology/",
-  },
-  {
-    date: "NEXT",
+    date: "2026.08",
     icon: "round-graph-linear",
     label: "ROTATION",
     title: "ETF 相对强度与轮动",
     description:
-      "围绕 SPY、QQQ、VTV、VOO 与行业 ETF 计算相对强弱、趋势持续性和状态迁移，不转售原始价格。",
-    metrics: [["进度", "验证中"], ["资产", "ETF"], ["输出", "相对强度"]],
+      "比较主要市场与行业 ETF 的相对强弱，观察资金偏好正在向哪里移动。",
+    metrics: [["视角", "成长 · 价值"], ["资产", "ETF"], ["输出", "相对强度"]],
     href: "/themes/information-technology/",
-  },
-  {
-    date: "NEXT",
-    icon: "document-text-linear",
-    label: "SIGNAL LEDGER",
-    title: "每次读数都要能对账",
-    description:
-      "保存信号落点、之后不同持有期的结果、失败样本与方法修订，避免只展示最漂亮的一段回测。",
-    metrics: [["进度", "设计中"], ["版本", "Git"], ["记录", "全部信号"]],
-    href: "/methodology/",
   },
 ] as const;
 
 const dockItems = [
   { href: "#market-environment", label: "市场环境总览" },
   { href: "#market-index-etfs", label: "主要指数与 ETF" },
-  { href: "#market-temperature", label: "市场温度" },
-  { href: "#market-breadth", label: "涨跌家数与宽度" },
   { href: "#market-heatmap", label: "市值加权热力图" },
-  { href: "#top10-decades", label: "各年代市值前十" },
-  { href: "#top10-longevity", label: "头部公司寿命" },
-  { href: "#top10-leaders", label: "领跑者更替" },
-  { href: "#top10-cooccurrence", label: "共同出现次数" },
-  { href: "#top10-outcomes", label: "进入前十后的结果" },
-  { href: "#arc-regime", label: "Arc Regime" },
-  { href: "#arc-breadth-pulse", label: "Breadth Pulse" },
-  { href: "#arc-relative-strength", label: "Relative Strength Leaders" },
-  { href: "#arc-signal-ledger", label: "Signal Ledger" },
-  { href: "#arc-daily-brief", label: "Daily Brief" },
 ] as const;
 ---
 
@@ -100,8 +66,8 @@ const dockItems = [
       <p class="eyebrow">ARC.LAB · 研究实验室</p>
       <h1>每一项研究，<br />都留下它是怎么长出来的。</h1>
       <p>
-        Lab 不是功能预告墙，而是研究日志。每项实验记录研究问题、使用数据、计算方法和验证结果，
-        让原创指标如何形成保持可见。
+        Lab 把长期数据、市场结构和原创读数放在一起。每个项目从一个市场问题出发，
+        给出对应的数据、图表和阅读方式。
       </p>
     </header>
 
@@ -146,91 +112,22 @@ const dockItems = [
       <section class="lab-component" id="market-index-etfs">
         <MarketProxyCharts />
       </section>
-      <ChartDataPending
-        description="把趋势、波动、信用压力和市场宽度标准化为同一套环境刻度。"
-        id="market-temperature"
-        source="公开市场与宏观序列 · ArcOfMarket 计算"
-        title="市场温度"
-      />
-      <ChartDataPending
-        description="观察上涨家数、下跌家数、创新高新低和均线以上股票比例。"
-        id="market-breadth"
-        source="可复核的股票横截面快照 · ArcOfMarket 计算"
-        title="涨跌家数与宽度"
-      />
       <TradingViewHeatmap
         dataSource="SPX500"
         description="按当前市值和涨跌幅观察 S&P 500 横截面，点击公司可查看明细。"
         id="market-heatmap"
         title="市值加权热力图"
       />
-
-      <ChartDataPending
-        description="以固定年末观察日重建不同时代的美国上市公司市值前十。"
-        id="top10-decades"
-        source="历史公司市值快照"
-        title="各年代市值前十"
-      />
-      <ChartDataPending
-        description="计算公司停留在市值前十的累计年数和连续年数。"
-        id="top10-longevity"
-        source="历史公司市值快照 · ArcOfMarket 计算"
-        title="头部公司寿命"
-      />
-      <ChartDataPending
-        description="沿时间轴展示市值领导者如何从铁路、能源、金融迁移到科技平台。"
-        id="top10-leaders"
-        source="历史公司市值快照 · ArcOfMarket 计算"
-        title="领跑者更替"
-      />
-      <ChartDataPending
-        description="统计公司在各期市值前十榜单中共同出现的次数。"
-        id="top10-cooccurrence"
-        source="历史公司市值快照 · ArcOfMarket 计算"
-        title="共同出现次数"
-      />
-      <ChartDataPending
-        description="追踪公司进入市值前十之后的一年、三年和五年结果。"
-        id="top10-outcomes"
-        source="历史公司市值与复权价格 · ArcOfMarket 计算"
-        title="进入前十后的结果"
-      />
-
-      <RegimeChart />
-      <ChartDataPending
-        description="把市场宽度的方向、速度和极端程度转成可追溯的脉冲状态。"
-        id="arc-breadth-pulse"
-        source="市场宽度快照 · ArcOfMarket 计算"
-        title="Breadth Pulse"
-      />
-      <ChartDataPending
-        description="按统一窗口比较主要指数、风格和行业 ETF 的相对强度。"
-        id="arc-relative-strength"
-        source="ETF 复权价格 · ArcOfMarket 计算"
-        title="Relative Strength Leaders"
-      />
-      <ChartDataPending
-        description="保存每次信号、公式版本、触发读数和之后不同持有期的结果。"
-        id="arc-signal-ledger"
-        source="ArcOfMarket 指标版本与历史快照"
-        title="Signal Ledger"
-      />
-      <ChartDataPending
-        description="把宏观、指数、宽度和原创状态压缩成一页可复核的每日环境简报。"
-        id="arc-daily-brief"
-        source="ArcOfMarket 数据管线与原创指标"
-        title="Daily Brief"
-      />
     </div>
 
     <section class="lab-note">
       <p class="eyebrow">OPEN NOTEBOOK</p>
-      <h2>当数据不够可靠，正确答案可以是“现在不做”。</h2>
+      <h2>同一个市场问题，可以从不同时间尺度观察。</h2>
       <p>
-        研究进度不以页面数量衡量，而以每个读数能否被未来的我们重新计算来衡量。
-        只有数据、公式和验证过程都准备好的指标，才会进入正式页面。
+        短期看价格和波动，中期看风格与行业，长期看估值和产业周期。
+        Lab 会持续把这些视角连接成一张完整的市场地图。
       </p>
-      <a href="/methodology/">查看数据政策 →</a>
+      <a href="/methodology/">查看计算方法 →</a>
     </section>
   </main>
 

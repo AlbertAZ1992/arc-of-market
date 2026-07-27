@@ -1,0 +1,309 @@
+---
+import SolarIcon from "@/components/SolarIcon.astro";
+import SiteShell from "@/layouts/SiteShell.astro";
+import { strategyLenses } from "@/lib/strategy-lenses";
+
+const readingOrder = [
+  ["01", "方向", "趋势引擎先回答市场的主要方向。"],
+  ["02", "确认", "市场脉冲再判断这段变化得到多少参与和风险确认。"],
+  ["03", "分配", "风格天平观察力量正集中在哪一类资产。"],
+  ["04", "背景", "创新时钟把短期变化放进更长的产业周期。"],
+] as const;
+---
+
+<SiteShell
+  bodyClass="signals-page"
+  description="ArcOfMarket 用四个观察维度理解趋势、强弱、风格与长期周期。"
+  title="Strategy Signals · ArcOfMarket"
+>
+  <main class="signals">
+    <header class="signals-hero">
+      <p class="eyebrow">STRATEGY SIGNALS</p>
+      <h1>四种视角，<br />读懂同一个市场。</h1>
+      <p>
+        市场很少只由一条曲线决定。ArcOfMarket
+        把主要趋势、市场强弱、风格迁移与长期周期整理成四个互相补充的观察坐标。
+      </p>
+    </header>
+
+    <section class="strategy-list" aria-label="四个市场观察维度">
+      {
+        strategyLenses.map((strategy, index) => (
+          <article>
+            <span class="strategy-code">{String(index + 1).padStart(2, "0")}</span>
+            <div class="strategy-name">
+              <p>{strategy.code}</p>
+              <h2>{strategy.title}</h2>
+            </div>
+            <p class="strategy-description">{strategy.description}</p>
+            <div class="strategy-meta">
+              <span>{strategy.dimension}</span>
+              <strong>{strategy.cadence}</strong>
+            </div>
+          </article>
+        ))
+      }
+    </section>
+
+    <section class="reading" aria-labelledby="reading-title">
+      <header>
+        <p class="eyebrow">HOW TO READ</p>
+        <h2 id="reading-title">从方向开始，到长期背景结束。</h2>
+        <p>四项读数按顺序回答不同问题，避免用一个指标解释所有市场变化。</p>
+      </header>
+      <div class="reading-grid">
+        {
+          readingOrder.map(([code, title, description]) => (
+            <article>
+              <span>{code}</span>
+              <h3>{title}</h3>
+              <p>{description}</p>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="signals-end">
+      <div>
+        <p class="eyebrow">THE MARKET MAP</p>
+        <h2>先看事实，再读状态。</h2>
+        <p>
+          首页给出当日市场环境，全部图表保留长期历史，方法论说明每项判断使用什么数据和规则。
+        </p>
+      </div>
+      <nav aria-label="继续阅读">
+        <a href="/">
+          今日市场判断
+          <SolarIcon name="arrow-right-linear" size={19} />
+        </a>
+        <a href="/archive/">
+          全部图表
+          <SolarIcon name="arrow-right-linear" size={19} />
+        </a>
+        <a href="/methodology/">
+          计算方法
+          <SolarIcon name="arrow-right-linear" size={19} />
+        </a>
+      </nav>
+    </section>
+  </main>
+
+  <footer class="page-footer signals-footer">
+    <span>© 2026 ArcOfMarket</span><span>·</span>
+    <span>市场研究不构成个性化投资建议</span><span>·</span>
+    <a href="/">返回今日市场判断</a>
+  </footer>
+</SiteShell>
+
+<style>
+  .signals {
+    padding: 2rem 2.25rem 0 3rem;
+  }
+
+  .signals-hero {
+    border-bottom: 1px dotted var(--rule);
+    padding-bottom: 3.5rem;
+  }
+
+  .signals-hero h1 {
+    font-size: clamp(2.8rem, 5vw, 5rem);
+    line-height: 1.12;
+    margin: 1.2rem 0 1.25rem;
+    max-width: 68rem;
+  }
+
+  .signals-hero > p:last-child {
+    color: var(--ink-soft);
+    max-width: 48rem;
+  }
+
+  .strategy-list article {
+    align-items: center;
+    border-bottom: 1px dotted var(--rule);
+    display: grid;
+    gap: 1.75rem;
+    grid-template-columns: 3rem minmax(12rem, 0.75fr) minmax(20rem, 1.45fr) 9rem;
+    min-height: 10rem;
+  }
+
+  .strategy-code {
+    color: var(--ink-faint);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+  }
+
+  .strategy-name p {
+    color: var(--main);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    margin: 0;
+  }
+
+  .strategy-name h2 {
+    font-size: 1.4rem;
+    margin: 0.18rem 0 0;
+  }
+
+  .strategy-description {
+    color: var(--ink-soft);
+    font-size: 0.83rem;
+    margin: 0;
+    max-width: 36rem;
+  }
+
+  .strategy-meta {
+    border-left: 1px solid var(--rule);
+    display: grid;
+    gap: 0.3rem;
+    padding-left: 1.4rem;
+  }
+
+  .strategy-meta span,
+  .strategy-meta strong {
+    font-size: 0.68rem;
+  }
+
+  .strategy-meta span {
+    color: var(--ink-faint);
+  }
+
+  .strategy-meta strong {
+    font-family: var(--font-mono);
+  }
+
+  .reading {
+    border-bottom: 1px dotted var(--rule);
+    padding: 4rem 0;
+  }
+
+  .reading > header {
+    margin-bottom: 2rem;
+    max-width: 48rem;
+  }
+
+  .reading > header h2 {
+    margin: 0.55rem 0;
+  }
+
+  .reading > header p:last-child {
+    color: var(--ink-soft);
+  }
+
+  .reading-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .reading-grid article {
+    border-block: 1px solid var(--rule);
+    min-height: 12rem;
+    padding: 1.25rem;
+  }
+
+  .reading-grid article:first-child {
+    padding-left: 0;
+  }
+
+  .reading-grid article + article {
+    border-left: 1px solid var(--rule);
+  }
+
+  .reading-grid span {
+    color: var(--main);
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+  }
+
+  .reading-grid h3 {
+    margin: 1.4rem 0 0.55rem;
+  }
+
+  .reading-grid p {
+    color: var(--ink-soft);
+    font-size: 0.75rem;
+  }
+
+  .signals-end {
+    align-items: end;
+    display: grid;
+    gap: 3rem;
+    grid-template-columns: minmax(0, 1.3fr) minmax(18rem, 0.7fr);
+    padding: 4rem 0 1rem;
+  }
+
+  .signals-end > div {
+    max-width: 46rem;
+  }
+
+  .signals-end > div h2 {
+    margin: 0.55rem 0;
+  }
+
+  .signals-end > div p:last-child {
+    color: var(--ink-soft);
+  }
+
+  .signals-end nav {
+    border-top: 1px solid var(--rule);
+  }
+
+  .signals-end nav a {
+    align-items: center;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    font-family: var(--font-serif);
+    font-weight: 700;
+    justify-content: space-between;
+    padding: 0.85rem 0;
+  }
+
+  @media (max-width: 900px) {
+    .signals {
+      padding: 1.4rem 1rem 0;
+    }
+
+    .strategy-list article {
+      grid-template-columns: 2rem 1fr auto;
+      padding: 1.4rem 0;
+    }
+
+    .strategy-description {
+      grid-column: 2 / -1;
+    }
+
+    .strategy-meta {
+      border-left: 0;
+      grid-column: 2 / -1;
+      grid-template-columns: auto auto;
+      justify-content: start;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .signals-hero h1 {
+      font-size: 2.7rem;
+    }
+
+    .reading-grid,
+    .signals-end {
+      display: block;
+    }
+
+    .reading-grid article,
+    .reading-grid article:first-child {
+      min-height: 9rem;
+      padding-inline: 0;
+    }
+
+    .reading-grid article + article {
+      border-left: 0;
+      border-top: 0;
+    }
+
+    .signals-end nav {
+      margin-top: 2rem;
+    }
+  }
+</style>

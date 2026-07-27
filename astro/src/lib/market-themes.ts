@@ -32,8 +32,7 @@ export const marketThemes = [
       },
       {
         heading: "核心公司",
-        description:
-          "价格路径只用于成员分化观察，不构成 ArcOfMarket 等权指数。",
+        description: "并列核心公司的价格路径，观察成员之间何时同步、何时分化。",
         symbols: [
           ["Apple", "NASDAQ:AAPL|1D"],
           ["Microsoft", "NASDAQ:MSFT|1D"],

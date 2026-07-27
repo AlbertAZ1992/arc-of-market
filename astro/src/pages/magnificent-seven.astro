@@ -1,15 +1,11 @@
 ---
-import ChartDataPending from "@/components/charts/ChartDataPending.astro";
 import TradingViewResearchSection from "@/components/charts/TradingViewResearchSection.astro";
 import SiteShell from "@/layouts/SiteShell.astro";
 
 const dockItems = [
   { href: "#mag7-equal-weight", label: "七巨头等权代理" },
   { href: "#mag7-members", label: "七家公司成员分化" },
-  { href: "#mag7-market-cap-share", label: "市值占比" },
-  { href: "#mag7-cash-capex", label: "现金与资本开支" },
   { href: "#mag7-nvda-cisco", label: "NVDA 与 1999 Cisco" },
-  { href: "#mag7-correlation", label: "七只股票相关性" },
 ] as const;
 ---
 
@@ -54,18 +50,6 @@ const dockItems = [
       ]}
       title="七家公司成员分化"
     />
-    <ChartDataPending
-      description="按统一观察日期计算七家公司合计市值占 S&P 500 总市值的比例。"
-      id="mag7-market-cap-share"
-      source="公司市值与 S&P 500 成分权重 · ArcOfMarket 计算"
-      title="市值占比"
-    />
-    <ChartDataPending
-      description="比较七家公司经营现金流、自由现金流和资本开支的年度变化。"
-      id="mag7-cash-capex"
-      source="SEC 公司申报文件 · ArcOfMarket 计算"
-      title="现金与资本开支"
-    />
     <TradingViewResearchSection
       description="在同一价格组件里查看 Nvidia 与 Cisco 的长期路径；跨时代比较需结合估值、盈利和拆股。"
       id="mag7-nvda-cisco"
@@ -74,12 +58,6 @@ const dockItems = [
         ["Cisco", "NASDAQ:CSCO|1D"],
       ]}
       title="NVDA 与 1999 Cisco"
-    />
-    <ChartDataPending
-      description="用滚动窗口展示七家公司日收益率相关性的中位数和区间。"
-      id="mag7-correlation"
-      source="七家公司复权价格 · ArcOfMarket 计算"
-      title="七只股票相关性"
     />
   </main>
 

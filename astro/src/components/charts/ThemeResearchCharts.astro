@@ -1,14 +1,11 @@
 ---
-import ChartDataPending from "@/components/charts/ChartDataPending.astro";
 import TradingViewResearchSection from "@/components/charts/TradingViewResearchSection.astro";
-import { themeResearch } from "@/lib/theme-research";
 
 type Props = {
   slug: string;
 };
 
 const { slug } = Astro.props;
-const entries = themeResearch[slug] ?? [];
 ---
 
 {
@@ -39,15 +36,4 @@ const entries = themeResearch[slug] ?? [];
       title="2008 金融危机横截面"
     />
   )
-}
-
-{
-  entries.map((entry) => (
-    <ChartDataPending
-      description={entry.description}
-      id={entry.id}
-      source={entry.source}
-      title={entry.title}
-    />
-  ))
 }
