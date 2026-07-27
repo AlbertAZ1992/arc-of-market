@@ -417,7 +417,7 @@ export const chartGroups: readonly ChartGroup[] = [
   {
     code: "LAB",
     title: "实验室指标",
-    description: "最后查看市场底图、历史榜单与 ArcOfMarket 原创指标。",
+    description: "最后查看市场底图、主要 ETF 与当日横截面。",
     href: "/lab/",
     charts: [
       entry(
@@ -435,7 +435,6 @@ export const chartGroups: readonly ChartGroup[] = [
         "成分涨跌与权重的横截面。",
         "/lab/#market-heatmap",
       ),
-      entry("Arc Regime", "市场环境分类、版本与输入台账。", "/lab/#arc-regime"),
     ],
   },
 ] as const;

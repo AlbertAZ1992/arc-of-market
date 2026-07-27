@@ -39,25 +39,22 @@ const megaSeven = [
     <p class="faint">市场代理</p>
     <h2 id="market-proxies-title">大盘、成长与价值</h2>
     <p class="muted">
-      这里用 SPY、VOO、QQQ 与 VTV 作为可交易 ETF 代理，比较大盘、科技成长和价值风格，
-      不把 ETF 当作官方指数点位。图表由 TradingView 官方组件直接展示；本站不下载、缓存或
-      转售组件中的行情，也不把组件数据用于自研指标计算。
+      用 SPY、VOO、QQQ 与 VTV 比较大盘、科技成长和价值风格。ETF 与对应指数的走势接近，
+      但会受到费用、跟踪误差和交易时段影响。
     </p>
   </header>
 
   <TradingViewSymbolOverview label="SPY、VOO、QQQ 和 VTV 历史价格图" symbols={marketProxies} />
 
   <p class="chart-note faint measure">
-    交易所、延迟状态与可用市场由 TradingView 标示并负责。ETF 会有费用、跟踪误差和交易时段差异，
-    因此不等同于官方 S&P 500 或 Nasdaq-100 指数。
+    图表由 TradingView 组件提供；交易所与延迟状态以组件标示为准。
   </p>
 
   <div class="subsection measure">
     <p class="faint">行业代理</p>
     <h3>十一大板块</h3>
     <p class="muted">
-      用 11 只 SPDR 行业 ETF 观察板块强弱。它们是可交易代理，不是 S&P GICS
-      官方行业指数；选择上方代码可切换时间序列。
+      用 11 只 SPDR 行业 ETF 观察板块强弱；选择上方代码可以切换时间序列。
     </p>
   </div>
 
@@ -67,8 +64,7 @@ const megaSeven = [
     <p class="faint">集中度观察</p>
     <h3>Magnificent 7 成员分化</h3>
     <p class="muted">
-      这里并列七家公司各自的价格路径，不把它命名为等权指数。以后上线的集中度、扩散度和
-      相对强弱评分会采用 ArcOfMarket 自己的版本化方法。
+      并列七家公司的价格路径，观察龙头之间何时同步、何时开始分化。
     </p>
   </div>
 

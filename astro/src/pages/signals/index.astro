@@ -1,148 +1,97 @@
 ---
 import SolarIcon from "@/components/SolarIcon.astro";
 import SiteShell from "@/layouts/SiteShell.astro";
-import { signalPublication } from "@/lib/signal-publication";
+import { strategyLenses } from "@/lib/strategy-lenses";
 
-const strategies = [
-  {
-    answer: "纳指风险敞口当前应持有、降低还是退出。",
-    cadence: "日频",
-    code: "01",
-    role: "核心行动信号",
-    title: "QQQ 量化策略",
-  },
-  {
-    answer: "趋势强度、交易时机与风险预算是否允许增加。",
-    cadence: "日频 / 周频",
-    code: "02",
-    role: "交易节奏",
-    title: "动量交易信号",
-  },
-  {
-    answer: "成长与价值之间是否正在形成可验证的反转。",
-    cadence: "周频",
-    code: "03",
-    role: "风格切换",
-    title: "QQQ / VTV 反转",
-  },
-  {
-    answer: "当前处于技术革命与资本部署的哪个长期阶段。",
-    cadence: "月频",
-    code: "04",
-    role: "长期环境",
-    title: "佩雷斯产业周期",
-  },
+const readingOrder = [
+  ["01", "方向", "趋势引擎先回答市场的主要方向。"],
+  ["02", "确认", "市场脉冲再判断这段变化得到多少参与和风险确认。"],
+  ["03", "分配", "风格天平观察力量正集中在哪一类资产。"],
+  ["04", "背景", "创新时钟把短期变化放进更长的产业周期。"],
 ] as const;
 ---
 
 <SiteShell
   bodyClass="signals-page"
-  description="ArcOfMarket 四项原创策略的用途、验证门槛、公开方法与订阅边界。"
+  description="ArcOfMarket 用四个观察维度理解趋势、强弱、风格与长期周期。"
   title="Strategy Signals · ArcOfMarket"
 >
   <main class="signals">
     <header class="signals-hero">
       <p class="eyebrow">STRATEGY SIGNALS</p>
-      <h1>先定义，再验证，最后才谈执行。</h1>
+      <h1>四种视角，<br />读懂同一个市场。</h1>
       <p>
-        四项策略目前只有产品目标和时间尺度，具体公式、参数、交易规则与验证标准
-        尚未由产品负责人确认。现阶段不会生成、发布或收费提供任何执行信号。
+        市场很少只由一条曲线决定。ArcOfMarket
+        把主要趋势、市场强弱、风格迁移与长期周期整理成四个互相补充的观察坐标。
       </p>
     </header>
 
-    <section class="strategy-list" aria-label="四项策略">
+    <section class="strategy-list" aria-label="四个市场观察维度">
       {
-        strategies.map((strategy) => (
+        strategyLenses.map((strategy, index) => (
           <article>
-            <span class="strategy-code">{strategy.code}</span>
+            <span class="strategy-code">{String(index + 1).padStart(2, "0")}</span>
             <div class="strategy-name">
-              <p>{strategy.role}</p>
+              <p>{strategy.code}</p>
               <h2>{strategy.title}</h2>
             </div>
-            <p class="strategy-answer">{strategy.answer}</p>
-            <p class="strategy-cadence">{strategy.cadence}</p>
-            <span class="strategy-state">待定义</span>
+            <p class="strategy-description">{strategy.description}</p>
+            <div class="strategy-meta">
+              <span>{strategy.dimension}</span>
+              <strong>{strategy.cadence}</strong>
+            </div>
           </article>
         ))
       }
     </section>
 
-    <section class="locked-signal" aria-labelledby="locked-title">
-      <div>
-        <p class="eyebrow">CURRENT EXECUTION</p>
-        <h2 id="locked-title">当前执行状态</h2>
-        <p>公式和回测尚未就绪，因此这里没有可以发布的今日方向或仓位。</p>
-      </div>
-      <div class="locked-values" aria-label="当前订阅字段">
+    <section class="reading" aria-labelledby="reading-title">
+      <header>
+        <p class="eyebrow">HOW TO READ</p>
+        <h2 id="reading-title">从方向开始，到长期背景结束。</h2>
+        <p>四项读数按顺序回答不同问题，避免用一个指标解释所有市场变化。</p>
+      </header>
+      <div class="reading-grid">
         {
-          ["最新方向", "目标仓位", "上一状态变化", "下一触发", "失效条件"].map(
-            (field) => (
-              <span>
-                <SolarIcon
-                  name="lock-keyhole-minimalistic-linear"
-                  size={19}
-                />
-                {field}<b>•••</b>
-              </span>
-            ),
-          )
+          readingOrder.map(([code, title, description]) => (
+            <article>
+              <span>{code}</span>
+              <h3>{title}</h3>
+              <p>{description}</p>
+            </article>
+          ))
         }
       </div>
-      <p class="validation-gate">{signalPublication.gateLabel}</p>
     </section>
 
-    <section class="validation" id="validation">
-      <header>
-        <p class="eyebrow">PUBLIC VALIDATION</p>
-        <h2>上线必须依次通过四道门禁。</h2>
-      </header>
-      <div class="validation-grid">
-        <article>
-          <span>01</span>
-          <h3>公式确认</h3>
-          <p>由产品负责人确认输入数据、状态定义、触发逻辑、仓位与无法覆盖的情形。</p>
-        </article>
-        <article>
-          <span>02</span>
-          <h3>历史与样本外验证</h3>
-          <p>固定版本后展示基准、收益、回撤和失败区间，再进行不改规则的样本外观察。</p>
-        </article>
-        <article>
-          <span>03</span>
-          <h3>模拟运行</h3>
-          <p>每日保存输入、输出与生成时间，连续运行后确认数据更新和状态迁移可靠。</p>
-        </article>
-        <article>
-          <span>04</span>
-          <h3>发布审批</h3>
-          <p>确认版本、数据许可、免责声明和提醒流程后，才允许启用订阅与当前信号。</p>
-        </article>
-      </div>
-    </section>
-
-    <section class="boundary">
-      <p class="eyebrow">THE PRODUCT BOUNDARY</p>
-      <h2>研究框架可以公开，未验证的执行结果不能出售。</h2>
+    <section class="signals-end">
       <div>
-        <article>
-          <h3>始终公开</h3>
-          <p>策略用途；公式确认后再公开方法、历史验证、失败样本和版本记录。</p>
-        </article>
-        <article>
-          <h3>验证后再决定订阅</h3>
-          <p>只有发布审批通过后，才讨论方向、仓位、触发条件和变化提醒。</p>
-        </article>
+        <p class="eyebrow">THE MARKET MAP</p>
+        <h2>先看事实，再读状态。</h2>
+        <p>
+          首页给出当日市场环境，全部图表保留长期历史，方法论说明每项判断使用什么数据和规则。
+        </p>
       </div>
-      <a href="/methodology/">
-        查看方法论与数据说明
-        <SolarIcon name="arrow-right-linear" size={19} />
-      </a>
+      <nav aria-label="继续阅读">
+        <a href="/">
+          今日市场判断
+          <SolarIcon name="arrow-right-linear" size={19} />
+        </a>
+        <a href="/archive/">
+          全部图表
+          <SolarIcon name="arrow-right-linear" size={19} />
+        </a>
+        <a href="/methodology/">
+          计算方法
+          <SolarIcon name="arrow-right-linear" size={19} />
+        </a>
+      </nav>
     </section>
   </main>
 
   <footer class="page-footer signals-footer">
     <span>© 2026 ArcOfMarket</span><span>·</span>
-    <span>策略研究不构成个性化投资建议</span><span>·</span>
+    <span>市场研究不构成个性化投资建议</span><span>·</span>
     <a href="/">返回今日市场判断</a>
   </footer>
 </SiteShell>
@@ -154,13 +103,14 @@ const strategies = [
 
   .signals-hero {
     border-bottom: 1px dotted var(--rule);
-    padding-bottom: 3rem;
+    padding-bottom: 3.5rem;
   }
 
   .signals-hero h1 {
-    font-size: clamp(2.5rem, 4vw, 4.2rem);
-    margin: 1.2rem 0 1rem;
-    max-width: 76rem;
+    font-size: clamp(2.8rem, 5vw, 5rem);
+    line-height: 1.12;
+    margin: 1.2rem 0 1.25rem;
+    max-width: 68rem;
   }
 
   .signals-hero > p:last-child {
@@ -172,13 +122,12 @@ const strategies = [
     align-items: center;
     border-bottom: 1px dotted var(--rule);
     display: grid;
-    gap: 1.5rem;
-    grid-template-columns: 3rem minmax(12rem, 0.9fr) minmax(18rem, 1.35fr) 7rem 5rem;
-    min-height: 9rem;
+    gap: 1.75rem;
+    grid-template-columns: 3rem minmax(12rem, 0.75fr) minmax(20rem, 1.45fr) 9rem;
+    min-height: 10rem;
   }
 
-  .strategy-code,
-  .strategy-cadence {
+  .strategy-code {
     color: var(--ink-faint);
     font-family: var(--font-mono);
     font-size: 0.7rem;
@@ -186,162 +135,128 @@ const strategies = [
 
   .strategy-name p {
     color: var(--main);
-    font-size: 0.67rem;
-    font-weight: 700;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
     letter-spacing: 0.08em;
     margin: 0;
   }
 
   .strategy-name h2 {
-    font-size: 1.2rem;
-    margin: 0.15rem 0 0;
+    font-size: 1.4rem;
+    margin: 0.18rem 0 0;
   }
 
-  .strategy-answer {
-    font-size: 0.84rem;
-    margin: 0;
-  }
-
-  .strategy-state {
-    border: 1px solid var(--main);
-    color: var(--main);
-    font-size: 0.7rem;
-    padding: 0.25rem 0.45rem;
-    text-align: center;
-  }
-
-  .locked-signal {
-    border-bottom: 1px dotted var(--rule);
-    display: grid;
-    grid-template-columns: minmax(14rem, 0.75fr) minmax(32rem, 1.8fr);
-    padding: 3.5rem 0;
-  }
-
-  .locked-signal > div:first-child {
-    border-right: 1px solid var(--rule);
-    padding-right: 2rem;
-  }
-
-  .locked-signal h2 {
-    margin: 0.45rem 0;
-  }
-
-  .locked-signal p {
+  .strategy-description {
     color: var(--ink-soft);
-    font-size: 0.76rem;
+    font-size: 0.83rem;
     margin: 0;
+    max-width: 36rem;
   }
 
-  .locked-values {
+  .strategy-meta {
+    border-left: 1px solid var(--rule);
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    padding-left: 2rem;
+    gap: 0.3rem;
+    padding-left: 1.4rem;
   }
 
-  .locked-values span {
-    align-items: center;
-    border-bottom: 1px solid var(--rule);
-    display: flex;
-    font-size: 0.76rem;
-    gap: 0.55rem;
-    padding: 0.7rem;
+  .strategy-meta span,
+  .strategy-meta strong {
+    font-size: 0.68rem;
   }
 
-  .locked-values b {
+  .strategy-meta span {
+    color: var(--ink-faint);
+  }
+
+  .strategy-meta strong {
     font-family: var(--font-mono);
-    letter-spacing: 0.14em;
   }
 
-  .validation-gate {
-    color: var(--main) !important;
-    font-weight: 700;
-    grid-column: 2;
-    padding: 1rem 0 0 2rem;
-  }
-
-  .validation {
+  .reading {
     border-bottom: 1px dotted var(--rule);
     padding: 4rem 0;
-    scroll-margin-top: 2rem;
   }
 
-  .validation > header {
+  .reading > header {
     margin-bottom: 2rem;
+    max-width: 48rem;
   }
 
-  .validation-grid {
+  .reading > header h2 {
+    margin: 0.55rem 0;
+  }
+
+  .reading > header p:last-child {
+    color: var(--ink-soft);
+  }
+
+  .reading-grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
-  .validation-grid article {
+  .reading-grid article {
     border-block: 1px solid var(--rule);
-    min-height: 13rem;
-    padding: 1.2rem;
+    min-height: 12rem;
+    padding: 1.25rem;
   }
 
-  .validation-grid article:first-child {
+  .reading-grid article:first-child {
     padding-left: 0;
   }
 
-  .validation-grid article + article {
+  .reading-grid article + article {
     border-left: 1px solid var(--rule);
   }
 
-  .validation-grid span {
+  .reading-grid span {
     color: var(--main);
     font-family: var(--font-mono);
     font-size: 0.65rem;
   }
 
-  .validation-grid h3 {
-    margin: 1.2rem 0 0.5rem;
+  .reading-grid h3 {
+    margin: 1.4rem 0 0.55rem;
   }
 
-  .validation-grid p {
+  .reading-grid p {
     color: var(--ink-soft);
-    font-size: 0.74rem;
+    font-size: 0.75rem;
   }
 
-  .boundary {
+  .signals-end {
+    align-items: end;
+    display: grid;
+    gap: 3rem;
+    grid-template-columns: minmax(0, 1.3fr) minmax(18rem, 0.7fr);
     padding: 4rem 0 1rem;
   }
 
-  .boundary h2 {
-    max-width: 52rem;
+  .signals-end > div {
+    max-width: 46rem;
   }
 
-  .boundary > div {
-    display: grid;
-    gap: 0;
-    grid-template-columns: 1fr 1fr;
-    margin-top: 2rem;
-    max-width: 58rem;
+  .signals-end > div h2 {
+    margin: 0.55rem 0;
   }
 
-  .boundary article {
-    border-block: 1px solid var(--rule);
-    padding: 1.3rem 1.5rem 1.3rem 0;
-  }
-
-  .boundary article + article {
-    border-left: 1px solid var(--rule);
-    padding-left: 1.5rem;
-  }
-
-  .boundary article p {
+  .signals-end > div p:last-child {
     color: var(--ink-soft);
-    font-size: 0.78rem;
-    margin: 0;
   }
 
-  .boundary > a {
+  .signals-end nav {
+    border-top: 1px solid var(--rule);
+  }
+
+  .signals-end nav a {
     align-items: center;
-    display: inline-flex;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
     font-family: var(--font-serif);
     font-weight: 700;
-    gap: 0.35rem;
-    margin-top: 2rem;
+    justify-content: space-between;
+    padding: 0.85rem 0;
   }
 
   @media (max-width: 900px) {
@@ -351,62 +266,44 @@ const strategies = [
 
     .strategy-list article {
       grid-template-columns: 2rem 1fr auto;
-      padding: 1.2rem 0;
+      padding: 1.4rem 0;
     }
 
-    .strategy-answer {
+    .strategy-description {
       grid-column: 2 / -1;
     }
 
-    .strategy-cadence {
-      grid-column: 2;
+    .strategy-meta {
+      border-left: 0;
+      grid-column: 2 / -1;
+      grid-template-columns: auto auto;
+      justify-content: start;
     }
   }
 
   @media (max-width: 700px) {
     .signals-hero h1 {
-      font-size: 2.4rem;
+      font-size: 2.7rem;
     }
 
-    .locked-signal,
-    .validation-grid {
+    .reading-grid,
+    .signals-end {
       display: block;
     }
 
-    .locked-signal > div:first-child {
-      border-bottom: 1px solid var(--rule);
-      border-right: 0;
-      padding: 0 0 1.4rem;
-    }
-
-    .locked-values {
-      display: block;
-      padding: 1rem 0 0;
-    }
-
-    .validation-gate {
-      padding-left: 0;
-    }
-
-    .validation-grid article,
-    .validation-grid article:first-child {
-      min-height: 10rem;
+    .reading-grid article,
+    .reading-grid article:first-child {
+      min-height: 9rem;
       padding-inline: 0;
     }
 
-    .validation-grid article + article {
+    .reading-grid article + article {
       border-left: 0;
       border-top: 0;
     }
 
-    .boundary > div {
-      display: block;
-    }
-
-    .boundary article + article {
-      border-left: 0;
-      border-top: 0;
-      padding-left: 0;
+    .signals-end nav {
+      margin-top: 2rem;
     }
   }
 </style>
