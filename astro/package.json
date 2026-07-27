@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "astro": "^4.16.0",
-    "echarts": "^5.5.0",
+    "echarts": "^6.1.0",
     "@iconify-json/solar": "^1.2.0"
   },
   "devDependencies": {
