@@ -1,4 +1,5 @@
 ---
+import HomeMarketStory from "@/components/HomeMarketStory.astro";
 import MarketBriefChart from "@/components/MarketBriefChart.astro";
 import SolarIcon from "@/components/SolarIcon.astro";
 import SiteShell from "@/layouts/SiteShell.astro";
@@ -13,38 +14,6 @@ const chapters = [
   { href: "#key-evidence", label: "关键证据" },
   { href: "#market-story", label: "五幕市场" },
   { href: "#subscribe", label: "变化提醒" },
-] as const;
-const researchActs = [
-  {
-    code: "01",
-    description: "价格、长期趋势、回撤与近期位置。",
-    href: "/sp500/",
-    title: "市场走到哪里了？",
-  },
-  {
-    code: "02",
-    description: "领导力、集中度与行业内部结构。",
-    href: "/sectors/",
-    title: "上涨是否健康？",
-  },
-  {
-    code: "03",
-    description: "波动率、金融压力、信用与流动性。",
-    href: "/macro/",
-    title: "风险是否被定价？",
-  },
-  {
-    code: "04",
-    description: "估值、增长、利率与产业周期。",
-    href: "/nasdaq/",
-    title: "市场处于什么周期？",
-  },
-  {
-    code: "05",
-    description: "历史回报、回撤、季节性和失败样本。",
-    href: "/archive/",
-    title: "历史给了什么参照？",
-  },
 ] as const;
 ---
 
@@ -157,33 +126,14 @@ const researchActs = [
             <li>VIX 与信用压力同步放大</li>
           </ul>
         </section>
-        <a href="/macro/">
-          下一幕：风险是否开始被市场定价
+        <a href="#story-health">
+          下一幕：上涨是否由整个市场推动
           <SolarIcon name="arrow-right-linear" size={19} />
         </a>
       </aside>
     </section>
 
-    <section class="market-story" id="market-story">
-      <header>
-        <p class="eyebrow">FIVE-ACT MARKET STORY</p>
-        <h2>从价格现象，走到风险与历史参照。</h2>
-      </header>
-      <ol>
-        {
-          researchActs.map((act) => (
-            <li>
-              <a href={act.href}>
-                <span>{act.code}</span>
-                <h3>{act.title}</h3>
-                <p>{act.description}</p>
-                <SolarIcon name="arrow-right-linear" size={18} />
-              </a>
-            </li>
-          ))
-        }
-      </ol>
-    </section>
+    <HomeMarketStory />
 
     <section class="subscribe-panel" id="subscribe">
       <div>
@@ -542,61 +492,6 @@ const researchActs = [
     padding-top: 1rem;
   }
 
-  .market-story {
-    padding: 4rem 0;
-    scroll-margin-top: 2rem;
-  }
-
-  .market-story > header {
-    margin-bottom: 1.7rem;
-  }
-
-  .market-story ol {
-    display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .market-story li {
-    border-block: 1px solid var(--rule);
-  }
-
-  .market-story li + li {
-    border-left: 1px solid var(--rule);
-  }
-
-  .market-story a {
-    display: grid;
-    min-height: 12rem;
-    padding: 1rem;
-  }
-
-  .market-story li:first-child a {
-    padding-left: 0;
-  }
-
-  .market-story a > span {
-    color: var(--main);
-    font-family: var(--font-mono);
-    font-size: 0.65rem;
-  }
-
-  .market-story h3 {
-    font-size: 0.96rem;
-    margin: 1.2rem 0 0.4rem;
-  }
-
-  .market-story p {
-    color: var(--ink-faint);
-    font-size: 0.68rem;
-  }
-
-  .market-story svg {
-    align-self: end;
-  }
-
   .subscribe-panel {
     align-items: center;
     background: var(--ink);
@@ -643,9 +538,6 @@ const researchActs = [
       grid-template-columns: 1fr 1fr;
     }
 
-    .market-story ol {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
   }
 
   @media (max-width: 900px) {
@@ -704,20 +596,6 @@ const researchActs = [
       border-left: 0;
       border-top: 1px solid var(--rule);
       padding-left: 0;
-    }
-
-    .market-story ol {
-      display: block;
-    }
-
-    .market-story li + li {
-      border-left: 0;
-      border-top: 0;
-    }
-
-    .market-story a {
-      min-height: 9rem;
-      padding-inline: 0;
     }
 
     .subscribe-panel {

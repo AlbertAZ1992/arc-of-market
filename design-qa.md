@@ -27,8 +27,11 @@ Final result: passed
 - The homepage judgment is generated from checked-in market datasets.
 - The placeholder breadth dataset is not used in a production-facing claim.
 - The key chart loads S&P 500 and VIX data and fails closed if either dataset is unavailable.
+- The five-act homepage story contains eight working charts with no production placeholder blocks.
 - The Strategy Signals and historical-validation links navigate to working destinations.
 - The Signals page distinguishes public validation from future execution-only subscription fields.
+- The mobile layout has no document-level horizontal overflow at `390 × 844`.
+- The mobile navigation opens, closes and reports its expanded state correctly.
 - Type checks, lint, production build and chart-catalog audit pass without warnings.
 
 ## Resolved findings
