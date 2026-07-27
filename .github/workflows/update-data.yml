@@ -83,6 +83,7 @@ jobs:
       - name: Validate and build frontend
         working-directory: astro
         run: |
+          pnpm data:sync
           pnpm check
           pnpm lint
           pnpm build
