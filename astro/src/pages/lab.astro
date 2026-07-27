@@ -1,7 +1,6 @@
 ---
 import MarketProxyCharts from "@/components/MarketProxyCharts.astro";
 import SolarIcon from "@/components/SolarIcon.astro";
-import ChartDataPending from "@/components/charts/ChartDataPending.astro";
 import FinancialStressChart from "@/components/charts/FinancialStressChart.astro";
 import RegimeChart from "@/components/charts/RegimeChart.astro";
 import TradingViewHeatmap from "@/components/charts/TradingViewHeatmap.astro";
@@ -73,19 +72,8 @@ const projects = [
 const dockItems = [
   { href: "#market-environment", label: "市场环境总览" },
   { href: "#market-index-etfs", label: "主要指数与 ETF" },
-  { href: "#market-temperature", label: "市场温度" },
-  { href: "#market-breadth", label: "涨跌家数与宽度" },
   { href: "#market-heatmap", label: "市值加权热力图" },
-  { href: "#top10-decades", label: "各年代市值前十" },
-  { href: "#top10-longevity", label: "头部公司寿命" },
-  { href: "#top10-leaders", label: "领跑者更替" },
-  { href: "#top10-cooccurrence", label: "共同出现次数" },
-  { href: "#top10-outcomes", label: "进入前十后的结果" },
   { href: "#arc-regime", label: "Arc Regime" },
-  { href: "#arc-breadth-pulse", label: "Breadth Pulse" },
-  { href: "#arc-relative-strength", label: "Relative Strength Leaders" },
-  { href: "#arc-signal-ledger", label: "Signal Ledger" },
-  { href: "#arc-daily-brief", label: "Daily Brief" },
 ] as const;
 ---
 
@@ -146,18 +134,6 @@ const dockItems = [
       <section class="lab-component" id="market-index-etfs">
         <MarketProxyCharts />
       </section>
-      <ChartDataPending
-        description="把趋势、波动、信用压力和市场宽度标准化为同一套环境刻度。"
-        id="market-temperature"
-        source="公开市场与宏观序列 · ArcOfMarket 计算"
-        title="市场温度"
-      />
-      <ChartDataPending
-        description="观察上涨家数、下跌家数、创新高新低和均线以上股票比例。"
-        id="market-breadth"
-        source="可复核的股票横截面快照 · ArcOfMarket 计算"
-        title="涨跌家数与宽度"
-      />
       <TradingViewHeatmap
         dataSource="SPX500"
         description="按当前市值和涨跌幅观察 S&P 500 横截面，点击公司可查看明细。"
@@ -165,62 +141,7 @@ const dockItems = [
         title="市值加权热力图"
       />
 
-      <ChartDataPending
-        description="以固定年末观察日重建不同时代的美国上市公司市值前十。"
-        id="top10-decades"
-        source="历史公司市值快照"
-        title="各年代市值前十"
-      />
-      <ChartDataPending
-        description="计算公司停留在市值前十的累计年数和连续年数。"
-        id="top10-longevity"
-        source="历史公司市值快照 · ArcOfMarket 计算"
-        title="头部公司寿命"
-      />
-      <ChartDataPending
-        description="沿时间轴展示市值领导者如何从铁路、能源、金融迁移到科技平台。"
-        id="top10-leaders"
-        source="历史公司市值快照 · ArcOfMarket 计算"
-        title="领跑者更替"
-      />
-      <ChartDataPending
-        description="统计公司在各期市值前十榜单中共同出现的次数。"
-        id="top10-cooccurrence"
-        source="历史公司市值快照 · ArcOfMarket 计算"
-        title="共同出现次数"
-      />
-      <ChartDataPending
-        description="追踪公司进入市值前十之后的一年、三年和五年结果。"
-        id="top10-outcomes"
-        source="历史公司市值与复权价格 · ArcOfMarket 计算"
-        title="进入前十后的结果"
-      />
-
       <RegimeChart />
-      <ChartDataPending
-        description="把市场宽度的方向、速度和极端程度转成可追溯的脉冲状态。"
-        id="arc-breadth-pulse"
-        source="市场宽度快照 · ArcOfMarket 计算"
-        title="Breadth Pulse"
-      />
-      <ChartDataPending
-        description="按统一窗口比较主要指数、风格和行业 ETF 的相对强度。"
-        id="arc-relative-strength"
-        source="ETF 复权价格 · ArcOfMarket 计算"
-        title="Relative Strength Leaders"
-      />
-      <ChartDataPending
-        description="保存每次信号、公式版本、触发读数和之后不同持有期的结果。"
-        id="arc-signal-ledger"
-        source="ArcOfMarket 指标版本与历史快照"
-        title="Signal Ledger"
-      />
-      <ChartDataPending
-        description="把宏观、指数、宽度和原创状态压缩成一页可复核的每日环境简报。"
-        id="arc-daily-brief"
-        source="ArcOfMarket 数据管线与原创指标"
-        title="Daily Brief"
-      />
     </div>
 
     <section class="lab-note">

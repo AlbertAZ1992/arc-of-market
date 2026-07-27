@@ -4,7 +4,6 @@ import TradingViewSymbolOverview from "@/components/TradingViewSymbolOverview.as
 import SiteShell from "@/layouts/SiteShell.astro";
 import type { MarketTheme } from "@/lib/market-themes";
 import { marketThemes } from "@/lib/market-themes";
-import { themeResearch } from "@/lib/theme-research";
 
 export function getStaticPaths() {
   return marketThemes.map((theme) => ({
@@ -29,10 +28,6 @@ const comparisonItems = [
   ...(theme.slug === "financials"
     ? [{ href: "#financial-crisis-2008", label: "2008 金融危机" }]
     : []),
-  ...(themeResearch[theme.slug] ?? []).map((item) => ({
-    href: `#${item.id}`,
-    label: item.title,
-  })),
 ];
 const allDockItems = [...dockItems, ...comparisonItems];
 ---
