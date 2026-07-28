@@ -6,22 +6,22 @@
     },
     "hero": {
       "eyebrow": "MAGNIFICENT SEVEN",
-      "title": "七巨头的指数权重、回报、回撤、相关性与估值",
-      "body": "本页比较 Apple、Microsoft、Nvidia、Amazon、Alphabet、Meta 和 Tesla，并计算七家公司在 S&P 500 中的合计权重。"
+      "title": "七家公司占了指数三成，但它们从来不是同一家公司",
+      "body": "Apple、Microsoft、Nvidia、Amazon、Alphabet、Meta 和 Tesla 合计影响 S&P 500 的三成左右。本页先看它们作为整体的权重与回报，再拆开个股回撤、相关性和估值。"
     },
     "chapter-evidence": {
-      "title": "合计权重、等权回报和个股差异",
-      "body": "合计权重衡量七家公司对 S&P 500 的影响；等权篮子避免市值权重主导；个股曲线比较回报、回撤和相关性。",
-      "guide": "集中度高不是自动卖出信号。真正需要观察的是权重继续上升时，市场广度和盈利贡献是否同步。",
-      "whyItMatters": "把七家公司当成一只股票，会掩盖商业模式和估值差异。",
+      "title": "先看它们对指数有多重要，再看七家公司是否仍在一起走",
+      "body": "合计权重衡量七家公司对 S&P 500 的影响，等权篮子避免 Apple 或 Nvidia 的市值主导结果；个股价格、回撤和相关性再回答组内差异有多大。",
+      "guide": "先看合计权重，再比较等权篮子与大盘，最后拆到个股回撤和 60 日相关性。权重上升与相关性上升是两件不同的事。",
+      "whyItMatters": "把七家公司合并成一个标签，会掩盖盈利模式、估值和回撤差异；指数集中也不等于七只股票每天同涨同跌。",
       "whatChanges": [
         "七家公司相关性上升，说明它们在同一交易日同涨同跌的程度提高。",
         "等权篮子相对大盘回报下降且合计权重下降，说明七家公司对指数的贡献正在减少。"
       ]
     },
     "chapter-frameworks": {
-      "title": "Nifty Fifty、四骑士、FANG、FAANG 与七巨头",
-      "body": "Nifty Fifty、四骑士、FANG、FAANG 和 Magnificent Seven 都反映了当时最重要的增长来源。谱系用于提醒龙头会更替，不用于机械预测顶点。"
+      "title": "七巨头不是凭空出现的：每个时代都会给龙头公司一个共同名字",
+      "body": "Nifty Fifty、四骑士、FANG、FAANG 和 Magnificent Seven 依次代表消费品牌、个人电脑、互联网平台与 AI 资本开支。共同标签会更换，组内公司也会分化；谱系能解释市场为何集中，不能预测顶点日期。"
     },
     "frameworks": {
       "title": "产业周期与货币政策框架的使用范围",

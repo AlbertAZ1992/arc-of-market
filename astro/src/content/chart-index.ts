@@ -12,7 +12,7 @@ import type { ChartIndex } from "@/content/types";
 export const chartIndex = {
   // ─── S&P 500 ───
   "sp500-century": {
-    title: "S&P 500 长期价格指数",
+    title: "S&P 500：近一个世纪的复利轨迹",
     dataPath: "/data/sp500_century.json",
     kind: "price",
     scaleType: "log",
@@ -20,11 +20,14 @@ export const chartIndex = {
     source: "Yahoo Finance 历史价格 · ArcOfMarket 计算",
   },
   "sp500-total-return": {
-    title: "S&P 500 总回报指数",
+    title: "股息再投资如何拉开长期回报差距？",
     dataPath: "/data/sp500_total_return.json",
     description:
-      "总回报指数把现金股息按指数口径重新投入，价格指数不包含这部分回报。",
-    interpretation: ["与价格指数的长期结果相比，差异来自现金股息及其再投资。"],
+      "总回报指数把现金股息按指数口径重新投入，" +
+      "价格指数不包含这部分回报。",
+    interpretation: [
+      "与价格指数的长期结果相比，差异来自现金股息及其再投资。",
+    ],
     kind: "valuation",
     scaleType: "log",
     yUnit: "指数点位",
@@ -34,25 +37,25 @@ export const chartIndex = {
     whatToWatch: ["比较累计差距，不把单年股息率直接外推为长期回报。"],
   },
   "sp500-annual": {
-    title: "S&P 500 每年的回报落在哪里？",
+    title: "近一个世纪，涨年比跌年多多少？",
     dataPath: "/data/sp500_annual.json",
     kind: "annual",
     source: "Yahoo Finance 历史价格 · ArcOfMarket 计算",
   },
   "sp500-bullbear": {
-    title: "牛市持续多久，熊市回撤多深？",
+    title: "每一轮牛熊走了多远、持续多久？",
     dataPath: "/data/sp500_bullbear.json",
     kind: "cycles",
     source: "Yahoo Finance 历史价格 · ArcOfMarket 计算",
   },
   "sp500-extremes": {
-    title: "S&P 500 最大单日上涨与下跌",
+    title: "最好和最坏的交易日相差多少？",
     dataPath: "/data/sp500_extremes.json",
     kind: "extremes",
     source: "Yahoo Finance 历史价格 · ArcOfMarket 计算",
   },
   "sp500-distribution": {
-    title: "S&P 500 年度回报分布",
+    title: "年度回报最常落在哪个区间？",
     dataPath: "/data/sp500_distribution.json",
     kind: "distribution",
     source: "Yahoo Finance 历史价格 · ArcOfMarket 计算",
@@ -64,19 +67,19 @@ export const chartIndex = {
     source: "Yahoo Finance 历史价格 · ArcOfMarket 计算",
   },
   "sp500-rollmatrix": {
-    title: "不同起点怎样改变五年、十年和二十年结果？",
+    title: "买入年份如何改变五年、十年和二十年结果？",
     dataPath: "/data/sp500_rollmatrix.json",
     kind: "rollmatrix",
     source: "Yahoo Finance 历史价格 · ArcOfMarket 计算",
   },
   "sp500-rolling5y": {
-    title: "任意起点持有五年的年化回报",
+    title: "持有五年，也可能经历负回报",
     dataPath: "/data/sp500_rolling5y.json",
     kind: "rolling",
     source: "Yahoo Finance 历史价格 · ArcOfMarket 计算",
   },
   "sp500-intrayear": {
-    title: "年内最大回撤和全年回报是什么关系？",
+    title: "年中下跌，不等于全年下跌",
     dataPath: "/data/sp500_intrayear.json",
     kind: "intrayear",
     source: "Yahoo Finance 历史价格 · ArcOfMarket 计算",
@@ -88,13 +91,13 @@ export const chartIndex = {
     source: "Yahoo Finance 历史价格 · ArcOfMarket 计算",
   },
   "sp500-drawdowns": {
-    title: "主要历史回撤的跌幅与修复时间",
+    title: "每次深跌，要多久才能回到前高？",
     dataPath: "/data/sp500_drawdowns.json",
     kind: "drawdown",
     source: "Yahoo Finance 历史价格 · ArcOfMarket 计算",
   },
   "sp500-volatility": {
-    title: "实现波动率在危机前后怎样变化？",
+    title: "危机如何改变价格波动的速度？",
     dataPath: "/data/sp500_volatility.json",
     kind: "volatility",
     source: "Yahoo Finance 历史价格 · Cboe · ArcOfMarket 计算",
@@ -126,7 +129,7 @@ export const chartIndex = {
     source: "Wikipedia 固定版本 · CC BY-SA 4.0",
   },
   "sp500-return-decomp": {
-    title: "每年的回报，多少来自股价，多少来自股息？",
+    title: "总回报不只来自价格：股息贡献了多少？",
     dataPath: "/data/sp500_return_decomp.json",
     description: "价格回报与总回报之间的差额，就是股息及再投资贡献。",
     interpretation: [
@@ -134,13 +137,17 @@ export const chartIndex = {
     ],
     kind: "drivers",
     source: "Yahoo Finance · ArcOfMarket 计算",
-    whatToWatch: ["比较长期累计结果，不用某一年的股息差额预测下一年回报。"],
+    whatToWatch: [
+      "比较长期累计结果，不用某一年的股息差额预测下一年回报。",
+    ],
   },
   "sp500-breadth": {
     title: "指数上涨时，有多少成分股真正参与？",
     dataPath: "/data/sp500_breadth.json",
     description: "统计当前成分股中高于 50 日和 200 日移动均线的比例。",
-    interpretation: ["50 日广度反映短期参与度，200 日广度反映中期趋势覆盖面。"],
+    interpretation: [
+      "50 日广度反映短期参与度，200 日广度反映中期趋势覆盖面。",
+    ],
     kind: "multiline",
     note: "历史序列使用当前成分股，存在幸存者偏差。",
     series: [
@@ -148,12 +155,14 @@ export const chartIndex = {
       { key: "pct_above_200ma", label: ">200MA", unit: "%" },
     ],
     source: "Yahoo Finance · ArcOfMarket 计算",
-    whatToWatch: ["指数创新高而广度持续下降，说明上涨越来越依赖少数大权重。"],
+    whatToWatch: [
+      "指数创新高而广度持续下降，说明上涨越来越依赖少数大权重。",
+    ],
   },
 
   // ─── Nasdaq Composite ───
   "ixic-century": {
-    title: "Nasdaq Composite 的长期价格路径",
+    title: "从 100 点出发：纳斯达克五十多年的价格路径",
     dataPath: "/data/ixic_century.json",
     kind: "price",
     scaleType: "log",
@@ -161,25 +170,25 @@ export const chartIndex = {
     source: "Yahoo Finance 历史价格 · ArcOfMarket 计算",
   },
   "ixic-annual": {
-    title: "Nasdaq Composite 每年的回报落在哪里？",
+    title: "纳斯达克的涨年、跌年与极端年份",
     dataPath: "/data/ixic_annual.json",
     kind: "annual",
     source: "Yahoo Finance 历史价格 · ArcOfMarket 计算",
   },
   "ixic-bullbear": {
-    title: "Nasdaq Composite 的牛熊幅度与持续时间",
+    title: "纳斯达克每轮牛熊走了多远？",
     dataPath: "/data/ixic_bullbear.json",
     kind: "cycles",
     source: "Yahoo Finance 历史价格 · ArcOfMarket 计算",
   },
   "ixic-extremes": {
-    title: "Nasdaq Composite 的极端单日回报",
+    title: "纳斯达克最好和最坏的一天",
     dataPath: "/data/ixic_extremes.json",
     kind: "extremes",
     source: "Yahoo Finance 历史价格 · ArcOfMarket 计算",
   },
   "ixic-distribution": {
-    title: "Nasdaq Composite 的年度回报分布",
+    title: "纳斯达克年度回报最常落在哪个区间？",
     dataPath: "/data/ixic_distribution.json",
     kind: "distribution",
     source: "Yahoo Finance 历史价格 · ArcOfMarket 计算",
@@ -191,19 +200,19 @@ export const chartIndex = {
     source: "Yahoo Finance 历史价格 · ArcOfMarket 计算",
   },
   "ixic-rollmatrix": {
-    title: "不同起点怎样改变纳斯达克长期结果？",
+    title: "买入年份如何改变纳斯达克长期结果？",
     dataPath: "/data/ixic_rollmatrix.json",
     kind: "rollmatrix",
     source: "Yahoo Finance 历史价格 · ArcOfMarket 计算",
   },
   "ixic-rolling5y": {
-    title: "Nasdaq Composite 滚动五年年化回报",
+    title: "纳斯达克持有五年的最好与最坏结果",
     dataPath: "/data/ixic_rolling5y.json",
     kind: "rolling",
     source: "Yahoo Finance 历史价格 · ArcOfMarket 计算",
   },
   "ixic-intrayear": {
-    title: "纳斯达克年内最大回撤与全年结果",
+    title: "纳斯达克年中深跌后，全年结果如何？",
     dataPath: "/data/ixic_intrayear.json",
     kind: "intrayear",
     source: "Yahoo Finance 历史价格 · ArcOfMarket 计算",
@@ -215,13 +224,13 @@ export const chartIndex = {
     source: "Yahoo Finance 历史价格 · ArcOfMarket 计算",
   },
   "ixic-drawdowns": {
-    title: "Nasdaq Composite 的主要历史回撤",
+    title: "科技泡沫之后，纳斯达克用了多久修复？",
     dataPath: "/data/ixic_drawdowns.json",
     kind: "drawdown",
     source: "Yahoo Finance 历史价格 · ArcOfMarket 计算",
   },
   "ixic-volatility": {
-    title: "Nasdaq Composite 的实现波动率",
+    title: "纳斯达克的波动何时进入极端区间？",
     dataPath: "/data/ixic_volatility.json",
     kind: "volatility",
     source: "Yahoo Finance 历史价格 · ArcOfMarket 计算",
@@ -229,7 +238,7 @@ export const chartIndex = {
 
   // ─── Nasdaq-100 ───
   "ndx-century": {
-    title: "Nasdaq-100 的长期价格路径",
+    title: "Nasdaq-100：大型成长股的长期复利轨迹",
     dataPath: "/data/ndx_century.json",
     kind: "price",
     scaleType: "log",
@@ -237,25 +246,25 @@ export const chartIndex = {
     source: "Yahoo Finance 历史价格 · ArcOfMarket 计算",
   },
   "ndx-annual": {
-    title: "Nasdaq-100 年度回报",
+    title: "Nasdaq-100 的涨年、跌年与极端年份",
     dataPath: "/data/ndx_annual.json",
     kind: "annual",
     source: "Yahoo Finance 历史价格 · ArcOfMarket 计算",
   },
   "ndx-bullbear": {
-    title: "Nasdaq-100 的牛熊幅度与持续时间",
+    title: "Nasdaq-100 每轮牛熊走了多远？",
     dataPath: "/data/ndx_bullbear.json",
     kind: "cycles",
     source: "Yahoo Finance 历史价格 · ArcOfMarket 计算",
   },
   "ndx-extremes": {
-    title: "Nasdaq-100 的极端单日回报",
+    title: "Nasdaq-100 最好和最坏的一天",
     dataPath: "/data/ndx_extremes.json",
     kind: "extremes",
     source: "Yahoo Finance 历史价格 · ArcOfMarket 计算",
   },
   "ndx-distribution": {
-    title: "Nasdaq-100 年度回报分布",
+    title: "Nasdaq-100 年度回报最常落在哪个区间？",
     dataPath: "/data/ndx_distribution.json",
     kind: "distribution",
     source: "Yahoo Finance 历史价格 · ArcOfMarket 计算",
@@ -267,19 +276,19 @@ export const chartIndex = {
     source: "Yahoo Finance 历史价格 · ArcOfMarket 计算",
   },
   "ndx-rollmatrix": {
-    title: "不同起点怎样改变 Nasdaq-100 长期结果？",
+    title: "买入年份如何改变 Nasdaq-100 长期结果？",
     dataPath: "/data/ndx_rollmatrix.json",
     kind: "rollmatrix",
     source: "Yahoo Finance 历史价格 · ArcOfMarket 计算",
   },
   "ndx-rolling5y": {
-    title: "Nasdaq-100 滚动五年年化回报",
+    title: "Nasdaq-100 持有五年的最好与最坏结果",
     dataPath: "/data/ndx_rolling5y.json",
     kind: "rolling",
     source: "Yahoo Finance 历史价格 · ArcOfMarket 计算",
   },
   "ndx-intrayear": {
-    title: "Nasdaq-100 年内最大回撤与全年结果",
+    title: "Nasdaq-100 年中深跌后，全年结果如何？",
     dataPath: "/data/ndx_intrayear.json",
     kind: "intrayear",
     source: "Yahoo Finance 历史价格 · ArcOfMarket 计算",
@@ -291,13 +300,13 @@ export const chartIndex = {
     source: "Yahoo Finance 历史价格 · ArcOfMarket 计算",
   },
   "ndx-drawdowns": {
-    title: "Nasdaq-100 主要历史回撤",
+    title: "Nasdaq-100 每次深跌，要多久才能回到前高？",
     dataPath: "/data/ndx_drawdowns.json",
     kind: "drawdown",
     source: "Yahoo Finance 历史价格 · ArcOfMarket 计算",
   },
   "ndx-volatility": {
-    title: "Nasdaq-100 的实现波动率",
+    title: "Nasdaq-100 的波动何时进入极端区间？",
     dataPath: "/data/ndx_volatility.json",
     kind: "volatility",
     source: "Yahoo Finance 历史价格 · ArcOfMarket 计算",
@@ -338,21 +347,21 @@ export const chartIndex = {
 
   // ─── Mag7 ───
   "mag7-equal-weight": {
-    title: "七巨头等权篮子相对大盘表现如何？",
+    title: "七巨头整体是否仍在领先大盘？",
     dataPath: "/data/mag7_equal_weight.json",
     kind: "price",
     source: "Yahoo Finance · ArcOfMarket 计算",
     eyebrow: "EQUAL-WEIGHT BASKET",
   },
   "mag7-prices": {
-    title: "七家公司的回报差距有多大？",
+    title: "七家公司没有一起涨：长期回报已经分化",
     dataPath: "/data/mag7_prices.json",
     kind: "price",
     source: "Yahoo Finance · ArcOfMarket 计算",
     eyebrow: "NORMALIZED COMPARISON",
   },
   "mag7-valuation": {
-    title: "Nvidia 与 Cisco 高增长时期的估值对照",
+    title: "Nvidia 与 Cisco：只有同口径数据才能比较",
     dataPath: "/data/nvda_csco_valuation.json",
     kind: "multiline",
     source: "Yahoo Finance 基本面元数据 · ArcOfMarket 积累",
@@ -365,7 +374,9 @@ export const chartIndex = {
     dataPath: "/data/etf_proxies.json",
     description:
       "三只 ETF 在最早共同日期归一化为 100，比较蓝筹、大盘和成长风格。",
-    interpretation: ["曲线差距表示长期相对表现，不代表下一阶段必然均值回归。"],
+    interpretation: [
+      "曲线差距表示长期相对表现，不代表下一阶段必然均值回归。",
+    ],
     kind: "nested",
     source: "Yahoo Finance · ArcOfMarket 计算",
     eyebrow: "BENCHMARK COMPARISON",
@@ -374,7 +385,9 @@ export const chartIndex = {
       { key: "SPY", label: "S&P 500", unit: "归一化指数" },
       { key: "QQQ", label: "Nasdaq-100", unit: "归一化指数" },
     ],
-    whatToWatch: ["观察领先关系何时持续收窄或扩大，而不是只比较最终终点。"],
+    whatToWatch: [
+      "观察领先关系何时持续收窄或扩大，而不是只比较最终终点。",
+    ],
   },
   "dow-century": {
     title: "道琼斯价格指数（1992 年以来）",
@@ -399,7 +412,7 @@ export const chartIndex = {
 
   // ─── Valuation ───
   "shiller-cape": {
-    title: "当前 CAPE 处在怎样的历史位置？",
+    title: "今天的 CAPE，放回 1871 年以来有多高？",
     dataPath: "/data/shiller_cape.json",
     description:
       "CAPE 用过去十年经通胀调整的平均盈利，降低单一经济周期的噪音。",
@@ -411,7 +424,8 @@ export const chartIndex = {
     eyebrow: "SHILLER CAPE · 1871→",
     series: [{ key: "cape", label: "CAPE (P/E10)", unit: "倍" }],
     whatToWatch: [
-      "价格与十年平均盈利的相对变化，以及当前分位能否被盈利增长消化。",
+      "价格与十年平均盈利的相对变化，" +
+        "以及当前分位能否被盈利增长消化。",
     ],
   },
   "shiller-pe": {
@@ -420,7 +434,8 @@ export const chartIndex = {
     description:
       "TTM PE 使用最近十二个月盈利，比 CAPE 更敏感，也更受经济周期影响。",
     interpretation: [
-      "PE 上升可能来自价格上涨，也可能来自盈利下降，两种情况含义不同。",
+      "PE 上升可能来自价格上涨，也可能来自盈利下降，" +
+        "两种情况含义不同。",
     ],
     kind: "multiline",
     source: "Robert J. Shiller, Yale University",
@@ -431,8 +446,11 @@ export const chartIndex = {
   "shiller-eps": {
     title: "S&P 500 每股盈利的长期增长路径",
     dataPath: "/data/shiller_cape.json",
-    description: "指数层面最近十二个月每股盈利，展示长期回报背后的盈利基础。",
-    interpretation: ["长期价格增长需要盈利增长支撑，短期两者可以明显背离。"],
+    description:
+      "指数层面最近十二个月每股盈利，展示长期回报背后的盈利基础。",
+    interpretation: [
+      "长期价格增长需要盈利增长支撑，短期两者可以明显背离。",
+    ],
     kind: "multiline",
     source: "Robert J. Shiller, Yale University",
     eyebrow: "EARNINGS · 1871→",
@@ -440,7 +458,7 @@ export const chartIndex = {
     whatToWatch: ["盈利是否继续增长，以及价格增速是否长期快于盈利。"],
   },
   vxn: {
-    title: "VXN 怎样反映 Nasdaq-100 的风险价格？",
+    title: "VXN 上升时，期权市场在为多大波动定价？",
     dataPath: "/data/vxn.json",
     description: "VXN 是基于 Nasdaq-100 期权价格计算的三十日隐含波动率指数。",
     interpretation: [

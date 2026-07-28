@@ -23,4 +23,23 @@
 - Nasdaq, Dow, macro and Magnificent Seven routes render without chart errors.
 - Mobile homepage and signal preview do not overflow or lose reading order.
 
+## Narrative QA · 2026-07-29
+
+- Reference pages checked: History of Market home, S&P 500 annual returns and
+  Magnificent Seven lineage.
+- Comparison:
+  `/Users/albertaz/.codex/visualizations/2026/07/29/arc-of-market-narrative-audit/06-home-narrative-comparison.jpg`
+- Final homepage:
+  `/Users/albertaz/.codex/visualizations/2026/07/29/arc-of-market-narrative-audit/10-arcofmarket-home-final.jpg`
+- S&P 500:
+  `/Users/albertaz/.codex/visualizations/2026/07/29/arc-of-market-narrative-audit/07-arcofmarket-sp500-after.jpg`
+- Macro:
+  `/Users/albertaz/.codex/visualizations/2026/07/29/arc-of-market-narrative-audit/08-arcofmarket-macro-after.jpg`
+- Magnificent Seven:
+  `/Users/albertaz/.codex/visualizations/2026/07/29/arc-of-market-narrative-audit/09-arcofmarket-mag7-after.jpg`
+- Verified the narrative order: conclusion, current evidence, historical context,
+  present meaning and boundary.
+- Verified all four pages at 1280 px with no horizontal overflow.
+- Verified the homepage lists the paid signal outputs without publishing their values.
+
 result: passed

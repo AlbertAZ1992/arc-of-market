@@ -9,15 +9,15 @@ type Props = {
 const { entry } = Astro.props;
 const details = [
   entry.guide
-    ? { body: entry.guide, label: "阅读方法" }
+    ? { body: entry.guide, label: "先看哪里" }
     : undefined,
   entry.whyItMatters
-    ? { body: entry.whyItMatters, label: "为什么重要" }
+    ? { body: entry.whyItMatters, label: "这件事为什么重要" }
     : undefined,
   entry.historicalContext
-    ? { body: entry.historicalContext, label: "历史告诉我们什么" }
+    ? { body: entry.historicalContext, label: "放回历史" }
     : undefined,
-  entry.caveat ? { body: entry.caveat, label: "数据边界" } : undefined,
+  entry.caveat ? { body: entry.caveat, label: "不能由此推出" } : undefined,
 ].filter((item) => item !== undefined);
 ---
 
@@ -39,7 +39,7 @@ const details = [
   {
     entry.whatChanges && entry.whatChanges.length > 0 && (
       <div class="research-prose__changes">
-        <strong>什么会改变判断</strong>
+        <strong>什么会推翻这个判断</strong>
         <ul>
           {entry.whatChanges.map((item) => <li>{item}</li>)}
         </ul>

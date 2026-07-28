@@ -47,7 +47,7 @@ const {
     interpretation && interpretation.length > 0 && (
       <div class="chart-narrative">
         <div class="chart-narrative__reading">
-          <h4>图中数据</h4>
+          <h4>这张图讲清了什么</h4>
           <ul>
             {interpretation.map((item) => <li>{item}</li>)}
           </ul>
@@ -55,7 +55,7 @@ const {
         {
           whatToWatch && whatToWatch.length > 0 && (
             <div class="chart-narrative__watch">
-              <h4>什么变化值得关注</h4>
+              <h4>接下来还要看什么</h4>
               <ul>
                 {whatToWatch.map((item) => <li>{item}</li>)}
               </ul>

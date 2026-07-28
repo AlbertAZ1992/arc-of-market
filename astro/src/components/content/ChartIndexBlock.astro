@@ -12,7 +12,12 @@ const facts = loadChartFacts(spec);
 if (spec.dataPath && facts.length === 0) {
   throw new Error(`Chart ${Astro.props.chart} has no data-derived fact`);
 }
-const interpretation = [...facts, ...(spec.interpretation ?? [])];
+const description = [...facts, spec.description]
+  .filter((item) => item !== undefined)
+  .join(" ");
+const interpretation = spec.interpretation
+  ? [...spec.interpretation]
+  : undefined;
 ---
 
-<ArcJsonChart {...spec} interpretation={interpretation} />
+<ArcJsonChart {...spec} description={description} interpretation={interpretation} />

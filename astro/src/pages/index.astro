@@ -12,7 +12,7 @@ const chapters = [
   { href: "#today-brief", label: "今日结论" },
   { href: "#strategy-signals", label: "策略信号" },
   { href: "#key-evidence", label: "关键证据" },
-  { href: "#market-story", label: "五幕市场" },
+  { href: "#market-story", label: "继续拆解" },
   { href: "#subscribe", label: "变化提醒" },
 ] as const;
 ---
@@ -41,9 +41,9 @@ const chapters = [
   <main class="market-brief">
     <section class="brief-hero" id="today-brief">
       <p class="eyebrow">MARKET BRIEF · {displayDate} · 盘后</p>
-      <p class="brief-kicker">截至最新收盘的数据</p>
+      <p class="brief-kicker">今天的市场分化</p>
       <h1>{brief.headline}</h1>
-      <p class="brief-summary">{brief.summary}</p>
+      <p class="brief-summary">{brief.narrative.hero}</p>
 
       <div class="evidence-strip" aria-label="三项关键证据">
         {
@@ -77,18 +77,12 @@ const chapters = [
       </div>
       <aside class="evidence-notes">
         <section>
-          <h3>风险读数</h3>
+          <h3>这张图先看什么</h3>
           <p>{brief.summary}</p>
         </section>
         <section>
-          <h3>市场广度</h3>
-          <p>
-            过去 20 个交易日有
-            {Object.values(brief.marketReturns).filter((value) => value > 0).length}/4
-            类市场上涨；S&P 500 高于 50 日均线的成分占
-            {brief.breadth.sp50050.toFixed(1)}%，Nasdaq-100 为
-            {brief.breadth.ndx50.toFixed(1)}%。
-          </p>
+          <h3>指数背后发生了什么</h3>
+          <p>{brief.narrative.breadth.takeaway}</p>
         </section>
         <section>
           <h3>什么会改变判断</h3>
@@ -105,13 +99,17 @@ const chapters = [
       </aside>
     </section>
 
-    <HomeMarketStory />
+    <HomeMarketStory brief={brief} />
 
     <section class="subscribe-panel" id="subscribe">
       <div>
         <p class="eyebrow">NEXT READING</p>
-        <h2>查看长期回报、回撤、估值、宏观和指数结构。</h2>
-        <p>专题页保留完整历史区间、数据来源、计算口径和判断限制。</p>
+        <h2>
+          指数只给出结果；专题页继续拆解盈利、估值、回撤与成员更替。
+        </h2>
+        <p>
+          每张图都列出数据结论、历史参照、来源和不能由它推出的判断。
+        </p>
       </div>
       <a href="/archive/">进入全部图表</a>
     </section>

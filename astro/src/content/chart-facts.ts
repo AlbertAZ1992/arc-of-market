@@ -64,6 +64,24 @@ function pairedValues(
   });
 }
 
+function average(values: number[]): number {
+  return values.length === 0
+    ? 0
+    : values.reduce((total, value) => total + value, 0) / values.length;
+}
+
+function percentile(values: number[], current: number): number {
+  if (values.length === 0) return 0;
+  return (values.filter((value) => value <= current).length / values.length) * 100;
+}
+
+function elapsedYears(start: number | string, end: number | string): number {
+  const startDate = new Date(`${start}T00:00:00Z`);
+  const endDate = new Date(`${end}T00:00:00Z`);
+  const milliseconds = endDate.getTime() - startDate.getTime();
+  return milliseconds / (365.2425 * 24 * 60 * 60 * 1000);
+}
+
 function summarizeAnnual(data: JsonMap): string[] {
   const pairs = pairedValues(
     asLabels(data["years"]),
@@ -79,12 +97,18 @@ function summarizeAnnual(data: JsonMap): string[] {
   );
   const partial = String(data["partial_year"]) === String(latest.label);
   const asOf = textValue(data["as_of"]);
+  const completed = partial ? pairs.slice(0, -1) : pairs;
+  const positiveYears = completed.filter((pair) => pair.value > 0).length;
+  const negativeYears = completed.filter((pair) => pair.value < 0).length;
+  const flatYears = completed.length - positiveYears - negativeYears;
   const latestLabel =
     partial && asOf
       ? `截至 ${asOf}，${latest.label} 年内回报`
       : `${latest.label} 年回报`;
   return [
-    `${latestLabel}为 ${formatPercent(latest.value)}；` +
+    `${completed.length} 个完整年度里，${positiveYears} 年上涨、` +
+      `${negativeYears} 年下跌${flatYears > 0 ? `、${flatYears} 年持平` : ""}。` +
+      `${latestLabel}为 ${formatPercent(latest.value)}；` +
       `样本最好年份为 ${best.label} 年 ${formatPercent(best.value)}，` +
       `最差为 ${worst.label} 年 ${formatPercent(worst.value)}。`,
   ];
@@ -101,10 +125,15 @@ function summarizePrice(data: JsonMap): string[] {
   const latest = pairs.at(-1);
   if (!first || !latest || first.value === 0)
     return summarizeTickerPrices(data);
-  const change = (latest.value / first.value - 1) * 100;
+  const multiple = latest.value / first.value;
+  const years = elapsedYears(first.label, latest.label);
+  const annualized = years > 0 && multiple > 0
+    ? (multiple ** (1 / years) - 1) * 100
+    : 0;
   return [
     `${first.label} 至 ${latest.label}，序列由 ${formatNumber(first.value)} ` +
-      `变为 ${formatNumber(latest.value)}，累计变化 ${formatPercent(change)}。`,
+      `变为 ${formatNumber(latest.value)}，相当于起点的 ` +
+      `${formatNumber(multiple)} 倍，年化复合约 ${formatPercent(annualized)}。`,
   ];
 }
 
@@ -142,13 +171,26 @@ function summarizeCycles(data: JsonMap): string[] {
   const latest = cycles.at(-1);
   if (!latest) return [];
   const kind = latest["kind"] === "bull" ? "牛市" : "熊市";
+  const bearCycles = cycles.filter((cycle) => cycle["kind"] === "bear");
+  const deepestBear = bearCycles.reduce<JsonMap | undefined>(
+    (deepest, cycle) =>
+      !deepest ||
+      (numberValue(cycle["ret"]) ?? 0) < (numberValue(deepest["ret"]) ?? 0)
+        ? cycle
+        : deepest,
+    undefined,
+  );
   const start = latest["start"];
   const end = textValue(latest["end"]);
   const period = end ? `${start} 至 ${end}` : `${start} 开始，当前仍在进行`;
   return [
     `最近一轮标记为${kind}：${period}，` +
       `累计回报 ${formatPercent(numberValue(latest["ret"]) ?? 0)}，` +
-      `持续 ${formatNumber(numberValue(latest["days"]) ?? 0, 0)} 天。`,
+      `持续 ${formatNumber(numberValue(latest["days"]) ?? 0, 0)} 天。` +
+      (deepestBear
+        ? `样本最深熊市从 ${deepestBear["start"]} 开始，` +
+          `累计下跌 ${formatPercent(numberValue(deepestBear["ret"]) ?? 0)}。`
+        : ""),
   ];
 }
 
@@ -182,14 +224,18 @@ function summarizeDistribution(data: JsonMap): string[] {
 
 function summarizeHolding(data: JsonMap): string[] {
   const rows = asMaps(data["rows"]);
-  const first = rows.at(0);
-  const long =
-    rows.find((row) => numberValue(row["years"]) === 10) ?? rows.at(-1);
-  if (!first || !long) return [];
+  const oneYear = rows.find((row) => numberValue(row["years"]) === 1);
+  const fiveYears = rows.find((row) => numberValue(row["years"]) === 5);
+  const twentyYears =
+    rows.find((row) => numberValue(row["years"]) === 20) ?? rows.at(-1);
+  if (!oneYear || !fiveYears || !twentyYears) return [];
   return [
-    `${first["years"]} 年持有期的历史正回报比例为 ` +
-      `${formatNumber(numberValue(first["win"]) ?? 0)}%；` +
-      `${long["years"]} 年持有期为 ${formatNumber(numberValue(long["win"]) ?? 0)}%。`,
+    `一年持有期的历史正回报比例为 ` +
+      `${formatNumber(numberValue(oneYear["win"]) ?? 0)}%，五年提高到 ` +
+      `${formatNumber(numberValue(fiveYears["win"]) ?? 0)}%，` +
+      `${twentyYears["years"]} 年为 ` +
+      `${formatNumber(numberValue(twentyYears["win"]) ?? 0)}%。` +
+      `时间降低了历史亏损概率，但没有把它降到零。`,
   ];
 }
 
@@ -225,12 +271,21 @@ function summarizeRollMatrix(data: JsonMap): string[] {
 }
 
 function summarizeIntrayear(data: JsonMap): string[] {
-  const latest = asMaps(data["rows"]).at(-1);
+  const rows = asMaps(data["rows"]);
+  const latest = rows.at(-1);
   if (!latest) return [];
+  const averageDrawdown = average(
+    rows.flatMap((row) => {
+      const value = numberValue(row["intra_dd"]);
+      return value === undefined ? [] : [value];
+    }),
+  );
   return [
     `${latest["year"]} 年内最大回撤为 ` +
       `${formatPercent(numberValue(latest["intra_dd"]) ?? 0)}，` +
-      `截至数据日的年度回报为 ${formatPercent(numberValue(latest["ret"]) ?? 0)}。`,
+      `截至数据日的年度回报为 ${formatPercent(numberValue(latest["ret"]) ?? 0)}。` +
+      `样本内年均最深回撤为 ${formatPercent(averageDrawdown)}；` +
+      `年中下跌并不直接决定年末涨跌。`,
   ];
 }
 
@@ -267,7 +322,8 @@ function summarizeDrawdown(data: JsonMap): string[] {
   return [
     `${current.label} 的当前回撤为 ${formatPercent(current.value)}；` +
       `样本最深回撤为 ${worst["peak"]} 高点后 ` +
-      `${formatPercent(numberValue(worst["depth"]) ?? 0)}。`,
+      `${formatPercent(numberValue(worst["depth"]) ?? 0)}，谷底在 ` +
+      `${worst["trough"]}，直到 ${worst["recovery"]} 才收复前高。`,
   ];
 }
 
@@ -277,8 +333,10 @@ function summarizeVolatility(data: JsonMap): string[] {
   const vol60 = asNumbers(data["vol60"]).at(-1);
   if (date === undefined || vol20 === undefined || vol60 === undefined)
     return [];
+  const percentile20 = percentile(asNumbers(data["vol20"]), vol20);
   return [
     `截至 ${date}，20 日年化实现波动率为 ${formatNumber(vol20)}%，` +
+      `处于样本约第 ${formatNumber(percentile20, 0)} 百分位；` +
       `60 日为 ${formatNumber(vol60)}%。`,
   ];
 }
@@ -316,9 +374,13 @@ function summarizeSeries(data: JsonMap, spec: ArcChartSpec): string[] {
     breadth200 !== undefined &&
     breadthDate !== undefined
   ) {
+    const breadth50Values = asNumbers(data["pct_above_50ma"]);
+    const breadth200Values = asNumbers(data["pct_above_200ma"]);
     return [
       `截至 ${breadthDate}，高于 50 日均线的成分占 ${formatNumber(breadth50)}%，` +
-        `高于 200 日均线的成分占 ${formatNumber(breadth200)}%。`,
+        `位于样本约第 ${formatNumber(percentile(breadth50Values, breadth50), 0)} ` +
+        `百分位；高于 200 日均线的成分占 ${formatNumber(breadth200)}%，` +
+        `位于约第 ${formatNumber(percentile(breadth200Values, breadth200), 0)} 百分位。`,
     ];
   }
   const facts =
@@ -340,6 +402,7 @@ function summarizeSeries(data: JsonMap, spec: ArcChartSpec): string[] {
             {
               date: String(date),
               label: series.label,
+              percentile: percentile(values, value),
               unit: series.unit ?? "",
               value,
             },
@@ -350,6 +413,16 @@ function summarizeSeries(data: JsonMap, spec: ArcChartSpec): string[] {
     .map((fact) => fact.date)
     .sort()
     .at(-1);
+  if (facts.length === 1) {
+    const fact = facts[0];
+    return fact
+      ? [
+          `截至 ${latestDate}，${fact.label}为 ${formatNumber(fact.value)}` +
+            `${fact.unit ? ` ${fact.unit}` : ""}，位于样本约第 ` +
+            `${formatNumber(fact.percentile, 0)} 百分位。`,
+        ]
+      : [];
+  }
   return [
     `截至 ${latestDate}：${facts
       .slice(0, 4)
@@ -381,13 +454,17 @@ function summarizeNamedValuation(data: JsonMap): string[] {
 }
 
 function summarizeValuation(data: JsonMap, spec: ArcChartSpec): string[] {
+  if (spec.valueLabel === "总回报指数") {
+    return summarizePrice(data);
+  }
   const values = asNumbers(data[spec.valueKey ?? "values"]);
   const dates = asLabels(data["dates"]);
   const latest = pairedValues(dates, values).at(-1);
   return latest
     ? [
         `截至 ${latest.label}，${spec.valueLabel ?? spec.title}为 ` +
-          `${formatNumber(latest.value)}${spec.yUnit ? ` ${spec.yUnit}` : ""}。`,
+          `${formatNumber(latest.value)}${spec.yUnit ? ` ${spec.yUnit}` : ""}，` +
+          `位于样本约第 ${formatNumber(percentile(values, latest.value), 0)} 百分位。`,
       ]
     : summarizeSeries(data, spec);
 }

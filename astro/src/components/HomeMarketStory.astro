@@ -2,6 +2,13 @@
 import ArcJsonChart from "@/components/charts/ArcJsonChart.astro";
 import FinancialStressChart from "@/components/charts/FinancialStressChart.astro";
 import SolarIcon from "@/components/SolarIcon.astro";
+import type { MarketBrief } from "@/lib/market-brief";
+
+type Props = {
+  brief: MarketBrief;
+};
+
+const { brief } = Astro.props;
 
 const acts = [
   ["01", "四类资产走势", "#key-evidence"],
@@ -15,11 +22,15 @@ const acts = [
 <section class="home-story" id="market-story">
   <header class="story-header">
     <div>
-      <p class="eyebrow">FIVE MARKET CHECKS</p>
-      <h2>首页按走势、广度、风险、资金配置和历史回撤组织数据。</h2>
+      <p class="eyebrow">TODAY · IN CONTEXT</p>
+      <h2>
+        科技与蓝筹已经分开，接下来要确认这种分化
+        会不会扩散成市场压力。
+      </h2>
     </div>
     <p>
-      每部分保留一至两张图；完整历史区间、来源和更多拆解放在对应专题页。
+      下面依次检查参与上涨的公司数量、波动率和金融压力、资金配置，
+      最后把今年的回撤放回 1928 年以来的年度分布。
     </p>
   </header>
 
@@ -39,12 +50,12 @@ const acts = [
       <span>02</span>
       <div>
         <p class="eyebrow">MARKET PARTICIPATION</p>
-        <h2>标普与纳指的 50 日、200 日市场广度</h2>
-        <p>高于均线的成分比例用于区分多数股票参与和少数权重股拉动。</p>
+        <h2>{brief.narrative.breadth.headline}</h2>
+        <p>{brief.narrative.breadth.body}</p>
       </div>
       <aside>
-        <strong>读图提示</strong>
-        <p>先比较两个指数的 50 日广度，再用 200 日广度确认中期趋势覆盖面。</p>
+        <strong>这意味着什么</strong>
+        <p>{brief.narrative.breadth.takeaway}</p>
       </aside>
     </header>
     <div class="story-charts story-charts--two">
@@ -53,14 +64,17 @@ const acts = [
         description="S&P 500 成分股中，高于 50 日与 200 日均线的比例。"
         eyebrow="S&P 500 BREADTH"
         id="home-sp500-breadth"
-        interpretation={["50 日广度回答短期上涨是否扩散，200 日广度回答中期趋势是否普遍。"]}
+        interpretation={[
+          "50 日广度回答短期上涨是否扩散，" +
+            "200 日广度回答中期趋势是否普遍。",
+        ]}
         kind="multiline"
         series={[
           { key: "pct_above_50ma", label: ">50MA", unit: "%" },
           { key: "pct_above_200ma", label: ">200MA", unit: "%" },
         ]}
         source="Yahoo Finance · ArcOfMarket 计算"
-        title="标普上涨有多少成分参与？"
+        title="S&P 500 的 50 日与 200 日广度"
         whatToWatch={["50 日广度跌破 50%，意味着多数成分短期趋势已经转弱。"]}
       />
       <ArcJsonChart
@@ -68,15 +82,20 @@ const acts = [
         description="Nasdaq-100 成分股中，高于 50 日与 200 日均线的比例。"
         eyebrow="NASDAQ-100 BREADTH"
         id="home-ndx-breadth"
-        interpretation={["与标普广度对照，判断科技龙头上涨是否扩散到更多成分。"]}
+        interpretation={[
+          "与标普广度对照，判断科技龙头上涨是否扩散到更多成分。",
+        ]}
         kind="multiline"
         series={[
           { key: "pct_above_50ma", label: ">50MA", unit: "%" },
           { key: "pct_above_200ma", label: ">200MA", unit: "%" },
         ]}
         source="Yahoo Finance · ArcOfMarket 计算"
-        title="科技内部是否同步走强？"
-        whatToWatch={["指数上涨但 50 日广度下降，说明上涨对少数权重股的依赖正在增加。"]}
+        title="Nasdaq-100 的 50 日与 200 日广度"
+        whatToWatch={[
+          "指数上涨但 50 日广度下降，" +
+            "说明上涨对少数权重股的依赖正在增加。",
+        ]}
       />
     </div>
     <a class="act-link" href="/sectors/">
@@ -90,19 +109,22 @@ const acts = [
       <span>03</span>
       <div>
         <p class="eyebrow">RISK PRICING</p>
-        <h2>OFR 金融压力与 VIX 期限结构</h2>
-        <p>OFR FSI 衡量金融系统压力；VIX 与 VIX3M 比较近端和三个月风险定价。</p>
+        <h2>{brief.narrative.risk.headline}</h2>
+        <p>{brief.narrative.risk.body}</p>
       </div>
       <aside>
-        <strong>阅读顺序</strong>
-        <p>先看 OFR 综合压力，再看 VIX 期限结构是否转向近端风险。</p>
+        <strong>这意味着什么</strong>
+        <p>{brief.narrative.risk.takeaway}</p>
       </aside>
     </header>
     <div class="story-charts">
       <FinancialStressChart />
       <ArcJsonChart
         dataPath="/data/vol_family.json"
-        description="比较 VIX 现货与三个月隐含波动率，观察市场在为眼前还是未来风险定价。"
+        description={
+          "比较 VIX 现货与三个月隐含波动率，" +
+          "观察市场在为眼前还是未来风险定价。"
+        }
         eyebrow="RISK CONFIRMATION"
         id="home-volatility-curve"
         kind="nested"
@@ -111,7 +133,7 @@ const acts = [
           { key: "VIX3M", label: "VIX3M", unit: "指数", valueKey: "close" },
         ]}
         source="Cboe Global Markets"
-        title="VIX 与 VIX3M 的期限差"
+        title="VIX 现货与三个月隐含波动率"
       />
     </div>
     <a class="act-link" href="/macro/">
@@ -125,12 +147,12 @@ const acts = [
       <span>04</span>
       <div>
         <p class="eyebrow">VALUATION & CYCLE</p>
-        <h2>股票配置比例与美债 10 年减 2 年利差</h2>
-        <p>股票配置比例显示资金已持有多少股票；期限利差显示长短端资金价格差。</p>
+        <h2>{brief.narrative.allocation.headline}</h2>
+        <p>{brief.narrative.allocation.body}</p>
       </div>
       <aside>
-        <strong>读图提示</strong>
-        <p>配置比例与期限利差更新频率不同，重点比较各自的历史位置。</p>
+        <strong>这意味着什么</strong>
+        <p>{brief.narrative.allocation.takeaway}</p>
       </aside>
     </header>
     <div class="story-charts story-charts--two">
@@ -141,20 +163,23 @@ const acts = [
         id="home-equity-allocation"
         kind="valuation"
         source="Federal Reserve Z.1 · ArcOfMarket 计算"
-        title="资金已经配置了多少股票？"
+        title="美国金融资产中的股票配置比例"
         valueKey="values"
         valueLabel="股票配置占比"
         yUnit="%"
       />
       <ArcJsonChart
         dataPath="/data/macro_rates.json"
-        description="观察 10 年与 2 年美债利差的倒挂和再陡峭化，定位经济周期环境。"
+        description={
+          "观察 10 年与 2 年美债利差的倒挂和再陡峭化，" +
+          "定位经济周期环境。"
+        }
         eyebrow="YIELD CURVE"
         id="home-yield-spread"
         kind="nested"
         series={[{ key: "t10y2y", label: "10Y − 2Y", unit: "%" }]}
         source="FRED"
-        title="利率曲线处于什么位置？"
+        title="10 年减 2 年美债收益率利差"
       />
     </div>
     <a class="act-link" href="/nasdaq/">
@@ -168,12 +193,12 @@ const acts = [
       <span>05</span>
       <div>
         <p class="eyebrow">HISTORICAL REFERENCE</p>
-        <h2>S&P 500 历史回撤与年度回报</h2>
-        <p>回撤图记录从高点下跌及修复时间；年度图记录每个自然年的价格回报。</p>
+        <h2>{brief.narrative.history.headline}</h2>
+        <p>{brief.narrative.history.body}</p>
       </div>
       <aside>
-        <strong>数据用途</strong>
-        <p>用历史分布确定当前幅度是否少见，不用相似图形预测下一次涨跌。</p>
+        <strong>这意味着什么</strong>
+        <p>{brief.narrative.history.takeaway}</p>
       </aside>
     </header>
     <div class="story-charts story-charts--two">
@@ -184,7 +209,7 @@ const acts = [
         id="home-sp500-drawdowns"
         kind="drawdown"
         source="Yahoo Finance 历史价格 · ArcOfMarket 计算"
-        title="历史回撤曾经有多深？"
+        title="S&P 500 历史回撤与修复"
       />
       <ArcJsonChart
         dataPath="/data/sp500_annual.json"
@@ -193,7 +218,7 @@ const acts = [
         id="home-sp500-annual"
         kind="annual"
         source="Yahoo Finance 历史价格 · ArcOfMarket 计算"
-        title="年度结果通常落在哪里？"
+        title="S&P 500 每个自然年的回报"
       />
     </div>
     <a class="act-link" href="/sp500/">
