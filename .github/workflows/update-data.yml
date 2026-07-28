@@ -34,7 +34,23 @@ jobs:
             refs/heads/data/automated-updates >/dev/null; then
             git fetch origin data/automated-updates
             git switch --create data/automated-updates --track origin/data/automated-updates
-            git merge --no-edit "$GITHUB_SHA"
+            if ! git merge --no-commit --no-ff "$GITHUB_SHA"; then
+              while IFS= read -r conflict_path; do
+                case "$conflict_path" in
+                  data/*)
+                    git restore --ours --worktree "$conflict_path"
+                    git add "$conflict_path"
+                    ;;
+                  *)
+                    echo "Unresolved non-data merge conflict: $conflict_path" >&2
+                    exit 1
+                    ;;
+                esac
+              done < <(git diff --name-only --diff-filter=U)
+            fi
+            if git rev-parse --verify --quiet MERGE_HEAD >/dev/null; then
+              git commit --no-edit
+            fi
           else
             git switch --create data/automated-updates
           fi
