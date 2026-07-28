@@ -69,3 +69,6 @@
 代码中的发布开关位于
 `astro/src/lib/signal-publication.ts`。当前
 `executionPublished` 与 `subscriptionEnabled` 必须保持为 `false`。
+
+`regime_rotation.json`、`rs_leaders.json` 和 `breadth_pulse.json` 属于内部策略输出。
+公开构建只读取样本起止日期和观测数量，不复制原始状态、排名、方向或触发记录。

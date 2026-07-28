@@ -1,5 +1,30 @@
 ---
-// Magnificent 7 dashboard — equal-weight index, member comparison, drawdowns, valuation
+import mag7WeightJson from "../../../../data/mag7_weight.json";
+import valuationJson from "../../../../data/nvda_csco_valuation.json";
+
+type NumberSeries = {
+  dates: string[];
+  trailing_pe: number[];
+};
+
+type ValuationData = {
+  csco: NumberSeries;
+  nvda: NumberSeries;
+};
+
+type WeightData = {
+  dates: string[];
+  weight_pct: number[];
+};
+
+const weightData = mag7WeightJson as WeightData;
+const valuationData = valuationJson as ValuationData;
+const weightDate = weightData.dates.at(-1) ?? "—";
+const weightValue = weightData.weight_pct.at(-1) ?? 0;
+const valuationDate = valuationData.nvda.dates.at(-1) ?? "—";
+const nvdaPe = valuationData.nvda.trailing_pe.at(-1) ?? 0;
+const cscoPe = valuationData.csco.trailing_pe.at(-1) ?? 0;
+const valuationStart = valuationData.nvda.dates.at(0) ?? "—";
 ---
 
 <section class="mag7-dashboard" aria-labelledby="mag7-dashboard-title">
@@ -7,16 +32,14 @@
   <section class="mag7-chapter" id="mag7-equal-weight">
     <div class="chapter-intro">
       <p class="chapter-label">§ I · THE BASKET</p>
-      <h2>七巨头，打包在一起看</h2>
+      <h2>七巨头等权指数与 S&P 500、Nasdaq-100</h2>
       <p>
-        把 Apple、Microsoft、Nvidia、Amazon、Alphabet、Meta、Tesla 七家公司
-        按等权重捏成一个指数，跟 S&P 500 和 Nasdaq-100 放在一起。这个篮子代表了
-        美股市场上最受关注的一批公司——它们加起来的市值超过了大多数国家的股市。
+        Apple、Microsoft、Nvidia、Amazon、Alphabet、Meta 和 Tesla 各占七分之一，
+        每日等权计算，再与 S&P 500 和 Nasdaq-100 从共同起点归一化比较。
       </p>
       <p class="guide">
-        怎么看：红色线是等权七巨头，灰色是 S&P 500，蓝色是 Nasdaq-100。
-        差距越大，说明头部公司的表现越脱离大盘。如果七巨头开始跑输大盘，
-        往往意味着市场风格在切换。
+        图例分别标出七巨头等权、S&P 500 和 Nasdaq-100。曲线差值只表示同一时期的
+        累计回报差，不预测下一阶段是否反转。
       </p>
     </div>
     <div
@@ -33,16 +56,14 @@
   <section class="mag7-chapter" id="mag7-weight">
     <div class="chapter-intro">
       <p class="chapter-label">§ I.5 · CONCENTRATION</p>
-      <h2>七家公司，占了标普 500 的三分之一</h2>
+      <h2>七巨头当前占 S&P 500 {weightValue.toFixed(1)}%</h2>
       <p>
-        2018 年，七巨头加起来只占 S&P 500 的 13%。到 2024 年底，这个数字逼近了 33%。
-        美股历史上从未有过如此程度的市值集中——排名前七的公司占整个指数的三分之一。
-        这意味着：如果你买了 S&P 500 指数基金，你三分之一的钱投在了这七家公司身上。
+        截至 {weightDate}，七家公司合计权重为 {weightValue.toFixed(2)}%。计算使用
+        SPY 公布的前十大持仓，并同时计入 Alphabet 两类股份。
       </p>
       <p class="guide">
-        怎么看：这条线往上走，说明头部公司越来越"大而不倒"。
-        集中度本身不一定是风险——但如果七家公司的业务高度相关
-        （都依赖 AI 主题），那"分散投资"的假象就破灭了。
+        当前文件只有管道运行日的快照，不能据此重建 2018 年或 2024 年的历史权重。
+        后续快照持续积累后，才能判断集中度是上升还是下降。
       </p>
     </div>
     <div
@@ -59,16 +80,14 @@
   <section class="mag7-chapter" id="mag7-members">
     <div class="chapter-intro">
       <p class="chapter-label">§ II · THE SEVEN</p>
-      <h2>七家公司，七种命运</h2>
+      <h2>七家公司归一化价格对比</h2>
       <p>
-        虽然它们被统称为"七巨头"，但这七家公司的路径完全不同。
-        Nvidia 靠 AI 芯片需求暴涨，Meta 在 2022 年跌了 77% 之后翻倍回来，
-        而 Apple 的增长更像一只稳健的蓝筹股。把七家放在同一张图里归一化对比，
-        你会看到它们的节奏差异有多大。
+        每家公司从共同可用日期归一化为 100。图中只比较价格路径，不包含股息，
+        也不把市值、盈利或估值差异合并进同一指标。
       </p>
       <p class="guide">
-        怎么看：每条线从同一个起点出发（100），谁的线在上面谁就跑赢。
-        2023 年以后的分化尤其剧烈——这不是"一个板块"，是七个不同的故事。
+        同一日期曲线越高，表示从共同起点以来累计价格回报越高。比较结束值时，
+        还应核对各公司的最大回撤和当前估值。
       </p>
     </div>
     <div
@@ -85,11 +104,10 @@
   <section class="mag7-chapter" id="mag7-drawdowns">
     <div class="chapter-intro">
       <p class="chapter-label">§ III · THE PAIN</p>
-      <h2>每一家都经历过自己的熊市</h2>
+      <h2>七家公司当前回撤与历史最大回撤</h2>
       <p>
-        即使是最强的公司也会大跌。Meta 在 2022 年跌掉了四分之三的市值，
-        Tesla 从高点回落超过 70% 也不止一次。了解每家公司曾经跌过多深、
-        现在离高点还有多远，比只看过去一年涨了多少更有用。
+        当前回撤按最新价格相对各自历史高点计算；历史最大回撤使用同一价格序列。
+        回撤为零表示最新价格位于样本期高点，不表示未来风险为零。
       </p>
     </div>
     <div
@@ -106,17 +124,14 @@
   <section class="mag7-chapter" id="mag7-correlation">
     <div class="chapter-intro">
       <p class="chapter-label">§ III.5 · ONE TRADE?</p>
-      <h2>七家公司是一起涨跌，还是七只独立的股票？</h2>
+      <h2>七家公司 60 日滚动平均相关系数</h2>
       <p>
-        60 天滚动窗口内，七家公司两两之间的平均相关系数。系数越高，
-        说明市场把七家当成"一篮子 AI 概念"在交易，而不是七个独立公司。
-        2022 年市场恐慌时，所有股票都一起跌——相关性趋近于 1。
-        但当市场分化时，低相关性才是"分散投资"有意义的前提。
+        每个交易日计算七家公司两两日回报的 60 日相关系数，再取平均值。
+        数值接近 1 表示同期涨跌方向更一致，接近 0 表示线性关系较弱。
       </p>
       <p class="guide">
-        怎么看：高于 0.7 = 市场把七家当一只股票在交易。
-        低于 0.4 = 各家在走自己的路——这时候选股才有意义。
-        注意极端事件（如 2022 加息、2023 AI 爆发）前后的相关性变化。
+        0.7 和 0.4 仅作为阅读分界，不是交易阈值。需要同时检查相关性持续时间，
+        不能用单日变化判断分散效果。
       </p>
     </div>
     <div
@@ -133,40 +148,55 @@
   <section class="mag7-chapter" id="mag7-lineage">
     <div class="chapter-intro">
       <p class="chapter-label">§ V · THE LINEAGE</p>
-      <h2>七巨头不是凭空出现的</h2>
+      <h2>历代美国大型成长股群体的成员变化</h2>
       <p>
-        每一代市场都有自己的"明星群体"。它们的名字变了，但故事的核心从未改变：
-        一群被认为代表"未来"的公司，获得了远超大盘的估值和关注——
-        然后其中一些真正改变了世界，另一些被遗忘在历史里。
+        Nifty Fifty、四骑士、FANG、FAANG 和 Magnificent Seven 是不同时期的
+        市场标签。下面只记录成员和时代背景，不把群体名称作为买卖信号。
       </p>
     </div>
     <div class="lineage-timeline">
       <div class="lineage-era">
         <strong>1970s · Nifty Fifty（漂亮 50）</strong>
-        <p>柯达、宝丽来、施乐、迪士尼、麦当劳、强生、可口可乐——50 家"一次决策、永久持有"的蓝筹成长股。1973-74 年熊市中平均跌了 60%+。很多不再是今天的明星，但它们当年的地位不亚于今天的 Mag7。</p>
+        <p>
+          常见成员包括柯达、宝丽来、施乐、迪士尼、麦当劳、强生和可口可乐。
+          “一次决策、永久持有”是当时常见的市场说法；1973–1974 年熊市检验了
+          高估值大型成长股的下行风险。
+        </p>
       </div>
       <div class="lineage-era">
         <strong>1990s · Four Horsemen（四骑士）</strong>
-        <p>Cisco、Intel、Microsoft、Dell——互联网基础设施的"四大天王"。1999 年 Cisco 短暂成为世界上市值最高的公司（PE 140 倍），然后 dotcom 泡沫破裂。Intel 和 Dell 从此再未回到巅峰市值。</p>
+        <p>
+          Cisco、Intel、Microsoft 和 Dell 代表 1990 年代个人电脑与互联网基础设施。
+          互联网泡沫破裂后，四家公司的长期表现明显分化。
+        </p>
       </div>
       <div class="lineage-era">
         <strong>2013 · FANG</strong>
-        <p>CNBC 的 Jim Cramer 创造了这个缩写——Facebook、Amazon、Netflix、Google。四家互联网平台公司，代表"注意力经济"的崛起。</p>
+        <p>
+          Facebook、Amazon、Netflix 和 Google。这个缩写把四家大型互联网平台公司
+          放在同一组比较。
+        </p>
       </div>
       <div class="lineage-era">
         <strong>2017 · FAANG</strong>
-        <p>加了 Apple——从硬件公司转型为生态帝国。FAANG 统治了 2015-2021 的美股叙事。</p>
+        <p>
+          在 FANG 基础上加入 Apple，用于概括 2010 年代后半段表现突出的五家
+          大型科技与互联网公司。
+        </p>
       </div>
       <div class="lineage-era">
         <strong>2023 · Magnificent 7</strong>
-        <p>Bank of America 的 Michael Hartnett 创造了这个名字。加了 Nvidia（AI 算力）、Meta（改名后的 Facebook）、Tesla（电动车+能源）。AI 成为新的叙事核心。</p>
+        <p>
+          Apple、Microsoft、Nvidia、Amazon、Alphabet、Meta 和 Tesla。
+          该名称在 2023 年广泛使用，用于描述对主要美股指数贡献较高的七家公司。
+        </p>
       </div>
     </div>
     <p class="lineage-lesson">
-      <strong>每一代的共同点：</strong>极高集中度 + 改变世界的叙事 + 远超平均的估值。<br/>
-      <strong>每一代的区别：</strong>有些公司真正兑现了承诺（Microsoft 30 年后仍在顶部），
-      有些成了历史注脚（柯达的胶片被数码取代，Cisco 的硬件被云服务稀释）。<br/>
-      <strong>对今天 Mag7 的启示：</strong>七家不全是一样的——把它们当成一个整体是方便的，但把它们当成七个独立公司来审视才是明智的。
+      <strong>可核对的结论：</strong>
+      这些标签的成员会变化，组内公司长期回报也会分化。<br />
+      <strong>使用限制：</strong>历史群体只能用于比较集中度、估值和成员更替，
+      不能直接推断七巨头的下一次高点或低点。
     </p>
   </section>
 
@@ -174,16 +204,14 @@
   <section class="mag7-chapter" id="mag7-valuation">
     <div class="chapter-intro">
       <p class="chapter-label">§ VI · THE ANCHOR</p>
-      <h2>Nvidia 的估值，离 1999 年的 Cisco 还有多远？</h2>
+      <h2>Nvidia 与 Cisco 的 TTM PE 快照</h2>
       <p>
-        1999 年互联网泡沫顶峰，Cisco 的市盈率最高冲到了 140 倍。
-        今天 Nvidia 作为 AI 时代的算力核心，经常被拿来跟当年的 Cisco 比较。
-        这张图每天积累两者的 TTM PE 快照，让你自己判断。
+        截至 {valuationDate}，Nvidia TTM PE 为 {nvdaPe.toFixed(1)} 倍，Cisco 为
+        {cscoPe.toFixed(1)} 倍。当前可比序列从 {valuationStart} 开始。
       </p>
       <p class="guide">
-        怎么看：PE 不是预测工具，但它是估值的"重力"。PE 越高，意味着市场
-        对未来增长的预期越乐观——也意味着容错空间越小。Nvidia 和 Cisco
-        两代算力龙头的 PE 路径，放在一起就是市场给"颠覆性技术"定价的历史。
+        当前文件不包含 Cisco 1999 年的完整 PE 历史，因此不能用这张图验证
+        “Nvidia 与 1999 年 Cisco”的定量差距。后续快照只用于同口径跟踪。
       </p>
     </div>
     <div
@@ -332,7 +360,10 @@
     const el = document.getElementById("mag7-dd-chart");
     if (!el) return;
     el.querySelector("[data-chart-status]")?.remove();
-    const dd = data.member_drawdowns as Record<string, { name: string; current_dd: number; deepest: any[] }>;
+    const dd = data.member_drawdowns as Record<
+      string,
+      { name: string; current_dd: number; deepest: any[] }
+    >;
     const entries = Object.entries(dd);
     const names = entries.map(([, v]) => v.name);
     const current = entries.map(([, v]) => v.current_dd);
@@ -440,23 +471,35 @@
       tooltip: { trigger: "axis", valueFormatter: (v: number) => v.toFixed(3) },
       xAxis: { type: "category", data: data.dates },
       yAxis: { type: "value", name: "平均相关系数", min: 0, max: 1 },
-      series: [{
-        name: "60日平均相关性", type: "line",
-        data: data.avg_correlation,
-        areaStyle: { color: "rgba(246,12,62,0.06)" },
-        lineStyle: { color: "#f60c3e", width: 2 },
-        showSymbol: false, sampling: "lttb",
-        markLine: {
-          silent: true,
-          data: [{ yAxis: 0.7, label: { formatter: "一篮子交易", fontSize: 10 }, lineStyle: { color: "#f08a24", type: "dashed" } }],
+      series: [
+        {
+          name: "60日平均相关性",
+          type: "line",
+          data: data.avg_correlation,
+          areaStyle: { color: "rgba(246,12,62,0.06)" },
+          lineStyle: { color: "#f60c3e", width: 2 },
+          showSymbol: false,
+          sampling: "lttb",
+          markLine: {
+            silent: true,
+            data: [
+              {
+                yAxis: 0.7,
+                label: { formatter: "平均相关性 0.7", fontSize: 10 },
+                lineStyle: { color: "#f08a24", type: "dashed" },
+              },
+            ],
+          },
         },
-      }],
+      ],
       grid: { bottom: 52, containLabel: true, left: 12, right: 18, top: 52 },
     });
     new ResizeObserver(() => chart.resize()).observe(el);
   }
 
   async function boot() {
+    const root = document.querySelector(".mag7-dashboard");
+    if (!root) return;
     const [mag7Res, eqRes, peRes, weightRes, corrRes] = await Promise.all([
       fetch("/data/mag7_prices.json"),
       fetch("/data/mag7_equal_weight.json"),
@@ -465,7 +508,7 @@
       fetch("/data/mag7_correlation.json"),
     ]);
     if (!mag7Res.ok || !eqRes.ok) {
-      document.querySelectorAll("[data-chart-status]").forEach(el => {
+      root.querySelectorAll("[data-chart-status]").forEach(el => {
         el.textContent = "数据暂不可用";
       });
       return;
@@ -494,9 +537,11 @@
   }
 
   boot().catch((e: unknown) => {
-    document.querySelectorAll("[data-chart-status]").forEach(el => {
-      el.textContent = `数据读取失败：${String(e)}`;
-    });
+    document
+      .querySelectorAll(".mag7-dashboard [data-chart-status]")
+      .forEach((element) => {
+        element.textContent = `数据读取失败：${String(e)}`;
+      });
   });
 </script>
 

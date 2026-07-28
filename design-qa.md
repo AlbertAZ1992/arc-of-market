@@ -1,41 +1,26 @@
-# ArcOfMarket homepage design QA
+# Design QA
 
-Final result: passed
+## Scope
 
-## Comparison
+- Visual system: preserved existing typography, colors, spacing, borders and page rhythm.
+- Changed surface: information hierarchy, market evidence, chart narrative and paid-signal boundary.
+- Reference:
+  `/Users/albertaz/.codex/generated_images/019fa94d-efa7-7b72-b9d4-ac1890d34fc6/exec-2270450c-7c60-4feb-91a3-122c456f6259.png`
+- Desktop implementation:
+  `/Users/albertaz/.codex/visualizations/2026/07/28/019fa94d-efa7-7b72-b9d4-ac1890d34fc6/arc-of-market-implementation/home-copy-final.png`
+- Side-by-side comparison:
+  `/Users/albertaz/.codex/visualizations/2026/07/28/019fa94d-efa7-7b72-b9d4-ac1890d34fc6/arc-of-market-implementation/home-reference-comparison-final.png`
+- Mobile checks:
+  `/Users/albertaz/.codex/visualizations/2026/07/28/019fa94d-efa7-7b72-b9d4-ac1890d34fc6/arc-of-market-implementation/home-copy-mobile-final.jpg`
 
-- Reference: `/Users/albertaz/Downloads/微信图片_20260727211421_224_2.png`
-- Implementation: `http://127.0.0.1:4323/`
-- Viewport: `1488 × 1058`
-- Side-by-side image:
-  `/Users/albertaz/.codex/visualizations/2026/07/27/arc-of-market-redesign/comparison.jpg`
+## Checks
 
-## Visual review
+- Desktop comparison keeps the approved editorial visual language.
+- Homepage first screen shows a judgment, three evidence groups and a multi-market chart.
+- Signal preview is visible without showing current direction, position or trigger values.
+- Homepage signal CTA opens `/signals/`.
+- S&P 500 research charts render and include numeric facts and watch conditions.
+- Nasdaq, Dow, macro and Magnificent Seven routes render without chart errors.
+- Mobile homepage and signal preview do not overflow or lose reading order.
 
-| Area | Result | Notes |
-| --- | --- | --- |
-| Red frame and fixed sidebar | Passed | Frame, sidebar width, logo block and navigation rhythm align with the reference. |
-| Typography | Passed | Uses the requested Noto Serif / Merriweather and Noto Sans / Open Sans stacks. |
-| Hero hierarchy | Passed | Date, kicker, judgment, summary and three evidence items follow the same reading order. |
-| Strategy strip | Passed | Uses the same horizontal editorial structure and keeps execution fields locked. |
-| Evidence chart | Passed | Chart and right-hand interpretation column match the reference proportions. |
-| Spacing and rules | Passed | Major horizontal divisions and content insets visually align at the target viewport. |
-| Icons | Passed | Solar icon assets are used; no handmade SVG or placeholder assets are present. |
-
-## Product and behavior review
-
-- The homepage judgment is generated from checked-in market datasets.
-- The placeholder breadth dataset is not used in a production-facing claim.
-- The key chart loads S&P 500 and VIX data and fails closed if either dataset is unavailable.
-- The five-act homepage story contains eight working charts with no production placeholder blocks.
-- The Strategy Signals and historical-validation links navigate to working destinations.
-- The Signals page distinguishes public validation from future execution-only subscription fields.
-- The mobile layout has no document-level horizontal overflow at `390 × 844`.
-- The mobile navigation opens, closes and reports its expanded state correctly.
-- Type checks, lint, production build and chart-catalog audit pass without warnings.
-
-## Resolved findings
-
-- P1: Removed the duplicate ECharts legend below the editorial legend.
-- P1: Prevented the Signals page headline from leaving a single orphaned character.
-- P2: Shortened the trend evidence label so it remains on one line at the reference viewport.
+result: passed

@@ -203,16 +203,16 @@
       "basis": "Derived volatility chart display with source attribution"
     },
     "breadth_pulse.json": {
-      "public": true,
-      "basis": "ArcOfMarket research output"
+      "public": false,
+      "basis": "ArcOfMarket strategy output reserved for the paid product layer"
     },
     "regime_rotation.json": {
-      "public": true,
-      "basis": "ArcOfMarket research output"
+      "public": false,
+      "basis": "ArcOfMarket strategy output reserved for the paid product layer"
     },
     "rs_leaders.json": {
-      "public": true,
-      "basis": "ArcOfMarket research output"
+      "public": false,
+      "basis": "ArcOfMarket strategy output reserved for the paid product layer"
     },
     "mag7_prices.json": {
       "public": true,

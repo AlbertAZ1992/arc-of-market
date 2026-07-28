@@ -1,10 +1,10 @@
 ---
 import HomeMarketStory from "@/components/HomeMarketStory.astro";
-import MarketBriefChart from "@/components/MarketBriefChart.astro";
+import MarketOverviewChart from "@/components/MarketOverviewChart.astro";
 import SolarIcon from "@/components/SolarIcon.astro";
+import StrategySignalPreview from "@/components/StrategySignalPreview.astro";
 import SiteShell from "@/layouts/SiteShell.astro";
 import { loadMarketBrief } from "@/lib/market-brief";
-import { strategyLenses } from "@/lib/strategy-lenses";
 
 const brief = loadMarketBrief();
 const displayDate = brief.asOf.replaceAll("-", ".");
@@ -41,7 +41,7 @@ const chapters = [
   <main class="market-brief">
     <section class="brief-hero" id="today-brief">
       <p class="eyebrow">MARKET BRIEF · {displayDate} · 盘后</p>
-      <p class="brief-kicker">一句话今日判断</p>
+      <p class="brief-kicker">截至最新收盘的数据</p>
       <h1>{brief.headline}</h1>
       <p class="brief-summary">{brief.summary}</p>
 
@@ -62,31 +62,7 @@ const chapters = [
       </div>
     </section>
 
-    <section class="signal-preview" id="strategy-signals">
-      <div class="signal-intro">
-        <p class="eyebrow">STRATEGY SIGNALS</p>
-        <h2>四个坐标，读懂市场正在往哪里走。</h2>
-        <p>从主要趋势到长期周期，把分散的市场变化放进同一张观察地图。</p>
-      </div>
-      <div class="signal-lenses" aria-label="四个市场观察维度">
-        {
-          strategyLenses.map((strategy) => (
-            <article>
-              <span>{strategy.code}</span>
-              <strong>{strategy.title}</strong>
-              <p>{strategy.dimension}</p>
-            </article>
-          ))
-        }
-      </div>
-      <div class="signal-actions">
-        <a class="primary-action" href="/signals/">了解四个观察维度</a>
-        <a class="secondary-action" href="/methodology/">
-          判断如何计算
-          <SolarIcon name="arrow-right-linear" size={19} />
-        </a>
-      </div>
-    </section>
+    <StrategySignalPreview compact />
 
     <section class="key-evidence" id="key-evidence">
       <div class="evidence-main">
@@ -94,34 +70,36 @@ const chapters = [
           <p>今日关键证据</p>
           <h2>{brief.evidenceTitle}</h2>
           <p>
-            <span class="legend-line legend-line--price"></span>S&P 500 收盘价（左轴）
-            <span class="legend-line legend-line--risk"></span>VIX（右轴）
+            四类市场近一年归一化表现 · 一年前 = 100
           </p>
         </header>
-        <MarketBriefChart />
+        <MarketOverviewChart />
       </div>
       <aside class="evidence-notes">
         <section>
-          <h3>结论</h3>
+          <h3>风险读数</h3>
           <p>{brief.summary}</p>
         </section>
         <section>
-          <h3>为什么重要</h3>
+          <h3>市场广度</h3>
           <p>
-            价格趋势需要波动率和金融压力共同确认。VIX 当前为
-            {brief.vix.toFixed(1)}，尚不足以单独证明系统性风险已经扩散。
+            过去 20 个交易日有
+            {Object.values(brief.marketReturns).filter((value) => value > 0).length}/4
+            类市场上涨；S&P 500 高于 50 日均线的成分占
+            {brief.breadth.sp50050.toFixed(1)}%，Nasdaq-100 为
+            {brief.breadth.ndx50.toFixed(1)}%。
           </p>
         </section>
         <section>
           <h3>什么会改变判断</h3>
           <ul>
-            <li>价格跌破长期趋势并持续</li>
-            <li>OFR FSI 回到历史均值上方</li>
-            <li>VIX 与信用压力同步放大</li>
+            <li>四类市场中三类以上转为 20 日下跌</li>
+            <li>标普 500 的 50 日广度跌破 50%</li>
+            <li>VIX 与 OFR 金融压力同时高于各自警戒线</li>
           </ul>
         </section>
         <a href="#story-health">
-          下一幕：上涨是否由整个市场推动
+          查看标普与纳指市场广度
           <SolarIcon name="arrow-right-linear" size={19} />
         </a>
       </aside>
@@ -132,8 +110,8 @@ const chapters = [
     <section class="subscribe-panel" id="subscribe">
       <div>
         <p class="eyebrow">NEXT READING</p>
-        <h2>把今天的判断，放回更长的市场历史。</h2>
-        <p>继续查看长期回报、回撤、估值、宏观环境与指数结构。</p>
+        <h2>查看长期回报、回撤、估值、宏观和指数结构。</h2>
+        <p>专题页保留完整历史区间、数据来源、计算口径和判断限制。</p>
       </div>
       <a href="/archive/">进入全部图表</a>
     </section>
@@ -141,6 +119,8 @@ const chapters = [
 
   <footer class="page-footer brief-footer">
     <span>价格 {brief.sourceDates.price}</span><span>·</span>
+    <span>广度 {brief.sourceDates.breadth}</span><span>·</span>
+    <span>集中度 {brief.sourceDates.concentration}</span><span>·</span>
     <span>VIX {brief.sourceDates.volatility}</span><span>·</span>
     <span>OFR FSI {brief.sourceDates.stress}</span><span>·</span>
     <a href="/methodology/">方法与数据说明</a>
@@ -311,100 +291,6 @@ const chapters = [
     margin: 0;
   }
 
-  .signal-preview {
-    border-bottom: 1px dotted var(--rule);
-    display: grid;
-    grid-template-columns: minmax(16rem, 0.8fr) minmax(32rem, 1.7fr) minmax(12rem, 0.55fr);
-    min-height: 10.5rem;
-    scroll-margin-top: 2rem;
-  }
-
-  .signal-preview > * {
-    padding: 1.5rem 1.5rem;
-  }
-
-  .signal-preview > *:first-child {
-    padding-left: 0;
-  }
-
-  .signal-preview > * + * {
-    border-left: 1px solid var(--rule);
-  }
-
-  .signal-intro h2 {
-    font-size: 1.15rem;
-    margin: 0.25rem 0 0.2rem;
-  }
-
-  .signal-intro > p:last-child {
-    color: var(--ink-soft);
-    font-size: 0.72rem;
-    margin: 0.45rem 0 0;
-  }
-
-  .signal-lenses {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .signal-lenses article {
-    padding: 0.2rem 1rem 0.8rem;
-  }
-
-  .signal-lenses article:nth-child(odd) {
-    border-right: 1px solid var(--rule);
-  }
-
-  .signal-lenses article:nth-child(-n + 2) {
-    border-bottom: 1px solid var(--rule);
-  }
-
-  .signal-lenses span {
-    color: var(--main);
-    font-family: var(--font-mono);
-    font-size: 0.58rem;
-  }
-
-  .signal-lenses strong {
-    display: block;
-    font-family: var(--font-serif);
-    font-size: 0.88rem;
-    margin-top: 0.2rem;
-  }
-
-  .signal-lenses p {
-    color: var(--ink-faint);
-    font-size: 0.65rem;
-    margin: 0.15rem 0 0;
-  }
-
-  .signal-actions {
-    align-items: center;
-    display: grid;
-    gap: 0.75rem;
-  }
-
-  .primary-action {
-    background: var(--main);
-    color: #fff;
-    font-family: var(--font-serif);
-    font-weight: 700;
-    padding: 0.75rem 1rem;
-    text-align: center;
-  }
-
-  .primary-action:hover {
-    color: #fff;
-  }
-
-  .secondary-action {
-    align-items: center;
-    display: flex;
-    font-size: 0.75rem;
-    gap: 0.35rem;
-    justify-content: center;
-  }
-
   .key-evidence {
     border-bottom: 1px dotted var(--rule);
     display: grid;
@@ -433,17 +319,6 @@ const chapters = [
     display: flex;
     font-size: 0.72rem;
     gap: 0.55rem;
-  }
-
-  .legend-line {
-    border-top: 2px solid var(--ink);
-    display: inline-block;
-    width: 1.75rem;
-  }
-
-  .legend-line--risk {
-    border-color: var(--main);
-    margin-left: 1rem;
   }
 
   .evidence-notes {
@@ -519,20 +394,6 @@ const chapters = [
     padding-left: 5.2rem;
   }
 
-  @media (max-width: 1100px) {
-    .signal-preview {
-      grid-template-columns: 1fr 1.7fr;
-    }
-
-    .signal-actions {
-      border-left: 0;
-      border-top: 1px solid var(--rule);
-      grid-column: 1 / -1;
-      grid-template-columns: 1fr 1fr;
-    }
-
-  }
-
   @media (max-width: 900px) {
     .market-brief {
       padding: 1.3rem 1rem 0;
@@ -558,8 +419,7 @@ const chapters = [
 
   @media (max-width: 700px) {
     .evidence-strip,
-    .key-evidence,
-    .signal-preview {
+    .key-evidence {
       display: block;
     }
 
@@ -567,18 +427,9 @@ const chapters = [
       padding: 1rem 0;
     }
 
-    .evidence-strip article + article,
-    .signal-preview > * + * {
+    .evidence-strip article + article {
       border-left: 0;
       border-top: 1px solid var(--rule);
-    }
-
-    .signal-preview > * {
-      padding-inline: 0;
-    }
-
-    .signal-actions {
-      grid-template-columns: 1fr;
     }
 
     .evidence-main {

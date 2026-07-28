@@ -1,0 +1,151 @@
+---
+import Sp500Composition from "@/components/Sp500Composition.astro";
+import ChartIndexBlock from "@/components/content/ChartIndexBlock.astro";
+import ResearchProse from "@/components/content/ResearchProse.astro";
+import FinancialStressChart from "@/components/charts/FinancialStressChart.astro";
+import MacroDashboard from "@/components/charts/MacroDashboard.astro";
+import Mag7Dashboard from "@/components/charts/Mag7Dashboard.astro";
+import TradingViewHeatmap from "@/components/charts/TradingViewHeatmap.astro";
+import ConstituentChanges from "@/components/tables/ConstituentChanges.astro";
+import NdxRankings from "@/components/tables/NdxRankings.astro";
+import { type ChartKey } from "@/content/chart-copy";
+import { pageContent, type ContentPageKey } from "@/content/page-content";
+import SiteShell from "@/layouts/SiteShell.astro";
+
+type Props = {
+  pageKey: ContentPageKey;
+};
+
+const { pageKey } = Astro.props;
+const content = pageContent[pageKey];
+const dockItems = content.chapters.map((chapter) => ({
+  href: `#${chapter.id}`,
+  label: chapter.navLabel,
+}));
+---
+
+<SiteShell
+  bodyClass="chart-page"
+  description={content.seo.description}
+  pageNavigation={{ current: content.hero.eyebrow, items: dockItems }}
+  title={content.seo.title}
+>
+  <header class="page-header">
+    <div class="page-header__inner">
+      <p class="eyebrow">{content.hero.eyebrow}</p>
+      <h1>{content.hero.headline}</h1>
+      <p class="muted">{content.hero.intro}</p>
+    </div>
+  </header>
+
+  <main class="chart-main">
+    {
+      content.chapters.map((chapter) => (
+        <section class="research-chapter">
+          <div class="research-chapter__intro" id={chapter.id}>
+            <p class="chapter-label">{chapter.label}</p>
+            <ResearchProse entry={chapter.copy} />
+          </div>
+          {chapter.blocks.map((block) => (
+            block.type === "chart" ? (
+              <ChartIndexBlock chart={block.chart as ChartKey} />
+            ) : block.type === "prose" ? (
+              <ResearchProse entry={block.entry} />
+            ) : block.component === "Sp500CrossSection" ? (
+              <TradingViewHeatmap
+                dataSource="SPX500"
+                description="按市值与当日涨跌观察 S&P 500 当前横截面。"
+                id="sp500-cross-section"
+                title="今天是谁在推动指数？"
+              />
+            ) : block.component === "NdxCrossSection" ? (
+              <TradingViewHeatmap
+                dataSource="NASDAQ100"
+                description="按市值与当日涨跌观察 Nasdaq-100 当前横截面。"
+                id="ndx-cross-section"
+                title="Nasdaq-100 的上涨集中在哪些公司？"
+              />
+            ) : block.component === "Sp500Composition" ? (
+              <Sp500Composition />
+            ) : block.component === "ConstituentChanges" ? (
+              <ConstituentChanges />
+            ) : block.component === "NdxRankings" ? (
+              <section class="component-section">
+                <header>
+                  <p class="eyebrow">CONSTITUENT RANKING</p>
+                  <h2>Nasdaq-100 成分的四个回报窗口排名</h2>
+                  <p>同时列出一周、一月、年内和一年回报，避免用单一窗口定义强弱。</p>
+                </header>
+                <NdxRankings />
+              </section>
+            ) : block.component === "MacroDashboard" ? (
+              <MacroDashboard />
+            ) : block.component === "FinancialStress" ? (
+              <FinancialStressChart />
+            ) : block.component === "Mag7Dashboard" ? (
+              <Mag7Dashboard />
+            ) : null
+          ))}
+        </section>
+      ))
+    }
+  </main>
+
+  <footer class="page-footer">
+    <a href="/">返回首页</a><span>·</span>
+    {pageKey !== "sp500" && <><a href="/sp500/">标普 500</a><span>·</span></>}
+    {pageKey !== "nasdaq" && <><a href="/nasdaq/">纳斯达克</a><span>·</span></>}
+    {pageKey !== "mag7" && (
+      <><a href="/magnificent-seven/">七巨头</a><span>·</span></>
+    )}
+    <a href="/methodology/">方法论</a>
+  </footer>
+</SiteShell>
+
+<style>
+  .chart-main {
+    padding: 2.5rem 2.25rem 4.5rem 3rem;
+  }
+
+  .research-chapter + .research-chapter {
+    border-top: 1px solid var(--ink);
+  }
+
+  .research-chapter__intro {
+    padding-top: 3rem;
+    scroll-margin-top: 6rem;
+  }
+
+  .chapter-label {
+    color: var(--ink-faint);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.4rem;
+    text-transform: uppercase;
+  }
+
+  .component-section {
+    border-bottom: 1px dotted var(--rule);
+    padding-block: 3.5rem;
+  }
+
+  .component-section > header {
+    max-width: 48rem;
+  }
+
+  .component-section h2 {
+    margin: 0.35rem 0 0.55rem;
+  }
+
+  .component-section header > p:last-child {
+    color: var(--ink-soft);
+    font-size: 0.8rem;
+  }
+
+  @media (max-width: 900px) {
+    .chart-main {
+      padding: 1.5rem 1rem 3.5rem;
+    }
+  }
+</style>

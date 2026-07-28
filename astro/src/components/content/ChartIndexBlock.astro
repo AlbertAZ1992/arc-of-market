@@ -1,0 +1,18 @@
+---
+import ArcJsonChart from "@/components/charts/ArcJsonChart.astro";
+import { resolveChartSpec, type ChartKey } from "@/content/chart-copy";
+import { loadChartFacts } from "@/content/chart-facts";
+
+type Props = {
+  chart: ChartKey;
+};
+
+const spec = resolveChartSpec(Astro.props.chart);
+const facts = loadChartFacts(spec);
+if (spec.dataPath && facts.length === 0) {
+  throw new Error(`Chart ${Astro.props.chart} has no data-derived fact`);
+}
+const interpretation = [...facts, ...(spec.interpretation ?? [])];
+---
+
+<ArcJsonChart {...spec} interpretation={interpretation} />

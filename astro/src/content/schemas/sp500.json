@@ -1,0 +1,72 @@
+{
+  "id": "sp500",
+  "route": "/sp500/",
+  "seo": "seo",
+  "hero": "hero",
+  "chapters": [
+    {
+      "id": "sp500-returns",
+      "navLabel": "长期回报",
+      "label": "§ I · RETURNS",
+      "copy": "chapter-returns",
+      "blocks": [
+        { "type": "chart", "chart": "sp500-century" },
+        { "type": "chart", "chart": "sp500-total-return" },
+        { "type": "chart", "chart": "sp500-return-decomp" },
+        { "type": "chart", "chart": "sp500-annual" },
+        { "type": "chart", "chart": "sp500-bullbear" },
+        { "type": "chart", "chart": "sp500-extremes" },
+        { "type": "chart", "chart": "sp500-distribution" },
+        { "type": "chart", "chart": "sp500-holding" },
+        { "type": "chart", "chart": "sp500-rollmatrix" },
+        { "type": "chart", "chart": "sp500-rolling5y" }
+      ]
+    },
+    {
+      "id": "sp500-valuation",
+      "navLabel": "CAPE 与盈利",
+      "label": "§ II · VALUATION",
+      "copy": "chapter-valuation",
+      "blocks": [
+        { "type": "chart", "chart": "shiller-cape" },
+        { "type": "chart", "chart": "shiller-pe" },
+        { "type": "chart", "chart": "shiller-eps" }
+      ]
+    },
+    {
+      "id": "sp500-risk",
+      "navLabel": "回撤与波动",
+      "label": "§ III · RISK",
+      "copy": "chapter-risk",
+      "blocks": [
+        { "type": "chart", "chart": "sp500-intrayear" },
+        { "type": "chart", "chart": "sp500-seasonality" },
+        { "type": "chart", "chart": "sp500-drawdowns" },
+        { "type": "chart", "chart": "sp500-volatility" },
+        { "type": "chart", "chart": "sp500-vol-family" }
+      ]
+    },
+    {
+      "id": "sp500-inside",
+      "navLabel": "广度与成分",
+      "label": "§ IV · INSIDE",
+      "copy": "chapter-inside",
+      "blocks": [
+        { "type": "chart", "chart": "sp500-breadth" },
+        { "type": "component", "component": "Sp500CrossSection" },
+        { "type": "component", "component": "Sp500Composition" },
+        { "type": "component", "component": "ConstituentChanges" }
+      ]
+    },
+    {
+      "id": "sp500-metabolism",
+      "navLabel": "行业结构",
+      "label": "§ V · METABOLISM",
+      "copy": "chapter-metabolism",
+      "blocks": [
+        { "type": "prose", "prose": "industry-turnover" },
+        { "type": "prose", "prose": "frameworks" }
+      ]
+    }
+  ]
+}

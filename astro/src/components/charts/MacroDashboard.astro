@@ -523,11 +523,16 @@ const recentRecessions = (recessionsJson as RecessionDataset).periods.slice(-8).
     renderCot(cot);
   }
 
-  renderMacroDashboard().catch((error: unknown) => {
-    document.querySelectorAll("[data-chart-status]").forEach((element) => {
-      element.textContent = `数据读取失败：${String(error)}`;
+  const macroDashboard = document.querySelector(".macro-dashboard");
+  if (macroDashboard) {
+    renderMacroDashboard().catch((error: unknown) => {
+      macroDashboard
+        .querySelectorAll("[data-chart-status]")
+        .forEach((element) => {
+          element.textContent = `数据读取失败：${String(error)}`;
+        });
     });
-  });
+  }
 </script>
 
 <style>

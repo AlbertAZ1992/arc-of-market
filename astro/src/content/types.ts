@@ -1,105 +1,115 @@
 import type { ArcChartKind } from "@/lib/arc-chart-types";
 
-// ─── Block types ───
-
-/** A chart block — references a chart definition from the chart index. */
 export type ChartBlock = {
-  type: "chart";
-  /** Key into ChartIndex */
   chart: string;
+  type: "chart";
 };
 
-/** A prose block managed by the page-content JSON. */
 export type ProseBlock = {
-  content: string;
+  prose: string;
   type: "prose";
 };
 
-/** A custom component block — rendered by a named Astro component. */
+export type ComponentName =
+  | "ConstituentChanges"
+  | "FinancialStress"
+  | "MacroDashboard"
+  | "Mag7Dashboard"
+  | "NdxRankings"
+  | "NdxCrossSection"
+  | "Sp500Composition"
+  | "Sp500CrossSection";
+
 export type ComponentBlock = {
+  component: ComponentName;
   type: "component";
-  /** Component identifier: "Sp500Composition" | "ConstituentChanges" | "MacroDashboard" etc. */
-  component: string;
 };
 
-export type Block = ChartBlock | ProseBlock | ComponentBlock;
-
-// ─── Chapter / Section ───
+export type Block = ChartBlock | ComponentBlock | ProseBlock;
 
 export type ChapterSpec = {
-  /** DOM anchor id */
-  id: string;
-  /** Sidebar nav label (short) */
-  navLabel: string;
-  /** Chapter heading label, e.g. "§ I · THE SHAPE OF RETURNS" */
-  label: string;
-  /** Chapter title, e.g. "回报的形状" */
-  title: string;
-  /** Optional intro prose key */
-  intro?: string;
-  /** Optional "how to read" / guide prose key */
-  guide?: string;
-  /** Blocks in order */
   blocks: Block[];
+  copy: string;
+  id: string;
+  label: string;
+  navLabel: string;
 };
 
-// ─── Page schema ───
-
 export type PageSchema = {
+  chapters: ChapterSpec[];
+  hero: string;
+  id: string;
   route: string;
-  seo: {
-    title: string;
-    description: string;
-  };
+  seo: string;
+};
+
+export type ProseEntry = {
+  body?: string;
+  caveat?: string;
+  description?: string;
+  eyebrow?: string;
+  guide?: string;
+  historicalContext?: string;
+  title?: string;
+  whatChanges?: string[];
+  whyItMatters?: string;
+};
+
+export type ProseIndex = {
+  entries: Record<string, ProseEntry>;
+};
+
+export type ResolvedProseBlock = {
+  entry: ProseEntry;
+  key: string;
+  type: "prose";
+};
+
+export type ResolvedChapter = Omit<ChapterSpec, "blocks" | "copy"> & {
+  blocks: Array<ChartBlock | ComponentBlock | ResolvedProseBlock>;
+  copy: ProseEntry;
+};
+
+export type ResolvedPageContent = {
+  chapters: ResolvedChapter[];
   hero: {
     eyebrow: string;
     headline: string;
     intro: string;
   };
-  chapters: ChapterSpec[];
-};
-
-// ─── Chart index entry ───
-
-export type ChartIndexEntry = {
-  /** Default title — can be overridden in prose */
-  title: string;
-  /** Data file path relative to /data/ */
-  dataPath: string;
-  /** Chart rendering kind */
-  kind: ArcChartKind;
-  /** Data source attribution */
-  source: string;
-  /** Optional: log scale */
-  scaleType?: "linear" | "log" | undefined;
-  /** Optional: Y axis unit label */
-  yUnit?: string;
-  /** Optional: value key for line/valuation charts */
-  valueKey?: string;
-  /** Optional: value label */
-  valueLabel?: string;
-  /** Optional: series config for nested/multiline charts */
-  series?: readonly ChartSeriesSpec[];
-  /** Optional: annotation / caveat */
-  note?: string;
-  /** Optional: default eyebrow override */
-  eyebrow?: string;
+  id: string;
+  route: string;
+  seo: {
+    description: string;
+    title: string;
+  };
 };
 
 export type ChartSeriesSpec = {
+  axis?: number;
   key: string;
   label: string;
   unit?: string;
   valueKey?: string;
-  axis?: number;
 };
 
-// ─── Prose index entry ───
-
-export type ProseEntry = {
-  /** Content in Markdown or plain text */
-  body: string;
+export type ChartIndexEntry = {
+  cadence?: "daily" | "monthly" | "quarterly" | "static";
+  dataPath: string;
+  description?: string;
+  eyebrow?: string;
+  homepageEligible?: boolean;
+  interpretation?: readonly string[];
+  kind: ArcChartKind;
+  note?: string;
+  scaleType?: "linear" | "log";
+  series?: readonly ChartSeriesSpec[];
+  source: string;
+  title: string;
+  valueKey?: string;
+  valueLabel?: string;
+  whatToWatch?: readonly string[];
+  yUnit?: string;
 };
 
-export type ProseIndex = Record<string, ProseEntry>;
 export type ChartIndex = Record<string, ChartIndexEntry>;

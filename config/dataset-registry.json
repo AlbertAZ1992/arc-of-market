@@ -332,12 +332,12 @@
         "yahoo-finance"
       ],
       "access": {
-        "public": true,
+        "public": false,
         "subscriber": false
       },
-      "derived_output": "allowed",
-      "status": "approved-for-public-research-display",
-      "approval_reference": "Product owner data-display decision 2026-07-26"
+      "derived_output": "internal-only",
+      "status": "internal-strategy-output",
+      "approval_reference": "Paid signal publication boundary 2026-07-29"
     },
     {
       "id": "mag7-research-panels",

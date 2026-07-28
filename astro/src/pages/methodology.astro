@@ -1,6 +1,6 @@
 ---
-import EditorialPage from "../layouts/EditorialPage.astro";
-import { MARKET_BRIEF_THRESHOLDS } from "../lib/market-brief";
+import EditorialPage from "@/layouts/EditorialPage.astro";
+import { MARKET_BRIEF_THRESHOLDS } from "@/lib/market-brief";
 ---
 
 <EditorialPage
@@ -10,31 +10,29 @@ import { MARKET_BRIEF_THRESHOLDS } from "../lib/market-brief";
 >
   <section>
     <p class="faint">DAILY MARKET BRIEF</p>
-    <h2>“一句话今日判断”不是 AI 写的</h2>
+    <h2>首页使用四类资产、市场广度和风险指标</h2>
     <p>
-      它是一组固定规则对最新数据做出的市场状态分类。每次更新使用同一套输入、顺序和阈值，
-      因而任何人都可以根据页面上的数据重新得到相同结论。它描述当前环境，不预测下一交易日涨跌。
+      首页标题直接列出过去 20 个交易日上涨的资产数量，以及 S&P 500 与
+      Nasdaq-100 的 50 日市场广度。下方证据栏公开全部输入，不生成无法核对的
+      综合分数。
     </p>
     <ol>
       <li>
-        先比较 S&P 500 收盘价与 {MARKET_BRIEF_THRESHOLDS.longTrendDays}
-        日均线，判断长期价格趋势。
+        计算 SPY、QQQ、DIA 和七巨头等权篮子过去 20 个交易日的回报。
       </li>
       <li>
-        再读取 OFR 金融压力指数；高于 {MARKET_BRIEF_THRESHOLDS.stressAverage}
-        代表压力高于历史均值。
+        读取 S&P 500 与 Nasdaq-100 成分中高于 50 日、200 日均线的比例，并列出
+        七巨头在 S&P 500 中的合计权重。
       </li>
       <li>
-        最后读取 VIX；{MARKET_BRIEF_THRESHOLDS.vixCaution}
-        是当前版本区分常态与压力升温的观察线。
+        读取 VIX、VIX3M 与 OFR FSI。VIX 不低于
+        {MARKET_BRIEF_THRESHOLDS.vixCaution} 记为波动率警戒；OFR FSI 高于
+        {MARKET_BRIEF_THRESHOLDS.stressAverage} 表示金融压力高于历史均值。
       </li>
     </ol>
     <p>
-      当价格低于 {MARKET_BRIEF_THRESHOLDS.longTrendDays}
-      日均线，页面显示长期趋势转弱；当价格仍在均线上方、但 OFR FSI 高于
-      {MARKET_BRIEF_THRESHOLDS.stressAverage} 或 VIX 不低于
-      {MARKET_BRIEF_THRESHOLDS.vixCaution}
-      ，页面显示趋势仍在但风险升温；其余情况显示趋势向上且系统性压力暂未升温。
+      这些阈值只用于标记读数，不预测下一交易日涨跌。首页同时显示数据日期，
+      用户可以按相同规则复算结果。
     </p>
   </section>
 
@@ -42,13 +40,14 @@ import { MARKET_BRIEF_THRESHOLDS } from "../lib/market-brief";
     <p class="faint">DAILY UPDATE</p>
     <h2>每个美股交易日收盘后更新</h2>
     <p>
-      日更任务在 UTC 22:17 运行，对应北京时间次日 06:17。系统先更新价格、波动率和金融压力，
-      检查日期与数值，再重新生成网站。某个核心输入更新失败时，网站保留上一份完整结果，
-      不用缺失值拼出新的判断。
+      日更任务在 UTC 22:17 运行，对应北京时间次日 06:17。系统更新价格、广度、
+      集中度、波动率和金融压力，检查日期与数值后重新生成网站。核心输入更新失败时，
+      网站保留上一份完整结果。
     </p>
     <p>
-      三类数据的发布日期并不完全相同：价格和 VIX 通常对应最近一个交易日，OFR FSI
-      通常滞后两个工作日。因此首页分别标出三者的数据日期，而不是用一个日期掩盖时间差。
+      各数据发布日期并不完全相同：价格和 VIX 通常对应最近一个交易日，
+      OFR FSI 通常滞后两个工作日。首页分别标出价格、广度、集中度、VIX 和
+      OFR FSI 的日期。
     </p>
   </section>
 
@@ -68,12 +67,13 @@ import { MARKET_BRIEF_THRESHOLDS } from "../lib/market-brief";
     <p class="faint">S&P 500 · HOW THE INDEX IS ACTUALLY BUILT</p>
     <h2>S&P 500 不是简单的市值前 500 名</h2>
     <p>
-      S&P 500 由指数委员会从合资格的美国股票中选择，并按自由流通市值加权。候选公司还需满足
-      上市市场、证券类型、流动性、规模和财务可行性等要求，行业代表性也会被纳入考虑。
+      S&P 500 由指数委员会从合资格的美国股票中选择，并按自由流通市值加权。
+      候选公司还需满足上市市场、证券类型、流动性、规模和财务可行性等要求，
+      行业代表性也会被纳入考虑。
     </p>
     <p>
-      指数会因并购、退市、重组和市场变化按需调整。因此调入调出记录展示的是指数如何持续代表
-      美国大盘股市场，并不是一份只按市值机械排序的名单。
+      指数会因并购、退市、重组和市场变化按需调整。因此调入调出记录展示的是
+      指数如何持续代表美国大盘股市场，并不是一份只按市值机械排序的名单。
     </p>
     <p class="faint">
       详细定义见
@@ -87,22 +87,47 @@ import { MARKET_BRIEF_THRESHOLDS } from "../lib/market-brief";
     <p class="faint">SOURCES</p>
     <h2>主要数据来源</h2>
     <ul>
-      <li><a href="https://fred.stlouisfed.org/">FRED</a>：利率、通胀、增长与流动性。</li>
-      <li><a href="https://www.financialresearch.gov/financial-stress-index/">OFR</a>：金融压力指数。</li>
-      <li><a href="https://www.cboe.com/tradable_products/vix/">Cboe</a>：VIX 与波动率资料。</li>
-      <li><a href="https://www.sec.gov/edgar/search/">SEC EDGAR</a>：公司与机构公开申报。</li>
-      <li><a href="https://www.cftc.gov/MarketReports/CommitmentsofTraders/index.htm">CFTC</a>：交易者持仓报告。</li>
-      <li><a href="https://www.nber.org/research/data/us-business-cycle-expansions-and-contractions">NBER</a>：美国经济周期日期。</li>
+      <li>
+        <a href="https://fred.stlouisfed.org/">FRED</a>：
+        利率、通胀、增长与流动性。
+      </li>
+      <li>
+        <a href="https://www.financialresearch.gov/financial-stress-index/">OFR</a>：
+        金融压力指数。
+      </li>
+      <li>
+        <a href="https://www.cboe.com/tradable_products/vix/">Cboe</a>：
+        VIX 与波动率资料。
+      </li>
+      <li>
+        <a href="https://www.sec.gov/edgar/search/">SEC EDGAR</a>：
+        公司与机构公开申报。
+      </li>
+      <li>
+        <a href="https://www.cftc.gov/MarketReports/CommitmentsofTraders/index.htm">
+          CFTC
+        </a>：交易者持仓报告。
+      </li>
+      <li>
+        <a
+          href="https://www.nber.org/research/data/us-business-cycle-expansions-and-contractions"
+        >
+          NBER
+        </a>：美国经济周期日期。
+      </li>
     </ul>
-    <p>每张图同时标注自身的数据日期、单位与来源；来源频率不同，不强行对齐为同一天。</p>
+    <p>
+      每张图同时标注自身的数据日期、单位与来源；来源频率不同，不强行对齐为同一天。
+    </p>
   </section>
 
   <section>
     <p class="faint">REVISIONS</p>
     <h2>数据修订时会发生什么</h2>
     <p>
-      宏观和金融压力数据可能被发布机构修订。网站会使用最新公开版本重新计算，并保留更新时间。
-      如果计算规则发生变化，会更新方法说明和版本日期，让新旧读数的差异可以解释。
+      宏观和金融压力数据可能被发布机构修订。网站会使用最新公开版本重新计算，
+      并保留更新时间。如果计算规则发生变化，会更新方法说明和版本日期，
+      让新旧读数的差异可以解释。
     </p>
   </section>
 </EditorialPage>

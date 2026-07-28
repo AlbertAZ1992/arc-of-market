@@ -1,0 +1,111 @@
+---
+import { formatProse } from "@/content/format-prose";
+import type { ProseEntry } from "@/content/types";
+
+type Props = {
+  entry: ProseEntry;
+};
+
+const { entry } = Astro.props;
+const details = [
+  entry.guide
+    ? { body: entry.guide, label: "阅读方法" }
+    : undefined,
+  entry.whyItMatters
+    ? { body: entry.whyItMatters, label: "为什么重要" }
+    : undefined,
+  entry.historicalContext
+    ? { body: entry.historicalContext, label: "历史告诉我们什么" }
+    : undefined,
+  entry.caveat ? { body: entry.caveat, label: "数据边界" } : undefined,
+].filter((item) => item !== undefined);
+---
+
+<section class="research-prose">
+  {entry.title && <h3>{entry.title}</h3>}
+  {entry.body && <p set:html={formatProse(entry.body)} />}
+  {
+    details.length > 0 && (
+      <div class="research-prose__details">
+        {details.map((detail) => (
+          <div>
+            <strong>{detail.label}</strong>
+            <p set:html={formatProse(detail.body)} />
+          </div>
+        ))}
+      </div>
+    )
+  }
+  {
+    entry.whatChanges && entry.whatChanges.length > 0 && (
+      <div class="research-prose__changes">
+        <strong>什么会改变判断</strong>
+        <ul>
+          {entry.whatChanges.map((item) => <li>{item}</li>)}
+        </ul>
+      </div>
+    )
+  }
+</section>
+
+<style>
+  .research-prose {
+    border-bottom: 1px dotted var(--rule);
+    max-width: 58rem;
+    padding: 2rem 0;
+  }
+
+  .research-prose h3 {
+    font-size: 1.05rem;
+    margin: 0 0 0.6rem;
+  }
+
+  .research-prose > p {
+    color: var(--ink-soft);
+    font-size: 0.82rem;
+    line-height: 1.75;
+  }
+
+  .research-prose__details {
+    border-top: 1px solid var(--rule);
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 1.2rem;
+    padding-top: 1rem;
+  }
+
+  .research-prose__details strong,
+  .research-prose__changes > strong {
+    font-family: var(--font-serif);
+    font-size: 0.74rem;
+  }
+
+  .research-prose__details p,
+  .research-prose__changes li {
+    color: var(--ink-soft);
+    font-size: 0.72rem;
+    line-height: 1.6;
+  }
+
+  .research-prose__details p {
+    margin: 0.35rem 0 0;
+  }
+
+  .research-prose__changes {
+    border-top: 1px solid var(--rule);
+    margin-top: 1rem;
+    padding-top: 1rem;
+  }
+
+  .research-prose__changes ul {
+    margin: 0.45rem 0 0;
+    padding-left: 1rem;
+  }
+
+  @media (max-width: 640px) {
+    .research-prose__details {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

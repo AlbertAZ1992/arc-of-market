@@ -1,0 +1,53 @@
+{
+  "id": "nasdaq",
+  "route": "/nasdaq/",
+  "seo": "seo",
+  "hero": "hero",
+  "chapters": [
+    {
+      "id": "nasdaq-composite",
+      "navLabel": "综合指数",
+      "label": "§ I · COMPOSITE",
+      "copy": "chapter-composite",
+      "blocks": [
+        { "type": "chart", "chart": "ixic-century" },
+        { "type": "chart", "chart": "ixic-annual" },
+        { "type": "chart", "chart": "ixic-bullbear" },
+        { "type": "chart", "chart": "ixic-extremes" },
+        { "type": "chart", "chart": "ixic-distribution" },
+        { "type": "chart", "chart": "ixic-holding" },
+        { "type": "chart", "chart": "ixic-rollmatrix" },
+        { "type": "chart", "chart": "ixic-rolling5y" },
+        { "type": "chart", "chart": "ixic-intrayear" },
+        { "type": "chart", "chart": "ixic-seasonality" },
+        { "type": "chart", "chart": "ixic-drawdowns" },
+        { "type": "chart", "chart": "ixic-volatility" }
+      ]
+    },
+    {
+      "id": "nasdaq-100",
+      "navLabel": "Nasdaq-100",
+      "label": "§ II · NASDAQ-100",
+      "copy": "chapter-ndx",
+      "blocks": [
+        { "type": "chart", "chart": "ndx-century" },
+        { "type": "chart", "chart": "ndx-annual" },
+        { "type": "chart", "chart": "ndx-bullbear" },
+        { "type": "chart", "chart": "ndx-extremes" },
+        { "type": "chart", "chart": "ndx-distribution" },
+        { "type": "chart", "chart": "ndx-holding" },
+        { "type": "chart", "chart": "ndx-rollmatrix" },
+        { "type": "chart", "chart": "ndx-rolling5y" },
+        { "type": "chart", "chart": "ndx-intrayear" },
+        { "type": "chart", "chart": "ndx-seasonality" },
+        { "type": "chart", "chart": "ndx-drawdowns" },
+        { "type": "chart", "chart": "ndx-volatility" },
+        { "type": "chart", "chart": "vxn" },
+        { "type": "chart", "chart": "ndx-valuation-proxy" },
+        { "type": "chart", "chart": "ndx-breadth" },
+        { "type": "component", "component": "NdxCrossSection" },
+        { "type": "component", "component": "NdxRankings" }
+      ]
+    }
+  ]
+}
