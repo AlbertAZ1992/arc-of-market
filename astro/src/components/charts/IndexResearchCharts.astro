@@ -1,7 +1,8 @@
 ---
 import ArcJsonChart from "@/components/charts/ArcJsonChart.astro";
 import TradingViewHeatmap from "@/components/charts/TradingViewHeatmap.astro";
-import type { ArcChartKind, ArcChartSpec } from "@/lib/arc-chart-types";
+import { chartIndex } from "@/content/chart-index";
+import type { ArcChartSpec } from "@/lib/arc-chart-types";
 
 type Props = {
   index: "ndx" | "sp500";
@@ -9,9 +10,7 @@ type Props = {
 
 type SuiteDefinition = {
   description: string;
-  kind: ArcChartKind;
   suffix: string;
-  title: (label: string) => string;
 };
 
 const { index } = Astro.props;
@@ -20,127 +19,229 @@ const isSp500 = index === "sp500";
 const suiteDefinitions: readonly SuiteDefinition[] = [
   {
     suffix: "century",
-    title: (label) => `${label}长期价格`,
     description: "使用对数尺度观察跨周期价格变化。",
-    kind: "price",
   },
   {
     suffix: "annual",
-    title: (label) => `${label}年度回报`,
     description: "按自然年聚合价格回报；未结束年份标记为年内数据。",
-    kind: "annual",
   },
   {
     suffix: "bullbear",
-    title: (label) => `${label}牛熊周期`,
     description: "按阶段涨跌幅观察牛熊切换、持续时间和周期幅度。",
-    kind: "cycles",
   },
   {
     suffix: "extremes",
-    title: (label) => `${label}极端交易日`,
     description: "并列历史最佳与最差单日回报，观察尾部事件的幅度。",
-    kind: "extremes",
   },
   {
     suffix: "distribution",
-    title: (label) => `${label}年度回报分布`,
     description: "把年度回报放入固定区间，观察常见年份和尾部年份。",
-    kind: "distribution",
   },
   {
     suffix: "holding",
-    title: (label) => `${label}持有期结果`,
     description: "比较不同持有年限的胜率、中位年化回报和样本数量。",
-    kind: "holding",
   },
   {
     suffix: "rollmatrix",
-    title: (label) => `${label}多周期滚动回报`,
     description: "在同一时间轴比较五年、十年与二十年年化回报。",
-    kind: "rollmatrix",
   },
   {
     suffix: "rolling5y",
-    title: (label) => `${label}滚动五年年化回报`,
     description: "观察起点与市场周期对五年持有结果的影响。",
-    kind: "rolling",
   },
   {
     suffix: "intrayear",
-    title: (label) => `${label}年内回撤与年度结果`,
     description: "横轴为年内最大跌幅，纵轴为全年回报。",
-    kind: "intrayear",
   },
   {
     suffix: "seasonality",
-    title: (label) => `${label}月份季节性`,
     description: "比较各月份平均回报和上涨概率，不作为单独交易信号。",
-    kind: "seasonality",
   },
   {
     suffix: "drawdowns",
-    title: (label) => `${label}历史回撤`,
     description: "从历史高点计算回撤，展示跌幅、持续时间和修复过程。",
-    kind: "drawdown",
   },
   {
     suffix: "volatility",
-    title: (label) => `${label}波动率`,
     description: "并列二十日、六十日实现波动率和可用的隐含波动率指数。",
-    kind: "volatility",
   },
 ];
+
+type ChartKey = keyof typeof chartIndex;
+
+const chartSpec = (
+  key: ChartKey,
+  description: string,
+): ArcChartSpec => ({
+  ...chartIndex[key],
+  description,
+  id: key,
+});
 
 const buildSuite = (
   prefix: "ixic" | "ndx" | "sp500",
-  idPrefix: string,
-  label: string,
 ): ArcChartSpec[] =>
-  suiteDefinitions.map((definition) => {
-    const priceOptions =
-      definition.kind === "price"
-        ? { scaleType: "log" as const, yUnit: "指数点位" }
-        : {};
-    return {
-      dataPath: `/data/${prefix}_${definition.suffix}.json`,
-      description: definition.description,
-      id: `${idPrefix}-${definition.suffix}`,
-      kind: definition.kind,
-      source: "Yahoo Finance 历史价格 · ArcOfMarket 计算",
-      title: definition.title(label),
-      ...priceOptions,
-    };
-  });
+  suiteDefinitions.map((definition) =>
+    chartSpec(
+      `${prefix}-${definition.suffix}` as ChartKey,
+      definition.description,
+    ),
+  );
 
-const sp500Suite = buildSuite("sp500", "sp500", "S&P 500");
+const sp500Suite = buildSuite("sp500");
+const sp500_LABELS: Record<string, string> = {
+  century: "S&P 500 长期价格 · 对数坐标",
+  annual: "S&P 500 年度回报",
+  bullbear: "S&P 500 牛熊周期",
+  extremes: "S&P 500 极端交易日",
+  distribution: "S&P 500 年度回报分布",
+  holding: "S&P 500 持有期结果",
+  rollmatrix: "S&P 500 多周期滚动回报",
+  rolling5y: "S&P 500 滚动五年年化回报",
+  intrayear: "S&P 500 年内回撤与年度结果",
+  seasonality: "S&P 500 月份季节性",
+  drawdowns: "S&P 500 历史回撤",
+  volatility: "S&P 500 实现波动率",
+};
+
 const sp500Charts: ArcChartSpec[] = [
+  { ...sp500Suite[0]!, eyebrow: sp500_LABELS["century"] },
   {
-    ...sp500Suite[0]!,
-    title: "世纪尺度下的美股",
-  },
-  {
-    dataPath: "/data/sp500_total_return.json",
-    description: "把股息再投资后的总回报指数与价格指数口径分开观察。",
+    ...chartIndex["sp500-total-return"],
+    description: "价格指数 vs 总回报指数：两者的差距即股息再投资的复利效果。过去五十年，价格指数涨了约 50 倍，总回报指数涨了约 150 倍。",
+    eyebrow: "S&P 500 总回报指数",
     id: "sp500-total-return",
-    kind: "valuation",
-    scaleType: "log",
-    source: "Yahoo Finance · S&P 500 Total Return Index",
-    title: "S&P 500 总回报指数",
-    valueKey: "values",
-    valueLabel: "总回报指数",
-    yUnit: "指数点位",
   },
-  ...sp500Suite.slice(1),
+  ...sp500Suite.slice(1).map((chart, index) => ({
+    ...chart,
+    eyebrow: sp500_LABELS[suiteDefinitions[index + 1]!.suffix],
+  })),
 ];
-const ixicCharts = buildSuite("ixic", "ixic", "Nasdaq Composite");
-const ndxCharts = buildSuite("ndx", "ndx", "Nasdaq-100");
+const ixic_LABELS: Record<string, string> = {
+  century: "Nasdaq Composite 长期价格 · 对数坐标",
+  annual: "Nasdaq Composite 年度回报",
+  bullbear: "Nasdaq Composite 牛熊周期",
+  extremes: "Nasdaq Composite 极端交易日",
+  distribution: "Nasdaq Composite 年度回报分布",
+  holding: "Nasdaq Composite 持有期结果",
+  rollmatrix: "Nasdaq Composite 多周期滚动回报",
+  rolling5y: "Nasdaq Composite 滚动五年年化回报",
+  intrayear: "Nasdaq Composite 年内回撤与年度结果",
+  seasonality: "Nasdaq Composite 月份季节性",
+  drawdowns: "Nasdaq Composite 历史回撤",
+  volatility: "Nasdaq Composite 实现波动率",
+};
+
+const ixicCharts = buildSuite("ixic").map((chart, i) => ({
+  ...chart,
+  eyebrow: ixic_LABELS[suiteDefinitions[i]!.suffix],
+}));
+
+const ndx_LABELS: Record<string, string> = {
+  century: "Nasdaq-100 长期价格 · 对数坐标",
+  annual: "Nasdaq-100 年度回报",
+  bullbear: "Nasdaq-100 牛熊周期",
+  extremes: "Nasdaq-100 极端交易日",
+  distribution: "Nasdaq-100 年度回报分布",
+  holding: "Nasdaq-100 持有期结果",
+  rollmatrix: "Nasdaq-100 多周期滚动回报",
+  rolling5y: "Nasdaq-100 滚动五年年化回报",
+  intrayear: "Nasdaq-100 年内回撤与年度结果",
+  seasonality: "Nasdaq-100 月份季节性",
+  drawdowns: "Nasdaq-100 历史回撤",
+  volatility: "Nasdaq-100 实现波动率",
+};
+
+const ndxCharts = buildSuite("ndx").map((chart, i) => ({
+  ...chart,
+  eyebrow: ndx_LABELS[suiteDefinitions[i]!.suffix],
+}));
 ---
 
 {
   isSp500 ? (
     <>
-      {sp500Charts.map((chart) => <ArcJsonChart {...chart} />)}
+      <section class="suite-intro" id="sp500-century">
+        <p class="chapter-label">§ I · THE SHAPE OF RETURNS</p>
+        <h2>回报的形状</h2>
+        <p>长期来看，美股给了投资者什么？先从百年的价格路径开始，再看年度涨跌、牛熊节奏和持有期真相。</p>
+      </section>
+      {sp500Charts.slice(0, 8).map((chart) => <ArcJsonChart {...chart} />)}
+
+      <section class="suite-intro" id="sp500-distribution-intro">
+        <p class="chapter-label">§ I.3 · THE FAT TAILS</p>
+        <h2>市场每天的涨跌——比你想象的更极端</h2>
+        <p>把近百年的每一个交易日按涨跌幅分组。红色柱 = 实际发生次数，灰色曲线 = 如果涨跌服从正态分布"应该"发生多少次。真正的市场有"肥尾"——极端涨跌日的次数远超正态分布的预测。这就是为什么"百年一遇"的暴跌每几年就来一次。</p>
+      </section>
+      <div
+        id="sp500-daily-dist-chart"
+        class="arc-json-chart"
+        data-arc-dist-chart="sp500"
+        role="img"
+        aria-label="S&P 500 日涨跌分布与正态曲线对比"
+      >
+        <p data-chart-status>正在读取数据…</p>
+      </div>
+      <section class="suite-intro" id="sp500-return-decomp">
+        <p class="chapter-label">§ I.4 · WHERE RETURNS COME FROM</p>
+        <h2>每年的回报，多少来自涨价，多少来自分红？</h2>
+        <p>价格回报（红色）= 股价涨了多少。总回报（灰色）= 加上股息再投资。两者之间的差距——每年约 2%——就是股息的力量。看似不起眼，复利 30 年能让最终回报接近翻倍。</p>
+      </section>
+      <ArcJsonChart
+        dataPath="/data/sp500_return_decomp.json"
+        description="价格回报 vs 总回报：差额即股息贡献。每年约 2% 的股息看似微小，但复利 30 年能让总回报接近翻倍。"
+        eyebrow="RETURN DECOMPOSITION"
+        id="sp500-return-decomp-chart"
+        kind="drivers"
+        source="Yahoo Finance · ArcOfMarket 计算"
+        title="价格回报 vs 总回报"
+      />
+
+      <section class="suite-intro" id="sp500-valuation">
+        <p class="chapter-label">§ I.5 · ANCHORS OF VALUATION</p>
+        <h2>现在贵不贵？三个估值坐标</h2>
+        <p>席勒 CAPE 用十年平均盈利平滑周期波动；TTM PE 看当前盈利水平；EPS 看盈利的长期趋势。三者放在一起：当前估值在 150 年历史中处于什么位置？</p>
+      </section>
+      <ArcJsonChart
+        dataPath="/data/shiller_cape.json"
+        description="席勒周期调整市盈率（P/E10），用十年平均真实盈利消除周期噪音。当前百分位告诉你今天在历史中的位置。"
+        eyebrow="SHILLER CAPE · 1871→"
+        id="sp500-shiller-cape"
+        kind="multiline"
+        series={[{ key: "cape", label: "CAPE (P/E10)", unit: "倍" }]}
+        source="Robert J. Shiller, Yale University"
+        title="当前 CAPE 在 150 年历史中的百分位：越高，未来十年预期回报越低"
+        eyebrow="席勒 CAPE · 周期调整市盈率 · Shiller 数据"
+      />
+      <ArcJsonChart
+        dataPath="/data/shiller_cape.json"
+        description="TTM PE = 当前价格 ÷ 过去十二个月每股盈利。"
+        eyebrow="TTM PE · 1871→"
+        id="sp500-pe-ttm"
+        kind="multiline"
+        series={[{ key: "pe_ttm", label: "PE (TTM)", unit: "倍" }]}
+        source="Robert J. Shiller, Yale University"
+        title="PE 越低，未来预期回报越高——但低 PE 通常出现在危机中"
+        eyebrow="标普 500 PE（TTM）· Shiller 数据"
+      />
+      <ArcJsonChart
+        dataPath="/data/shiller_cape.json"
+        description="标普 500 指数层面的每股收益（TTM），对数坐标看长期增长。"
+        eyebrow="EARNINGS · 1871→"
+        id="sp500-eps"
+        kind="multiline"
+        series={[{ key: "eps", label: "EPS (TTM)", unit: "美元" }]}
+        source="Robert J. Shiller, Yale University"
+        title="长期盈利增长是指数回报最根本的驱动力"
+        eyebrow="标普 500 每股收益（TTM）· Shiller 数据"
+      />
+
+      <section class="suite-intro" id="sp500-intrayear">
+        <p class="chapter-label">§ II · THE RHYTHM OF CRISIS</p>
+        <h2>危机的节奏</h2>
+        <p>美股每年平均从高点回撤 14%，但多数年份年末仍收正。了解"最坏会怎样"，比猜"明年涨多少"有用。</p>
+      </section>
+      {sp500Charts.slice(8).map((chart) => <ArcJsonChart {...chart} />)}
       <ArcJsonChart
         dataPath="/data/vol_family.json"
         description="比较 VIX 9 日、现货、三个月、六个月、一年期与 SKEW 的历史变化。"
@@ -155,7 +256,8 @@ const ndxCharts = buildSuite("ndx", "ndx", "Nasdaq-100");
           { axis: 1, key: "SKEW", label: "SKEW", unit: "指数", valueKey: "close" },
         ]}
         source="Cboe 历史数据"
-        title="VIX 期限家族与 SKEW"
+        title="VIX 高于 30 通常对应危机定价，低于 15 对应市场平静"
+        eyebrow="VIX 期限结构 · Cboe 官方数据"
       />
       <TradingViewHeatmap
         dataSource="SPX500"
@@ -163,20 +265,41 @@ const ndxCharts = buildSuite("ndx", "ndx", "Nasdaq-100");
         id="sp500-cross-section"
         title="市值 · 回报 · 指数权重"
       />
+      <ArcJsonChart
+        dataPath="/data/sp500_breadth.json"
+        description="S&P 500 成分股中高于 50 日和 200 日均线的比例。高于 70% = 普涨牛市；低于 30% = 极少数股票在支撑指数。"
+        id="sp500-breadth"
+        kind="multiline"
+        series={[
+          { key: "pct_above_50ma", label: ">50MA %", unit: "%" },
+          { key: "pct_above_200ma", label: ">200MA %", unit: "%" },
+        ]}
+        source="Yahoo Finance · ArcOfMarket 计算"
+        title="比例越高，上涨越由多数股票参与；比例越低，少数大盘股在支撑指数"
+        eyebrow="标普 500 市场广度 · >50MA & >200MA 比例"
+      />
     </>
   ) : (
     <>
       <section class="suite-intro" id="nasdaq-composite-suite">
-        <p class="eyebrow">NASDAQ COMPOSITE</p>
-        <h2>先看整个纳斯达克市场</h2>
-        <p>Nasdaq Composite 覆盖数千家纳斯达克上市公司，是观察市场广度的长期坐标。</p>
+        <p class="chapter-label">§ I · THE WHOLE MARKET</p>
+        <h2>纳斯达克综合指数：半个世纪的成长与泡沫</h2>
+        <p>
+          1971 年从 100 点起步，2000 年冲到 5000 点然后跌掉 78%，
+          再花 15 年创新高——然后又在 AI 浪潮中翻了倍。
+          Nasdaq Composite 覆盖几千家公司，是观察成长股情绪的长期坐标。
+        </p>
       </section>
       {ixicCharts.map((chart) => <ArcJsonChart {...chart} />)}
 
       <section class="suite-intro" id="nasdaq-100-suite">
-        <p class="eyebrow">NASDAQ-100</p>
-        <h2>再看最大的非金融公司</h2>
-        <p>Nasdaq-100 是大型成长基准，与 Nasdaq Composite 的覆盖范围和权重规则不同。</p>
+        <p class="chapter-label">§ II · THE BIGGEST 100</p>
+        <h2>纳斯达克 100：大型非金融科技公司的竞技场</h2>
+        <p>
+          去掉银行、去掉保险，只留最大的 100 家非金融公司。
+          前七大持仓就占了一半权重——看 Nasdaq-100 等于在看
+          "科技龙头们在做什么"。
+        </p>
       </section>
       {ndxCharts.map((chart) => <ArcJsonChart {...chart} />)}
       <TradingViewHeatmap
@@ -185,6 +308,15 @@ const ndxCharts = buildSuite("ndx", "ndx", "Nasdaq-100");
         id="ndx-cross-section"
         title="头部持仓与累计权重"
       />
+      <div
+        id="ndx-daily-dist-chart"
+        class="arc-json-chart"
+        data-arc-dist-chart="ndx"
+        role="img"
+        aria-label="Nasdaq-100 日涨跌分布与正态曲线对比"
+      >
+        <p data-chart-status>正在读取数据…</p>
+      </div>
       <ArcJsonChart
         dataPath="/data/ndx_valuation_proxy.json"
         description="从启用日起每日保存 QQQ 的滚动市盈率，作为可持续积累的估值代理。"
@@ -194,6 +326,31 @@ const ndxCharts = buildSuite("ndx", "ndx", "Nasdaq-100");
         series={[{ key: "trailing_pe", label: "QQQ TTM PE", unit: "倍" }]}
         source="Yahoo Finance QQQ 基本面元数据"
         title="纳指 100 动态估值代理"
+      />
+      <ArcJsonChart
+        dataPath="/data/vxn.json"
+        description="VXN 是 Nasdaq-100 的隐含波动率指数——就像 VIX 之于 S&P 500。VXN 结构性高于 VIX，因为纳斯达克本身就是波动更大的市场。"
+        eyebrow="NASDAQ FEAR INDEX"
+        id="ndx-vxn"
+        kind="valuation"
+        valueKey="close"
+        valueLabel="VXN"
+        source="Cboe Global Markets"
+        title="VXN 结构性高于 VIX——纳斯达克本身的波动就更大"
+        eyebrow="VXN · 纳斯达克 100 波动率指数 · Cboe 数据"
+      />
+      <ArcJsonChart
+        dataPath="/data/ndx_breadth.json"
+        description="成分股中价格高于 50 日和 200 日移动均线的比例。比例越高，上涨越'普涨'；比例低，上涨可能只是少数大股票在拉动。"
+        id="ndx-breadth"
+        kind="multiline"
+        series={[
+          { key: "pct_above_50ma", label: ">50MA %", unit: "%" },
+          { key: "pct_above_200ma", label: ">200MA %", unit: "%" },
+        ]}
+        source="Yahoo Finance · ArcOfMarket 计算"
+        title="纳指 100 的上涨由多少成分参与——集中度越高，风险越集中在少数股票"
+        eyebrow="纳斯达克 100 市场广度 · >50MA & >200MA 比例"
       />
     </>
   )
@@ -206,13 +363,118 @@ const ndxCharts = buildSuite("ndx", "ndx", "Nasdaq-100");
     scroll-margin-top: 6rem;
   }
 
+  .chapter-label {
+    color: var(--ink-faint);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+  }
+
   .suite-intro h2 {
     margin: 0.35rem 0 0.6rem;
   }
 
   .suite-intro p:last-child {
     color: var(--ink-soft);
-    font-size: 0.8rem;
+    font-size: 0.82rem;
+    line-height: 1.7;
     max-width: 48rem;
   }
+
+  [data-arc-dist-chart] {
+    height: 22rem;
+    min-width: 0;
+    width: 100%;
+    margin-bottom: 3.5rem;
+  }
+
+  [data-arc-dist-chart] [data-chart-status] {
+    align-items: center;
+    border-block: 1px dotted var(--rule);
+    color: var(--ink-faint);
+    display: flex;
+    font-size: 0.72rem;
+    height: 100%;
+    justify-content: center;
+  }
 </style>
+
+<script>
+  import { BarChart, LineChart } from "echarts/charts";
+  import { GridComponent, LegendComponent, TooltipComponent } from "echarts/components";
+  import * as echarts from "echarts/core";
+  import { CanvasRenderer } from "echarts/renderers";
+  import { ARC_ECHARTS_THEME, ARC_ECHARTS_THEME_DARK } from "@/lib/echarts-theme";
+
+  echarts.use([BarChart, LineChart, GridComponent, LegendComponent, TooltipComponent, CanvasRenderer]);
+  echarts.registerTheme("arc", ARC_ECHARTS_THEME);
+  echarts.registerTheme("arc-dark", ARC_ECHARTS_THEME_DARK);
+
+  const ct = window.matchMedia("(prefers-color-scheme: dark)").matches ? "arc-dark" : "arc";
+
+  function renderDistChart(el: HTMLElement) {
+    const prefix = el.dataset["arcDistChart"]!;
+    fetch(`/data/${prefix}_daily_dist.json`).then(r => {
+      if (!r.ok) throw new Error("data unavailable");
+      return r.json();
+    }).then(data => {
+      el.querySelector("[data-chart-status]")?.remove();
+      const chart = echarts.init(el, ct);
+      chart.setOption({
+        animation: false,
+        tooltip: { trigger: "axis" },
+        legend: { data: ["实际分布", `正态分布 (μ=${data.meta.mean}%, σ=${data.meta.std}%)`] },
+        xAxis: { type: "category", data: data.bins, axisLabel: { interval: 9, rotate: 25 } },
+        yAxis: { type: "value", name: "天数" },
+        series: [
+          { name: "实际分布", type: "bar", data: data.counts, itemStyle: { color: "rgba(246,12,62,0.5)" } },
+          { name: `正态分布 (μ=${data.meta.mean}%, σ=${data.meta.std}%)`, type: "line",
+            data: data.normal, lineStyle: { color: "#989898", width: 1.5 }, showSymbol: false, smooth: true },
+        ],
+        grid: { bottom: 42, containLabel: true, left: 12, right: 18, top: 42 },
+      });
+      new ResizeObserver(() => chart.resize()).observe(el);
+    }).catch(e => {
+      const s = el.querySelector("[data-chart-status]");
+      if (s) s.textContent = String(e);
+    });
+  }
+
+  // Also render return decomposition inline
+  function renderReturnDecomp() {
+    fetch("/data/sp500_return_decomp.json").then(r => {
+      if (!r.ok) return;
+      return r.json();
+    }).then(data => {
+      const el = document.getElementById("sp500-return-decomp-chart");
+      if (!el) return;
+      // Wait for ArcJsonChart to render, then overlay
+      setTimeout(() => {
+        const inst = echarts.getInstanceByDom(el.querySelector(".arc-json-chart") || el);
+        if (inst) {
+          inst.setOption({
+            legend: { data: ["价格回报", "总回报", "股息贡献"] },
+            series: [
+              { name: "价格回报", type: "bar", data: data.price_return.map((v: number) => ({
+                value: v, itemStyle: { color: v >= 0 ? "#f60c3e" : "rgba(246,12,62,0.3)" }
+              })), barGap: "20%" },
+              { name: "总回报", type: "bar", data: data.total_return.map((v: number) => ({
+                value: v, itemStyle: { color: v >= 0 ? "#989898" : "rgba(152,152,152,0.3)" }
+              })) },
+              { name: "股息贡献", type: "line", data: data.dividend_contribution,
+                lineStyle: { color: "#00a487", width: 1.2 }, showSymbol: false },
+            ],
+          });
+        }
+      }, 800);
+    }).catch(() => {});
+  }
+
+  // Boot distribution charts
+  document
+    .querySelectorAll<HTMLElement>("[data-arc-dist-chart]")
+    .forEach((element) => renderDistChart(element));
+  renderReturnDecomp();
+</script>

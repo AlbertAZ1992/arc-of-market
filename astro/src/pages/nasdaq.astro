@@ -1,34 +1,39 @@
 ---
 import IndexResearchCharts from "@/components/charts/IndexResearchCharts.astro";
-import TradingViewSymbolOverview from "@/components/TradingViewSymbolOverview.astro";
+import NdxRankings from "@/components/tables/NdxRankings.astro";
+import { formatProse } from "@/content/format-prose";
+import { pageContent } from "@/content/page-content";
 import SiteShell from "@/layouts/SiteShell.astro";
 
+const content = pageContent.nasdaq;
 const dockItems = [
-  { href: "#nasdaq-price-proxy", label: "纳斯达克市场代理" },
+  { href: "#nasdaq-intro", label: "看纳斯达克看什么" },
+  { href: "#nasdaq-composite-chapter", label: "整个纳斯达克市场" },
   { href: "#ixic-century", label: "综合指数长期价格" },
   { href: "#ixic-annual", label: "综合指数年度回报" },
   { href: "#ixic-bullbear", label: "综合指数牛熊周期" },
-  { href: "#ixic-extremes", label: "综合指数极端交易日" },
+  { href: "#ixic-extremes", label: "综合指数极端日" },
   { href: "#ixic-distribution", label: "综合指数年度分布" },
-  { href: "#ixic-holding", label: "综合指数持有期结果" },
+  { href: "#ixic-holding", label: "综合指数持有期" },
   { href: "#ixic-rollmatrix", label: "综合指数多周期回报" },
   { href: "#ixic-rolling5y", label: "综合指数五年回报" },
   { href: "#ixic-intrayear", label: "综合指数年内回撤" },
-  { href: "#ixic-seasonality", label: "综合指数月份季节性" },
+  { href: "#ixic-seasonality", label: "综合指数季节性" },
   { href: "#ixic-drawdowns", label: "综合指数历史回撤" },
-  { href: "#ixic-volatility", label: "综合指数实现波动" },
+  { href: "#ixic-volatility", label: "综合指数波动率" },
+  { href: "#nasdaq-100-chapter", label: "最大的非金融公司" },
   { href: "#ndx-century", label: "Nasdaq-100 长期价格" },
   { href: "#ndx-annual", label: "Nasdaq-100 年度回报" },
   { href: "#ndx-bullbear", label: "Nasdaq-100 牛熊周期" },
-  { href: "#ndx-extremes", label: "Nasdaq-100 极端交易日" },
+  { href: "#ndx-extremes", label: "Nasdaq-100 极端日" },
   { href: "#ndx-distribution", label: "Nasdaq-100 年度分布" },
-  { href: "#ndx-holding", label: "Nasdaq-100 持有期结果" },
+  { href: "#ndx-holding", label: "Nasdaq-100 持有期" },
   { href: "#ndx-rollmatrix", label: "Nasdaq-100 多周期回报" },
   { href: "#ndx-rolling5y", label: "Nasdaq-100 五年回报" },
   { href: "#ndx-intrayear", label: "Nasdaq-100 年内回撤" },
-  { href: "#ndx-seasonality", label: "Nasdaq-100 月份季节性" },
+  { href: "#ndx-seasonality", label: "Nasdaq-100 季节性" },
   { href: "#ndx-drawdowns", label: "Nasdaq-100 历史回撤" },
-  { href: "#ndx-volatility", label: "Nasdaq-100 实现波动" },
+  { href: "#ndx-volatility", label: "Nasdaq-100 波动率" },
   { href: "#ndx-cross-section", label: "头部持仓与权重" },
   { href: "#ndx-dynamic-pe", label: "动态估值代理" },
 ] as const;
@@ -36,41 +41,58 @@ const dockItems = [
 
 <SiteShell
   bodyClass="chart-page"
-  description="从纳斯达克综合指数长期历史，到纳斯达克 100 回报、回撤、波动与集中度。"
-  pageNavigation={{ current: "纳斯达克", items: dockItems }}
-  title="纳斯达克市场编年史 · ArcOfMarket"
+  description={content.seo.description}
+  pageNavigation={{ current: content.hero.eyebrow, items: dockItems }}
+  title={content.seo.title}
 >
   <header class="page-header">
     <div class="page-header__inner">
-      <p class="eyebrow">NASDAQ · GROWTH</p>
-      <h1>纳斯达克</h1>
-      <p class="muted">先看半个世纪的成长路径，再拆解年度回报、回撤、波动和头部权重。</p>
+      <p class="eyebrow">{content.hero.eyebrow}</p>
+      <h1>{content.hero.headline}</h1>
+      <p class="muted" set:html={formatProse(content.hero.intro)} />
     </div>
   </header>
 
   <main class="nasdaq-main">
-    <section class="proxy-section" id="nasdaq-price-proxy">
-      <header>
-        <p class="eyebrow">CURRENT PRICE VIEW</p>
-        <h2>纳斯达克市场代理</h2>
-        <p>用 QQQ、QQQM 与 ONEQ 比较大型成长和纳斯达克综合市场的价格路径。</p>
-      </header>
-      <TradingViewSymbolOverview
-        label="纳斯达克市场代理"
-        symbols={[
-          ["Invesco QQQ", "NASDAQ:QQQ|1D"],
-          ["Invesco QQQM", "NASDAQ:QQQM|1D"],
-          ["Fidelity Nasdaq Composite ETF", "NASDAQ:ONEQ|1D"],
-        ]}
-      />
+    <!-- § 0 · 导读 -->
+    <section class="chapter-intro" id="nasdaq-intro">
+      <p class="chapter-label">HOW TO READ</p>
+      <h2>怎么看纳斯达克</h2>
+      <div class="intro-grid">
+        <div>
+          <h3>看综合指数</h3>
+          <p>
+            综合指数覆盖广，更能反映成长股整体的温度。
+            1971 年从 100 点起步，2000 年 dotcom 泡沫达到 5000 点然后跌掉 78%。
+            这个指数告诉你："科技股的集体情绪到了什么位置。"
+          </p>
+        </div>
+        <div>
+          <h3>看纳斯达克 100</h3>
+          <p>
+            Nasdaq-100 是大型成长的基准，前七大持仓就占了一半权重。
+            看它等于在看"科技龙头们在做什么"——而且因为集中度高，
+            几只大股票的涨跌就能决定整个指数的方向。
+          </p>
+        </div>
+      </div>
     </section>
+
     <IndexResearchCharts index="ndx" />
+    <section class="ranking-section" id="ndx-ranking">
+      <p class="chapter-label">CONSTITUENT RETURNS</p>
+      <h2>谁在领涨，谁在拖后腿？</h2>
+      <p class="muted">纳斯达克 100 全部成分按 1 年回报排序。可以点击表头切换排序（即将支持）。</p>
+      <NdxRankings />
+    </section>
   </main>
 
   <footer class="page-footer">
-    <a href="/archive/">全部图表</a><span>·</span>
-    <a href="/methodology/">方法论</a><span>·</span>
-    <span>仅供信息与教育</span>
+    <a href="/">返回首页</a><span>·</span>
+    <a href="/sp500/">标普 500</a><span>·</span>
+    <a href="/dow/">道琼斯</a><span>·</span>
+    <a href="/magnificent-seven/">七巨头</a><span>·</span>
+    <a href="/methodology/">方法论</a>
   </footer>
 
 </SiteShell>
@@ -80,29 +102,67 @@ const dockItems = [
     padding: 0 2.25rem 4.5rem 3rem;
   }
 
-  .proxy-section {
-    border-bottom: 1px dotted var(--rule);
-    padding-block: 3.5rem;
+  .chapter-intro {
+    border-bottom: 1px solid var(--ink);
+    padding-block: 3.5rem 2rem;
     scroll-margin-top: 6rem;
   }
 
-  .proxy-section > header {
-    margin-bottom: 1.35rem;
-    max-width: 48rem;
+  .chapter-label {
+    color: var(--ink-faint);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
   }
 
-  .proxy-section h2 {
-    margin: 0.35rem 0 0.6rem;
+  .chapter-intro h2 {
+    margin: 0.35rem 0 1.5rem;
   }
 
-  .proxy-section header > p:last-child {
+  .intro-grid {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .intro-grid h3 {
+    font-family: var(--font-serif);
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .intro-grid p {
     color: var(--ink-soft);
-    font-size: 0.8rem;
+    font-size: 0.82rem;
+    line-height: 1.7;
+  }
+
+  .ranking-section {
+    border-top: 1px solid var(--ink);
+    margin-top: 3rem;
+    padding-top: 2.5rem;
+    scroll-margin-top: 6rem;
+  }
+
+  .ranking-section h2 { margin: 0.35rem 0 0.4rem; }
+
+  .chapter-label {
+    color: var(--ink-faint);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
 
   @media (max-width: 900px) {
     .nasdaq-main {
       padding: 0 1rem 3.5rem;
+    }
+
+    .intro-grid {
+      grid-template-columns: 1fr;
     }
   }
 </style>

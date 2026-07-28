@@ -1,0 +1,60 @@
+{
+  "route": "/nasdaq/",
+  "seo": {
+    "title": "纳斯达克市场编年史 · ArcOfMarket",
+    "description": "从纳斯达克综合指数半个世纪的成长与泡沫，到纳斯达克 100 的回报、回撤、波动与集中度。"
+  },
+  "hero": {
+    "eyebrow": "NASDAQ",
+    "headline": "纳斯达克：更陡的复利，更深的回撤",
+    "intro": "1971 年从 100 点起步，2000 年冲到 5000 点然后跌掉 78%——再花 15 年创新高，然后在 AI 浪潮中再翻一倍。纳斯达克是成长股的天堂也是地狱。注意它有两副面孔：**纳斯达克综合指数**覆盖几千家公司，是成长股情绪的集体体温计；**纳斯达克 100** 取最大的 100 家非金融公司，是科技龙头的竞技场。"
+  },
+  "chapters": [
+    {
+      "id": "nasdaq-composite-chapter",
+      "navLabel": "整个纳斯达克",
+      "label": "§ I · 综合指数",
+      "title": "半个世纪的成长与泡沫",
+      "intro": "Nasdaq Composite 从 1971 年的 100 点起步，经历了 1980 年代 PC 革命、1990 年代互联网泡沫、2000 年代初的崩塌、2010 年代的移动互联网繁荣，和 2020 年代以来的 AI 狂潮。它的波动幅度比 S&P 500 大得多——涨的时候更猛，跌的时候也更狠。看它等于在看“成长股作为一个资产类别，过去五十年经历了什么”。",
+      "guide": "注意 2000 年前后的走势——那一轮泡沫和崩塌定义了纳斯达克此后二十年的叙事。对数坐标下，泡沫顶点和当前的 AI 高点之间的差距一目了然。灰色区间是 NBER 衰退期——每次衰退纳斯达克都跌得比大盘更深。",
+      "blocks": [
+        { "type": "chart", "chart": "ixic-century" },
+        { "type": "chart", "chart": "ixic-annual" },
+        { "type": "chart", "chart": "ixic-bullbear" },
+        { "type": "chart", "chart": "ixic-extremes" },
+        { "type": "chart", "chart": "ixic-distribution" },
+        { "type": "chart", "chart": "ixic-holding" },
+        { "type": "chart", "chart": "ixic-rollmatrix" },
+        { "type": "chart", "chart": "ixic-rolling5y" },
+        { "type": "chart", "chart": "ixic-intrayear" },
+        { "type": "chart", "chart": "ixic-seasonality" },
+        { "type": "chart", "chart": "ixic-drawdowns" },
+        { "type": "chart", "chart": "ixic-volatility" }
+      ]
+    },
+    {
+      "id": "nasdaq-100-chapter",
+      "navLabel": "最大的 100 家",
+      "label": "§ II · 纳斯达克 100",
+      "title": "科技龙头的竞技场",
+      "intro": "纳斯达克 100 排除金融公司，只取最大的 100 家非金融企业。结果是什么？前 7 大持仓就占了指数将近一半的权重。Apple、Microsoft、Nvidia——这三家加起来就是接近 30% 的指数。看 Nasdaq-100 等于在看“科技龙头们在做什么”。但这也意味着：几只大股票的涨跌就能决定整个指数的方向——这不是分散投资，这是集中的赌注。",
+      "guide": "Nasdaq-100 和 Nasdaq Composite 的核心区别：范围（100 vs 几千家）+ 行业限制（不含金融）。2000 年 dotcom 泡沫中 NDX 跌了 83%——因为那时前十大持仓几乎全是后来破产的互联网公司。今天的前十大是完全不同的公司——但集中度的风险结构是一样的：少数几只股票决定了整个指数的命运。",
+      "blocks": [
+        { "type": "chart", "chart": "ndx-century" },
+        { "type": "chart", "chart": "ndx-annual" },
+        { "type": "chart", "chart": "ndx-bullbear" },
+        { "type": "chart", "chart": "ndx-extremes" },
+        { "type": "chart", "chart": "ndx-distribution" },
+        { "type": "chart", "chart": "ndx-holding" },
+        { "type": "chart", "chart": "ndx-rollmatrix" },
+        { "type": "chart", "chart": "ndx-rolling5y" },
+        { "type": "chart", "chart": "ndx-intrayear" },
+        { "type": "chart", "chart": "ndx-seasonality" },
+        { "type": "chart", "chart": "ndx-drawdowns" },
+        { "type": "chart", "chart": "ndx-volatility" },
+        { "type": "chart", "chart": "ndx-cross-section" },
+        { "type": "chart", "chart": "ndx-valuation-proxy" }
+      ]
+    }
+  ]
+}

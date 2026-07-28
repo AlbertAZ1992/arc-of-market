@@ -17,12 +17,13 @@
 import argparse
 import hashlib
 import json
+import math
 import os
 import re
 import time
 from collections.abc import Callable, Sequence
 from datetime import UTC, datetime, timedelta
-from io import StringIO
+from io import BytesIO, StringIO
 from pathlib import Path
 from typing import Any, cast
 
@@ -610,6 +611,1029 @@ def build_ndx_valuation_proxy() -> None:
     _SOURCE_TRACE["ndx_valuation_proxy"] = f"Yahoo:QQQ.info({as_of})"
 
 
+# ------------------------------------------------------------ 七巨头数据
+MAG7_TICKERS = ["AAPL", "MSFT", "NVDA", "AMZN", "GOOGL", "META", "TSLA"]
+MAG7_NAMES = {
+    "AAPL": "Apple",
+    "MSFT": "Microsoft",
+    "NVDA": "Nvidia",
+    "AMZN": "Amazon",
+    "GOOGL": "Alphabet",
+    "META": "Meta",
+    "TSLA": "Tesla",
+}
+
+
+def build_mag7_data() -> None:
+    """七家公司归一化价格、等权指数、个股回撤。"""
+    print("== 七巨头数据")
+    closes: dict[str, pd.Series] = {}
+    for ticker in MAG7_TICKERS:
+        raw = _fetch_close(ticker)
+        if raw is None:
+            _SOURCE_TRACE[f"mag7:{ticker}"] = "missing"
+            continue
+        closes[ticker] = raw.dropna().sort_index()
+        _SOURCE_TRACE[f"mag7:{ticker}"] = (
+            f"Yahoo({len(closes[ticker])} rows,{closes[ticker].index[-1].strftime('%Y-%m-%d')})"
+        )
+
+    if len(closes) < 7:
+        missing_tickers = [t for t in MAG7_TICKERS if t not in closes]
+        raise RuntimeError(f"Mag7 fetch incomplete, missing: {', '.join(missing_tickers)}")
+
+    # 归一化价格：以最早共同日期为基点 100
+    common_dates = closes[MAG7_TICKERS[0]].index
+    for ticker in MAG7_TICKERS[1:]:
+        common_dates = common_dates.intersection(closes[ticker].index)
+    if len(common_dates) < 500:
+        raise RuntimeError(f"Mag7 common date range too short: {len(common_dates)} rows")
+    base_date = common_dates[0]
+    normalized: dict[str, list[float | None]] = {}
+    for ticker in MAG7_TICKERS:
+        aligned = closes[ticker].reindex(common_dates).dropna()
+        base_value = float(aligned.loc[base_date])
+        if base_value <= 0:
+            raise RuntimeError(f"{ticker} base value is non-positive")
+        normalized[ticker] = [round(v / base_value * 100, 2) for v in aligned]
+
+    pin(
+        "mag7_prices.json",
+        {
+            "meta": {
+                "name": "Magnificent 7 normalized prices",
+                "base_date": base_date.strftime("%Y-%m-%d"),
+                "base_value": 100,
+                "note": "Each series rebased to 100 at the earliest common date.",
+            },
+            "dates": [d.strftime("%Y-%m-%d") for d in common_dates],
+            "tickers": {
+                ticker: {"name": MAG7_NAMES.get(ticker, ticker), "values": values}
+                for ticker, values in normalized.items()
+            },
+        },
+    )
+
+    # 等权指数：每日取七家归一化价格的平均值
+    all_aligned = pd.DataFrame(
+        {ticker: closes[ticker].reindex(common_dates) for ticker in MAG7_TICKERS}
+    ).dropna()
+    normalized_frame = all_aligned.div(all_aligned.iloc[0]).mul(100)
+    eq_index = normalized_frame.mean(axis=1)
+
+    # 个股回撤（从历史高点计算）
+    per_member_drawdowns: dict[str, list[dict]] = {}
+    for ticker in MAG7_TICKERS:
+        price = closes[ticker]
+        ath = price.cummax()
+        dd = (price / ath - 1) * 100
+        # Get deepest 5 drawdown episodes
+        episodes = []
+        in_dd = False
+        dd_start = None
+        deepest_val = 0.0
+        for i in range(len(dd)):
+            if dd.iloc[i] < -0.5 and not in_dd:
+                in_dd = True
+                dd_start = dd.index[i]
+                deepest_val = float(dd.iloc[i])
+            elif in_dd:
+                if dd.iloc[i] > -0.5 or i == len(dd) - 1:
+                    if dd_start is None:
+                        raise RuntimeError(f"{ticker} drawdown episode has no start date")
+                    episodes.append(
+                        {
+                            "start": dd_start.strftime("%Y-%m-%d"),
+                            "end": dd.index[i].strftime("%Y-%m-%d"),
+                            "depth": round(deepest_val, 1),
+                        }
+                    )
+                    in_dd = False
+                else:
+                    deepest_val = min(deepest_val, float(dd.iloc[i]))
+        per_member_drawdowns[ticker] = sorted(episodes, key=lambda e: e["depth"])[:5]
+
+    pin(
+        "mag7_equal_weight.json",
+        {
+            "meta": {
+                "name": "Magnificent 7 equal-weight index",
+                "methodology": (
+                    "Each stock normalized to 100 at start, then averaged "
+                    "with equal weights each day."
+                ),
+                "start_date": common_dates[0].strftime("%Y-%m-%d"),
+            },
+            "dates": [d.strftime("%Y-%m-%d") for d in eq_index.index],
+            "values": [round(v, 2) for v in eq_index.values],
+            "member_drawdowns": {
+                ticker: {
+                    "name": MAG7_NAMES.get(ticker, ticker),
+                    "current_dd": round(
+                        float(
+                            (closes[ticker].iloc[-1] / closes[ticker].cummax().iloc[-1] - 1) * 100
+                        ),
+                        1,
+                    ),
+                    "deepest": episodes,
+                }
+                for ticker, episodes in per_member_drawdowns.items()
+            },
+        },
+    )
+
+
+# ------------------------------------------------------------ NVDA vs CSCO 估值对标
+def build_nvda_csco_valuation() -> None:
+    """NVDA 与 CSCO TTM PE 对标，展示两个算力周期的估值差异。"""
+    print("== NVDA vs CSCO 估值对标")
+    out: dict[str, dict[str, list[Any]]] = {}
+    for ticker in ("NVDA", "CSCO"):
+        try:
+            info = yf.Ticker(ticker).info
+            pe = info.get("trailingPE")
+            if not isinstance(pe, int | float) or pe <= 0:
+                raise RuntimeError(f"{ticker} trailingPE unavailable")
+            path = DATA / f"{ticker.lower()}_pe_snapshot.json"
+            existing = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+            series = merge_valuation_observation(
+                existing,
+                datetime.now(UTC).date().isoformat(),
+                float(pe),
+            )
+            out[ticker] = series
+            _SOURCE_TRACE[f"pe:{ticker}"] = (
+                f"Yahoo({series['dates'][-1]},{series['trailing_pe'][-1]})"
+            )
+        except Exception as e:
+            print(f"  {ticker} PE 失败(留旧): {str(e)[:60]}")
+            _SOURCE_TRACE[f"pe:{ticker}"] = "missing"
+    if out:
+        pin(
+            "nvda_csco_valuation.json",
+            {
+                "meta": {
+                    "name": "NVDA vs CSCO TTM PE — Two computing cycles",
+                    "note": "Daily snapshots accumulated over time. CSCO 1999-2000 peak ≈ 140x.",
+                },
+                "nvda": out.get("NVDA", {}),
+                "csco": out.get("CSCO", {}),
+            },
+        )
+
+
+# ------------------------------------------------------------ 道琼斯数据
+def build_dow_jones_data() -> None:
+    """道琼斯指数 DJI 价格数据。"""
+    print("== 道琼斯指数")
+    dji_close = _fetch_close("^DJI")
+    if dji_close is None:
+        _SOURCE_TRACE["dow:dji"] = "missing"
+        raise RuntimeError("DJI fetch failed")
+    _SOURCE_TRACE["dow:dji"] = (
+        f"Yahoo({len(dji_close)} rows,{dji_close.index[-1].strftime('%Y-%m-%d')})"
+    )
+    values = dji_close.dropna().sort_index()
+
+    # Century panel
+    pin(
+        "dji_century.json",
+        {
+            "dates": dates(values.index),
+            "close": rnd(values, 2),
+            "return_type": "price",
+        },
+    )
+
+    # Annual returns
+    pin("dji_annual.json", annual_performance(values))
+
+    # Drawdowns
+    dd, episodes = drawdown_history(values)
+    weekly_dd = weekly_min(dd).mul(100)
+    pin(
+        "dji_drawdowns.json",
+        {
+            "dates": dates(weekly_dd.index),
+            "dd": rnd(weekly_dd, 2),
+            "episodes": sorted(episodes, key=lambda row: row["depth"])[:25],
+            "return_type": "price",
+        },
+    )
+
+
+# ------------------------------------------------------------ ETF 代理对比
+def build_etf_proxies() -> None:
+    """DIA/SPY/QQQ 三大 ETF 归一化对比。"""
+    print("== ETF 代理对比")
+    etf_map = {"DIA": "Dow", "SPY": "S&P 500", "QQQ": "Nasdaq-100"}
+    closes: dict[str, pd.Series] = {}
+    for ticker in etf_map:
+        raw = _fetch_close(ticker)
+        if raw is None:
+            _SOURCE_TRACE[f"etf:{ticker}"] = "missing"
+            continue
+        closes[ticker] = raw.dropna().sort_index()
+        _SOURCE_TRACE[f"etf:{ticker}"] = (
+            f"Yahoo({len(closes[ticker])} rows,{closes[ticker].index[-1].strftime('%Y-%m-%d')})"
+        )
+
+    if len(closes) < 3:
+        raise RuntimeError("ETF proxy fetch incomplete")
+
+    # Find common date range
+    common_dates = closes["DIA"].index
+    for ticker in ("SPY", "QQQ"):
+        common_dates = common_dates.intersection(closes[ticker].index)
+    base_date = common_dates[0]
+
+    etf_data = {}
+    for ticker, label in etf_map.items():
+        aligned = closes[ticker].reindex(common_dates)
+        base = float(aligned.loc[base_date])
+        etf_data[ticker] = {
+            "label": label,
+            "values": [round(v / base * 100, 2) for v in aligned],
+        }
+
+    pin(
+        "etf_proxies.json",
+        {
+            "meta": {
+                "name": "ETF benchmarks rebased",
+                "base_date": base_date.strftime("%Y-%m-%d"),
+                "note": "DIA, SPY, QQQ rebased to 100 at earliest common date.",
+            },
+            "dates": [d.strftime("%Y-%m-%d") for d in common_dates],
+            "series": etf_data,
+        },
+    )
+
+
+# ------------------------------------------------------------ Shiller CAPE & PE (monthly)
+SHILLER_URL = "http://www.econ.yale.edu/~shiller/data/ie_data.xls"
+SHILLER_CITATION = (
+    "Robert J. Shiller, 'Online Data: U.S. Stock Markets 1871-Present,' "
+    "Yale University Department of Economics, http://www.econ.yale.edu/~shiller/data.htm"
+)
+
+
+def shiller_month_to_date(value: float) -> str:
+    """Convert Shiller's YYYY.MM month code to an ISO mid-month date."""
+    year = int(value)
+    month = int(round((value - year) * 100))
+    if month < 1 or month > 12:
+        raise ValueError(f"invalid Shiller month code: {value}")
+    return f"{year}-{month:02d}-15"
+
+
+def build_shiller_data() -> None:
+    """Fetch Shiller CAPE, TTM PE, EPS, and dividend data from Yale."""
+    print("== Shiller CAPE & PE（月频）")
+    response = requests.get(SHILLER_URL, headers=UA, timeout=60)
+    response.raise_for_status()
+    # The workbook opens with a disclaimer; observations live on the Data sheet.
+    frame = pd.read_excel(BytesIO(response.content), sheet_name="Data", header=7)
+    if len(frame.columns) < 10:
+        raise ValueError("Shiller Excel schema changed unexpectedly")
+    # Columns: Date, S&P Comp(P), Dividend(D), Earnings(E), CPI,
+    # Date Fraction, Long Interest Rate(GS10), Real Price, Real Dividend,
+    # Real Earnings, CAPE(P/E10), Real CAPE, ...
+    columns = [str(c).strip() for c in frame.columns]
+    date_col = columns[0]
+    cape_col = next((c for c in columns if "P/E10" in c or "CAPE" in c.upper()), None)
+    price_col = "Real Price" if "Real Price" in columns else columns[1]
+    eps_col = "Real Earnings" if "Real Earnings" in columns else columns[3]
+    div_col = "Real Dividend" if "Real Dividend" in columns else columns[2]
+
+    if cape_col is None:
+        raise ValueError("Shiller CAPE column not found")
+    # Parse dates: Shiller data uses fractional years like 1871.1, 1871.2...
+    dates_raw = pd.to_numeric(frame[date_col], errors="coerce")
+    valid_mask = dates_raw.notna() & (dates_raw >= 1870) & (dates_raw <= 2100)
+    cape_raw = pd.to_numeric(frame[cape_col], errors="coerce")
+    valid_mask = valid_mask & pd.to_numeric(frame[columns[1]], errors="coerce").notna()
+    cape_vals = cape_raw[valid_mask].reset_index(drop=True)
+    cape_vals = cape_vals.where((cape_vals > 0) & (cape_vals < 500))
+    dates_frac = dates_raw[valid_mask].reset_index(drop=True)
+
+    # Shiller encodes months as YYYY.MM (1871.01, 1871.02, …), not year fractions.
+    dates_parsed = [shiller_month_to_date(float(value)) for value in dates_frac]
+
+    payload: dict[str, list] = {
+        "dates": dates_parsed,
+        "cape": rnd(cape_vals, 2),
+    }
+
+    # Extract TTM PE (price / trailing earnings)
+    price_raw = pd.to_numeric(frame[price_col], errors="coerce")[valid_mask].reset_index(drop=True)
+    eps_raw = pd.to_numeric(frame[eps_col], errors="coerce")[valid_mask].reset_index(drop=True)
+    valid_eps = eps_raw.notna() & (eps_raw > 0)
+    pe_ttm = [
+        round(float(p) / float(e), 2) if v else None
+        for p, e, v in zip(price_raw, eps_raw, valid_eps, strict=True)
+    ]
+    payload["pe_ttm"] = pe_ttm
+
+    # EPS series
+    payload["eps"] = rnd(eps_raw, 2)
+
+    # Dividend series
+    div_raw = pd.to_numeric(frame[div_col], errors="coerce")[valid_mask].reset_index(drop=True)
+    payload["dividend"] = rnd(div_raw, 2)
+
+    observed_cape = cape_vals.dropna()
+    if observed_cape.empty:
+        raise ValueError("Shiller CAPE series contains no observations")
+    latest_cape = float(observed_cape.iloc[-1])
+    latest_cape_date = dates_parsed[int(observed_cape.index[-1])]
+    cape_pct = round(float(observed_cape.rank(pct=True).iloc[-1] * 100), 1)
+
+    pin(
+        "shiller_cape.json",
+        {
+            "meta": {
+                "name": "Shiller CAPE, PE, EPS, Dividend",
+                "source": SHILLER_CITATION,
+                "frequency": "monthly",
+                "coverage": f"{dates_parsed[0]} to {dates_parsed[-1]}",
+                "latest_cape": latest_cape,
+                "latest_cape_date": latest_cape_date,
+                "cape_percentile": cape_pct,
+                "interpretation": (
+                    "CAPE > 30 is historically elevated (1929 peak ~33, "
+                    "2000 peak ~44). Percentile shows where current CAPE "
+                    "stands in the full history."
+                ),
+                "caveat": (
+                    "This is Robert Shiller's published workbook. Its latest "
+                    "observation can lag the current market; latest_cape_date "
+                    "makes that source lag explicit. ArcOfMarket does not "
+                    "forward-fill unpublished values."
+                ),
+            },
+            **payload,
+        },
+        license_tag=(
+            "Data from Robert J. Shiller, 'U.S. Stock Markets 1871-Present,' "
+            "Yale University. Underlying values are Shiller's published facts; "
+            "compilation and presentation by ArcOfMarket."
+        ),
+    )
+    _SOURCE_TRACE["shiller"] = f"Yale-Shiller({len(dates_parsed)} rows,{dates_parsed[-1]})"
+    print(f"  CAPE = {latest_cape:.1f}（{latest_cape_date}，历史百分位 {cape_pct}%）")
+
+
+# ------------------------------------------------------------ VXN (Nasdaq-100 Volatility Index)
+VXN_CBOE_URL = "https://cdn.cboe.com/api/global/us_indices/daily_prices/VXN_History.csv"
+
+
+def build_vxn() -> None:
+    """Fetch VXN — Nasdaq-100 implied volatility index from Cboe."""
+    print("== VXN（Nasdaq-100 恐慌指数）")
+    try:
+        series = cboe_daily_close("VXN")
+        pin(
+            "vxn.json",
+            {
+                "meta": {
+                    "name": "VXN — Nasdaq-100 Volatility Index",
+                    "source": "Cboe Global Markets",
+                    "interpretation": (
+                        "VXN is to Nasdaq-100 what VIX is to S&P 500: "
+                        "the option market's 30-day expected volatility. "
+                        "VXN is structurally higher than VIX (Nasdaq is "
+                        "more volatile). Values above 30 mark crisis pricing."
+                    ),
+                },
+                "dates": dates(series.index),
+                "close": rnd(series, 2),
+            },
+        )
+        _SOURCE_TRACE["vxn"] = f"Cboe({len(series)} rows,{series.index[-1].strftime('%Y-%m-%d')})"
+    except Exception as e:
+        print(f"  VXN Cboe 失败(留旧): {str(e)[:80]}")
+        _SOURCE_TRACE["vxn"] = "missing"
+
+
+# ------------------------------------------------------------ Mag7 占 S&P 500 权重（月频快照）
+def build_mag7_weight() -> None:
+    """Save a monthly snapshot of Mag7 weights reported by the SPY fund."""
+    print("== 七巨头占标普权重（月频快照）")
+    holdings = yf.Ticker("SPY").funds_data.top_holdings
+    if not isinstance(holdings, pd.DataFrame) or "Holding Percent" not in holdings.columns:
+        raise RuntimeError("SPY top holdings are unavailable")
+    holding_percent = pd.to_numeric(holdings["Holding Percent"], errors="coerce")
+    weights_by_symbol = {
+        str(symbol): float(value) for symbol, value in holding_percent.dropna().items()
+    }
+    company_symbols = {
+        "AAPL": ("AAPL",),
+        "MSFT": ("MSFT",),
+        "NVDA": ("NVDA",),
+        "AMZN": ("AMZN",),
+        "GOOGL": ("GOOGL", "GOOG"),
+        "META": ("META",),
+        "TSLA": ("TSLA",),
+    }
+    missing = [
+        ticker
+        for ticker, symbols in company_symbols.items()
+        if not any(symbol in weights_by_symbol for symbol in symbols)
+    ]
+    if missing:
+        raise RuntimeError(f"SPY holdings omit Mag7 members: {', '.join(missing)}")
+    member_weights = {
+        ticker: round(
+            sum(weights_by_symbol.get(symbol, 0.0) for symbol in symbols) * 100,
+            3,
+        )
+        for ticker, symbols in company_symbols.items()
+    }
+    weight = round(sum(member_weights.values()), 2)
+    as_of = datetime.now(UTC).date().isoformat()
+
+    path = DATA / "mag7_weight.json"
+    existing = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+    existing_dates: list[str] = existing.get("dates", [])
+    existing_weights: list[float] = existing.get("weight_pct", [])
+    existing_members: dict[str, list[float | None]] = existing.get("member_weights", {})
+
+    replace_latest = bool(existing_dates and existing_dates[-1][:7] == as_of[:7])
+    if replace_latest:
+        existing_dates[-1] = as_of
+        existing_weights[-1] = weight
+    else:
+        existing_dates.append(as_of)
+        existing_weights.append(weight)
+    for ticker in MAG7_TICKERS:
+        member_list: list[float | None] = existing_members.get(ticker, [])
+        member_weight = member_weights[ticker]
+        if replace_latest and member_list:
+            member_list[-1] = member_weight
+        else:
+            member_list.append(member_weight)
+        existing_members[ticker] = member_list
+
+    pin(
+        "mag7_weight.json",
+        {
+            "meta": {
+                "name": "Magnificent 7 weight in S&P 500",
+                "frequency": "monthly snapshots when pipeline runs",
+                "methodology": (
+                    "Sum the constituent weights reported in SPY top holdings. "
+                    "Both Alphabet share classes are included."
+                ),
+                "latest_weight_pct": weight,
+                "latest_date": as_of,
+                "caveat": (
+                    "SPY is used as a tradable proxy. Fund holdings can differ "
+                    "slightly from official S&P DJI index weights."
+                ),
+            },
+            "dates": existing_dates,
+            "weight_pct": existing_weights,
+            "member_weights": {t: existing_members.get(t, []) for t in MAG7_TICKERS},
+            "member_names": {t: MAG7_NAMES[t] for t in MAG7_TICKERS},
+        },
+    )
+    _SOURCE_TRACE["mag7_weight"] = f"Yahoo({as_of},{weight}%)"
+    print(f"  Mag7 占标普 {weight}%（{as_of}）")
+
+
+# ------------------------------------------------------------ P1: Daily return distribution
+def build_daily_distribution(prefix: str, close: pd.Series) -> None:
+    """日涨跌分布：展示"肥尾"——极端涨跌远超正态分布预测。"""
+    rets = close.pct_change().dropna() * 100
+    internal_edges = [float(x) / 10 for x in range(-80, 81, 2)]
+    edges = [-math.inf, *internal_edges, math.inf]
+    buckets = pd.cut(rets, bins=edges, include_lowest=True)
+    hist = buckets.value_counts(sort=False)
+    bin_labels = [
+        "< -8.0%",
+        *[f"{internal_edges[index]:.1f}%" for index in range(len(internal_edges) - 1)],
+        "≥ 8.0%",
+    ]
+    bin_counts = [int(value) for value in hist.to_list()]
+
+    # Normal curve for comparison
+    mean_ret = float(rets.mean())
+    std_ret = float(rets.std())
+
+    def normal_cdf(value: float) -> float:
+        if value == -math.inf:
+            return 0.0
+        if value == math.inf:
+            return 1.0
+        z_score = (value - mean_ret) / (std_ret * math.sqrt(2))
+        return 0.5 * (1 + math.erf(z_score))
+
+    normal_y = [
+        round(len(rets) * (normal_cdf(high) - normal_cdf(low)), 1)
+        for low, high in zip(edges[:-1], edges[1:], strict=True)
+    ]
+
+    pin(
+        f"{prefix}_daily_dist.json",
+        {
+            "meta": {
+                "name": (
+                    f"{'S&P 500' if prefix == 'sp500' else 'Nasdaq-100'} daily return distribution"
+                ),
+                "mean": round(mean_ret, 2),
+                "std": round(std_ret, 2),
+                "skew": round(float(rets.skew()), 2),
+                "kurtosis": round(float(rets.kurtosis()), 2),
+                "n_days": len(rets),
+                "interpretation": (
+                    "Real markets have 'fat tails': extreme daily moves happen far more "
+                    "often than a normal distribution predicts. The gray curve shows "
+                    "what 'should' happen; the red bars show what actually happened."
+                ),
+            },
+            "bins": bin_labels,
+            "counts": bin_counts,
+            "normal": normal_y,
+        },
+    )
+    _SOURCE_TRACE[f"{prefix}_daily_dist"] = f"Computed({len(rets)} days)"
+
+
+# ------------------------------------------------------------ P1: Return decomposition
+def build_return_decomposition() -> None:
+    """标普 500 年度回报拆解：价格回报 vs 总回报，差额即股息贡献。"""
+    print("== 回报拆解（价格 vs 总回报）")
+    price = _fetch_close("^GSPC")
+    total_ret = _fetch_close("^SP500TR")
+    if price is None or total_ret is None:
+        raise RuntimeError("S&P 500 price or total return unavailable")
+
+    price_clean = price.dropna().sort_index()
+    tr_clean = total_ret.dropna().sort_index()
+
+    # Align dates and compute annual returns
+    common = price_clean.index.intersection(tr_clean.index)
+    p_aligned = price_clean.reindex(common).dropna()
+    tr_aligned = tr_clean.reindex(common).dropna()
+
+    # Annual returns
+    p_annual = p_aligned.resample("YE").last().pct_change().dropna() * 100
+    tr_annual = tr_aligned.resample("YE").last().pct_change().dropna() * 100
+    common_years = p_annual.index.intersection(tr_annual.index)
+    if common_years.empty:
+        raise RuntimeError("S&P 500 return series have no overlapping complete years")
+
+    years = [str(d.year) for d in common_years]
+    price_rets = [round(float(p_annual.loc[d]), 1) for d in common_years]
+    total_rets = [round(float(tr_annual.loc[d]), 1) for d in common_years]
+    div_contrib = [round(float(tr_annual.loc[d]) - float(p_annual.loc[d]), 1) for d in common_years]
+
+    pin(
+        "sp500_return_decomp.json",
+        {
+            "meta": {
+                "name": "S&P 500 Annual Return Decomposition",
+                "methodology": (
+                    "Total return - Price return = Dividend contribution. "
+                    "Buyback contribution is not separately identified."
+                ),
+                "coverage": f"{common_years[0].year}-{common_years[-1].year}",
+            },
+            "years": years,
+            "price_return": price_rets,
+            "total_return": total_rets,
+            "dividend_contribution": div_contrib,
+        },
+    )
+    _SOURCE_TRACE["sp500_return_decomp"] = f"Computed({len(years)} years)"
+    print(f"  回报拆解 {len(years)} 年: 年均股息贡献 ~{sum(div_contrib) / len(div_contrib):.1f}%")
+
+
+# ------------------------------------------------------------ P1: Mag7 rolling correlation
+def build_mag7_correlation() -> None:
+    """七巨头 60 日滚动两两相关性矩阵。"""
+    print("== 七巨头相关性")
+    closes: dict[str, pd.Series] = {}
+    for ticker in MAG7_TICKERS:
+        raw = _fetch_close(ticker)
+        if raw is None:
+            _SOURCE_TRACE[f"corr:{ticker}"] = "missing"
+            continue
+        closes[ticker] = raw.dropna().sort_index()
+        _SOURCE_TRACE[f"corr:{ticker}"] = (
+            f"Yahoo({len(closes[ticker])} rows,{closes[ticker].index[-1].strftime('%Y-%m-%d')})"
+        )
+    if len(closes) < 7:
+        raise RuntimeError(f"Mag7 correlation incomplete: {len(closes)}/7")
+
+    # Align to common dates
+    common = closes[MAG7_TICKERS[0]].index
+    for t in MAG7_TICKERS[1:]:
+        common = common.intersection(closes[t].index)
+    df = pd.DataFrame({t: closes[t].reindex(common) for t in MAG7_TICKERS}).dropna()
+    rets = df.pct_change().dropna()
+
+    # Rolling 60-day pairwise correlation (average of all pairs)
+    window = 60
+    avg_corr = []
+    for i in range(window, len(rets)):
+        corr_matrix = rets.iloc[i - window : i].corr()
+        # Average of upper triangle (excluding diagonal)
+        upper_vals = []
+        for a_idx, a in enumerate(MAG7_TICKERS):
+            for b in MAG7_TICKERS[a_idx + 1 :]:
+                upper_vals.append(corr_matrix.loc[a, b])
+        avg_corr.append(round(sum(upper_vals) / len(upper_vals), 3))
+
+    dates_corr = [d.strftime("%Y-%m-%d") for d in rets.index[window:]]
+
+    # Latest pairwise matrix
+    latest_matrix = rets.iloc[-window:].corr()
+    latest_pairs = {}
+    for i, a in enumerate(MAG7_TICKERS):
+        for b in MAG7_TICKERS[i + 1 :]:
+            latest_pairs[f"{a}-{b}"] = round(float(latest_matrix.loc[a, b]), 3)
+
+    pin(
+        "mag7_correlation.json",
+        {
+            "meta": {
+                "name": "Mag7 60-day rolling average pairwise correlation",
+                "window_days": window,
+                "interpretation": (
+                    "High correlation (>0.7) suggests the market treats them as "
+                    "a single AI/tech trade rather than seven independent companies. "
+                    "Correlation spikes during market stress."
+                ),
+                "latest_avg_correlation": avg_corr[-1] if avg_corr else None,
+                "latest_pairs": latest_pairs,
+            },
+            "dates": dates_corr,
+            "avg_correlation": avg_corr,
+            "tickers": MAG7_TICKERS,
+        },
+    )
+    _SOURCE_TRACE["mag7_correlation"] = f"Computed({len(dates_corr)} windows)"
+    if avg_corr:
+        print(f"  当前平均相关性: {avg_corr[-1]:.3f}, 最近成对: {latest_pairs}")
+
+
+# ------------------------------------------------------------ D1: Nasdaq-100 成分排名
+NDX_COMPONENTS_URL = "https://api.nasdaq.com/api/quote/list-type/nasdaq100"
+
+
+def fetch_ndx_constituents() -> dict[str, str]:
+    """Fetch the current Nasdaq-100 share-class list from Nasdaq's public endpoint."""
+    response = requests.get(
+        NDX_COMPONENTS_URL,
+        headers={**UA, "Accept": "application/json, text/plain, */*"},
+        timeout=30,
+    )
+    response.raise_for_status()
+    payload = response.json()
+    rows = (((payload.get("data") or {}).get("data") or {}).get("rows") or [])
+    names = {
+        str(row.get("symbol", "")).strip(): str(row.get("companyName", "")).strip()
+        for row in rows
+        if isinstance(row, dict) and str(row.get("symbol", "")).strip()
+    }
+    if len(names) < 90:
+        raise ValueError(f"Nasdaq-100 constituent count too low: {len(names)}")
+    return names
+
+
+def build_ndx_rankings() -> None:
+    """Fetch Nasdaq-100 constituents and compute 1W/1M/YTD/1Y returns."""
+    print("== Nasdaq-100 成分排名")
+    names = fetch_ndx_constituents()
+    tickers = list(names)
+
+    close_matrix = _download_close_matrix(tickers, period="2y")
+    rows = []
+    for ticker in tickers:
+        try:
+            if ticker not in close_matrix.columns:
+                continue
+            close = close_matrix[ticker].dropna().sort_index()
+            if len(close) < 6:
+                continue
+            latest = float(close.iloc[-1])
+            # 1-week, 1-month, YTD, 1-year
+            w1 = period_return(close, 5)
+            m1 = period_return(close, 21)
+            ytd_date = pd.Timestamp(f"{datetime.now(UTC).year}-01-01")
+            prior_year = close[close.index < ytd_date]
+            ytd = (
+                round((latest / float(prior_year.iloc[-1]) - 1) * 100, 1)
+                if not prior_year.empty
+                else None
+            )
+            y1 = period_return(close, 252)
+            rows.append(
+                {
+                    "ticker": ticker,
+                    "name": names.get(ticker, ticker)[:40],
+                    "close": round(latest, 2),
+                    "r1w": w1,
+                    "r1m": m1,
+                    "ytd": ytd,
+                    "r1y": y1,
+                }
+            )
+        except Exception as e:
+            print(f"  {ticker} skip: {str(e)[:40]}")
+
+    rows.sort(
+        key=lambda row: numeric_desc_sort_key(row, "r1y"),
+        reverse=True,
+    )
+    pin(
+        "ndx_rankings.json",
+        {
+            "meta": {
+                "name": "Nasdaq-100 constituent return rankings",
+                "constituent_source": NDX_COMPONENTS_URL,
+                "as_of": datetime.now(UTC).strftime("%Y-%m-%d"),
+                "count": len(rows),
+            },
+            "rows": rows,
+        },
+    )
+    _SOURCE_TRACE["ndx_rankings"] = f"Nasdaq+Yahoo({len(rows)} tickers)"
+    print(f"  {len(rows)} 只成分排名已生成")
+
+
+def period_return(close: pd.Series, sessions: int) -> float | None:
+    """Return the percentage change across an exact number of trading sessions."""
+    if len(close) <= sessions:
+        return None
+    latest = float(close.iloc[-1])
+    baseline = float(close.iloc[-(sessions + 1)])
+    return round((latest / baseline - 1) * 100, 1)
+
+
+def numeric_desc_sort_key(row: dict[str, Any], field: str) -> float:
+    """Return a numeric field or negative infinity for missing values."""
+    value = row.get(field)
+    return float(value) if isinstance(value, (int, float)) else float("-inf")
+
+
+# ------------------------------------------------------------ D2: 月度热力图数据
+def build_monthly_heatmap(prefix: str, close: pd.Series) -> None:
+    """将月度回报转换为 year×month 矩阵用于热力图。"""
+    monthly = close.resample("ME").last().pct_change().dropna() * 100
+    df = pd.DataFrame({"ret": monthly})
+    timestamps = [pd.Timestamp(value) for value in df.index]
+    df["year"] = [timestamp.year for timestamp in timestamps]
+    df["month"] = [timestamp.month for timestamp in timestamps]
+    pivot = df.pivot_table(values="ret", index="year", columns="month", aggfunc="last")
+    years = [str(y) for y in pivot.index]
+    heatmap = {
+        str(year): {
+            str(month): (
+                round(float(pivot.loc[year, month]), 1)
+                if pd.notna(pivot.loc[year, month])
+                else None
+            )
+            for month in range(1, 13)
+            if month in pivot.columns
+        }
+        for year in pivot.index
+    }
+    # Also keep monthly averages
+    month_numbers = pd.Series(
+        [pd.Timestamp(value).month for value in monthly.index],
+        index=monthly.index,
+    )
+    avg_ret = {
+        str(month): round(float(monthly[month_numbers == month].mean()), 1)
+        for month in range(1, 13)
+    }
+    win_rate = {
+        str(month): round(
+            float((monthly[month_numbers == month] > 0).mean() * 100),
+            1,
+        )
+        for month in range(1, 13)
+    }
+
+    pin(
+        f"{prefix}_monthly_heatmap.json",
+        {
+            "meta": {
+                "name": (f"{'S&P 500' if prefix == 'sp500' else 'Nasdaq-100'} monthly heatmap")
+            },
+            "years": years,
+            "months": [str(m) for m in range(1, 13)],
+            "heatmap": heatmap,
+            "avg_return": avg_ret,
+            "win_rate": win_rate,
+            "month_labels": [f"{month}月" for month in range(1, 13)],
+        },
+    )
+    _SOURCE_TRACE[f"{prefix}_monthly_heatmap"] = f"Computed({len(years)} years)"
+
+
+# ------------------------------------------------------------ D3: 广度指标
+def build_breadth(prefix: str, close: pd.Series, tickers: list[str]) -> None:
+    """计算 >50MA 和 >200MA 的成分比例。"""
+    print(f"== 广度指标 {prefix}")
+    if not tickers:
+        raise RuntimeError("No tickers for breadth computation")
+    close_matrix = _download_close_matrix(tickers, period="5y")
+    dates_common = close.dropna().sort_index().index.intersection(close_matrix.index)
+    above_50 = pd.Series(0.0, index=dates_common)
+    above_200 = pd.Series(0.0, index=dates_common)
+    eligible_50 = pd.Series(0.0, index=dates_common)
+    eligible_200 = pd.Series(0.0, index=dates_common)
+    count = 0
+    for ticker in tickers:
+        try:
+            if ticker not in close_matrix.columns:
+                continue
+            c = close_matrix[ticker].dropna().sort_index()
+            ma50 = c.rolling(50).mean()
+            ma200 = c.rolling(200).mean()
+            valid_50 = ma50.notna().reindex(dates_common).fillna(False)
+            valid_200 = ma200.notna().reindex(dates_common).fillna(False)
+            aligned_50 = (c > ma50).reindex(dates_common).fillna(False).astype(float)
+            aligned_200 = (c > ma200).reindex(dates_common).fillna(False).astype(float)
+            above_50 = above_50.add(aligned_50, fill_value=0)
+            above_200 = above_200.add(aligned_200, fill_value=0)
+            eligible_50 = eligible_50.add(valid_50.astype(float), fill_value=0)
+            eligible_200 = eligible_200.add(valid_200.astype(float), fill_value=0)
+            count += 1
+        except Exception:
+            continue
+    if count < 5:
+        raise RuntimeError(f"Breadth ticker coverage too low: {count}")
+    pct_50 = (above_50 / eligible_50.replace(0, float("nan")) * 100).dropna()
+    pct_200 = (above_200 / eligible_200.replace(0, float("nan")) * 100).dropna()
+    shared_dates = pct_50.index.intersection(pct_200.index)
+    pct_50 = pct_50.reindex(shared_dates)
+    pct_200 = pct_200.reindex(shared_dates)
+
+    pin(
+        f"{prefix}_breadth.json",
+        {
+            "meta": {
+                "name": f"{'S&P 500' if prefix == 'sp500' else 'Nasdaq-100'} market breadth",
+                "ticker_count": count,
+                "methodology": (
+                    "Each date uses only constituents with enough observations "
+                    "to form the requested moving average."
+                ),
+                "caveat": (
+                    "Historical values use today's constituent universe and "
+                    "therefore contain survivorship bias."
+                ),
+            },
+            "dates": [d.strftime("%Y-%m-%d") for d in pct_50.index],
+            "pct_above_50ma": rnd(pct_50, 1),
+            "pct_above_200ma": rnd(pct_200, 1),
+            "latest_50ma": round(float(pct_50.iloc[-1]), 1) if len(pct_50) > 0 else None,
+            "latest_200ma": round(float(pct_200.iloc[-1]), 1) if len(pct_200) > 0 else None,
+        },
+    )
+    _SOURCE_TRACE[f"{prefix}_breadth"] = f"Computed({count} tickers,{len(pct_50)} days)"
+    if len(pct_50) > 0:
+        print(f"  >50MA: {pct_50.iloc[-1]:.1f}%, >200MA: {pct_200.iloc[-1]:.1f}%")
+
+
+def _sp500_tickers() -> list[str]:
+    """Get S&P 500 constituent tickers from Wikipedia, fallback to top 100."""
+    try:
+        response = requests.get(WIKIPEDIA_SP500_URL, headers=UA, timeout=30)
+        response.raise_for_status()
+        table = pd.read_html(StringIO(response.text))[0]
+        return [str(t).strip() for t in table["Symbol"] if pd.notna(t)]
+    except Exception:
+        return [
+            "AAPL",
+            "MSFT",
+            "NVDA",
+            "AMZN",
+            "GOOGL",
+            "META",
+            "TSLA",
+            "BRK-B",
+            "JPM",
+            "V",
+            "JNJ",
+            "WMT",
+            "PG",
+            "MA",
+            "UNH",
+            "HD",
+            "BAC",
+            "XOM",
+            "DIS",
+            "NFLX",
+            "ADBE",
+            "CRM",
+            "CSCO",
+            "INTC",
+            "QCOM",
+            "AMD",
+            "PEP",
+            "KO",
+            "MRK",
+            "ABBV",
+            "COST",
+            "AVGO",
+            "TMO",
+            "ABT",
+            "DHR",
+            "NEE",
+            "GE",
+            "CAT",
+            "WFC",
+            "MS",
+            "GS",
+            "BLK",
+            "AXP",
+            "SPGI",
+            "CMCSA",
+            "T",
+            "VZ",
+            "PFE",
+            "BMY",
+            "GILD",
+            "AMGN",
+            "MDT",
+            "CVS",
+            "UNP",
+            "HON",
+            "LMT",
+            "RTX",
+            "LOW",
+            "TGT",
+            "SBUX",
+            "MCD",
+            "NKE",
+            "ISRG",
+            "INTU",
+            "NOW",
+            "UBER",
+            "DASH",
+            "PLTR",
+            "PANW",
+            "CRWD",
+            "ORCL",
+            "ADP",
+            "FI",
+            "KLAC",
+            "AMAT",
+            "LRCX",
+            "MU",
+            "ADI",
+            "TXN",
+            "REGN",
+            "VRTX",
+            "SYK",
+            "BSX",
+            "ETN",
+            "PH",
+            "TT",
+            "CEG",
+            "SO",
+            "DUK",
+            "AEP",
+            "WM",
+            "RSG",
+            "SHW",
+            "ECL",
+            "CTAS",
+            "ITW",
+            "MMM",
+            "DE",
+            "EMR",
+            "ROK",
+        ]
+
+
+def _ndx_tickers() -> list[str]:
+    """Return the current Nasdaq-100 share classes, with the last dataset as fallback."""
+    try:
+        return list(fetch_ndx_constituents())
+    except Exception as error:
+        path = DATA / "ndx_rankings.json"
+        if path.exists():
+            payload = json.loads(path.read_text(encoding="utf-8"))
+            rows = payload.get("rows", []) if isinstance(payload, dict) else []
+            tickers = [
+                str(row.get("ticker", "")).strip()
+                for row in rows
+                if isinstance(row, dict) and row.get("ticker")
+            ]
+            if len(tickers) >= 90:
+                return tickers
+        raise RuntimeError(
+            "Nasdaq-100 constituents unavailable and no complete fallback exists"
+        ) from error
+
+
 def run_daily() -> None:
     print("fetching prices …")
     gspc = _fetch_close("^GSPC")
@@ -637,9 +1661,16 @@ def run_daily() -> None:
     run_section("VIX 家族", build_vol_family, vix)
     run_section("宏观·利率", build_macro_rates)
     run_section("OFR 金融压力", build_financial_stress)
+    run_section("七巨头数据", build_mag7_data, blocking=False)
+    run_section("NVDA-CSCO 估值对标", build_nvda_csco_valuation, blocking=False)
+    run_section("道琼斯指数", build_dow_jones_data, blocking=False)
+    run_section("ETF 代理对比", build_etf_proxies, blocking=False)
 
 
 def run_weekly() -> None:
+    print("fetching weekly index histories …")
+    gspc = _fetch_close("^GSPC")
+    ndx = _fetch_close("^NDX")
     run_section("美国股票配置占比", build_equity_allocation)
     run_section("CFTC COT", build_cot_vix)
     run_section("NBER 衰退期", build_recessions)
@@ -667,6 +1698,34 @@ def run_weekly() -> None:
         blocking=sec_required,
     )
     run_section("13F 机构持仓", build_inst_holdings, blocking=sec_required)
+    run_section("Shiller CAPE/PE", build_shiller_data)
+    run_section("VXN 恐慌指数", build_vxn, blocking=False)
+    run_section("七巨头权重", build_mag7_weight, blocking=False)
+    if gspc is not None:
+        run_section(
+            "日涨跌分布 SP500",
+            build_daily_distribution,
+            "sp500",
+            gspc,
+            blocking=False,
+        )
+    if ndx is not None:
+        run_section(
+            "日涨跌分布 NDX",
+            build_daily_distribution,
+            "ndx",
+            ndx,
+            blocking=False,
+        )
+    run_section("回报拆解", build_return_decomposition, blocking=False)
+    run_section("七巨头相关性", build_mag7_correlation, blocking=False)
+    run_section("纳指成分排名", build_ndx_rankings, blocking=False)
+    if gspc is not None:
+        run_section("SP500 热力图", build_monthly_heatmap, "sp500", gspc, blocking=False)
+        run_section("SP500 广度", build_breadth, "sp500", gspc, _sp500_tickers(), blocking=False)
+    if ndx is not None:
+        run_section("NDX 热力图", build_monthly_heatmap, "ndx", ndx, blocking=False)
+        run_section("NDX 广度", build_breadth, "ndx", ndx, _ndx_tickers(), blocking=False)
 
 
 def add_trace_failures() -> None:
@@ -772,6 +1831,40 @@ def _fetch_close(ticker: str) -> pd.Series | None:
     _FAILURES.append({"section": f"fetch {ticker}", "error": message, "blocking": True})
     print(f"  ⚠️ {ticker} 拉取失败（跳过其面板并保留上一版）: {message}")
     return None
+
+
+def _download_close_matrix(tickers: Sequence[str], period: str) -> pd.DataFrame:
+    """Download adjusted close histories for a ticker universe in one batch."""
+    unique_tickers = list(dict.fromkeys(tickers))
+    if not unique_tickers:
+        raise ValueError("ticker universe is empty")
+    yahoo_symbols = [ticker.replace(".", "-") for ticker in unique_tickers]
+    frame = yf.download(
+        yahoo_symbols,
+        auto_adjust=True,
+        group_by="column",
+        multi_level_index=True,
+        period=period,
+        progress=False,
+        threads=True,
+        timeout=30,
+    )
+    if not isinstance(frame, pd.DataFrame) or frame.empty:
+        raise RuntimeError("bulk price download returned no rows")
+    if isinstance(frame.columns, pd.MultiIndex):
+        if "Close" not in frame.columns.get_level_values(0):
+            raise RuntimeError("bulk price download has no Close columns")
+        closes = frame["Close"].copy()
+    elif "Close" in frame.columns and len(yahoo_symbols) == 1:
+        closes = frame[["Close"]].copy()
+        closes.columns = yahoo_symbols
+    else:
+        raise RuntimeError("bulk price download schema is unsupported")
+    closes.columns = [str(column) for column in closes.columns]
+    original_symbols = dict(zip(yahoo_symbols, unique_tickers, strict=True))
+    closes = closes.rename(columns=original_symbols)
+    closes.index = pd.DatetimeIndex(closes.index).tz_localize(None)
+    return closes.sort_index()
 
 
 # 外部源：Cboe VIX 家族历史数据
@@ -1081,9 +2174,7 @@ def build_macro_growth() -> None:
     def annualized_quarterly_growth(series: pd.Series) -> dict:
         previous_quarter = series.shift(1)
         valid_previous_quarter = previous_quarter.where(previous_quarter.gt(0))
-        annualized_growth = (
-            series.div(valid_previous_quarter).pow(4).mul(100).sub(100).dropna()
-        )
+        annualized_growth = series.div(valid_previous_quarter).pow(4).mul(100).sub(100).dropna()
         return {
             "dates": dates(annualized_growth.index),
             "values": rnd(annualized_growth, 1),
@@ -1737,8 +2828,15 @@ def build_insider_trades(symbols: list[str], days_back: int = 90) -> None:
             continue
         try:
             company = edgar.Company(sym.upper())
-            filings = company.get_filings(form="4")
+            filings = company.get_filings(
+                form="4",
+                filing_date=f"{cutoff.isoformat()}:",
+            )
+            if not filings:
+                continue
             latest: Any = filings.latest(5) if hasattr(filings, "latest") else list(filings)[:5]
+            if latest is None:
+                continue
             if hasattr(latest, "obj"):
                 latest = [latest]
             for filing in latest:
@@ -1816,12 +2914,16 @@ def build_inst_holdings() -> None:
     from datetime import datetime as _dt
 
     ingested = _dt.now(UTC)
+    recent_filing_cutoff = (ingested - timedelta(days=550)).date().isoformat()
     rows = []
     failed_funds = []
     for fund_name, cik in TOP_FUNDS_13F:
         try:
             entity = edgar.Company(cik)
-            filings = entity.get_filings(form=["13F-HR", "13F-HR/A"])
+            filings = entity.get_filings(
+                form=["13F-HR", "13F-HR/A"],
+                filing_date=f"{recent_filing_cutoff}:",
+            )
             if not filings:
                 failed_funds.append(fund_name)
                 continue

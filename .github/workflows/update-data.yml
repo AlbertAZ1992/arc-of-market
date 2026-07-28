@@ -51,11 +51,10 @@ jobs:
       - name: Install Python dependencies
         run: uv sync --locked --group dev
 
-      - name: Validate Python
+      - name: Validate Python code
         run: |
           uv run ruff check scripts tests
           uv run ty check scripts
-          uv run pytest -q
 
       - name: Update data
         env:
@@ -66,6 +65,11 @@ jobs:
           SP500_FORWARD_EPS_SOURCE: ${{ vars.SP500_FORWARD_EPS_SOURCE }}
           SP500_FORWARD_EPS_LICENSE_SCOPE: ${{ vars.SP500_FORWARD_EPS_LICENSE_SCOPE }}
         run: uv run python -m scripts.update --profile "${{ inputs.profile }}"
+
+      - name: Validate generated data
+        run: |
+          uv run pytest -q
+          uv run python -m scripts.license_gate
 
       - uses: actions/setup-node@v4
         with:

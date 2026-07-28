@@ -1,0 +1,73 @@
+{
+  "route": "/magnificent-seven/",
+  "seo": {
+    "title": "科技七姐妹 · ArcOfMarket",
+    "description": "七巨头等权指数、成员分化、回撤历史、估值对标——七家公司，七个故事。"
+  },
+  "hero": {
+    "eyebrow": "MAGNIFICENT SEVEN",
+    "headline": "七家公司，半个美股",
+    "intro": "Apple、Microsoft、Nvidia、Amazon、Alphabet、Meta、Tesla。这七家公司的市值加起来，超过了日本、英国和德国股市的总和。但把它们当成“一个板块”看是危险的——2022 年 Meta 跌了 77%，同一年 Nvidia 也只微跌。2023 年以来，Nvidia 靠 AI 芯片涨了五倍，而 Tesla 基本在原地。这不是“一个板块”，这是七个完全不同的故事。"
+  },
+  "chapters": [
+    {
+      "id": "mag7-basket",
+      "navLabel": "打包看七巨头",
+      "label": "§ I",
+      "title": "把七家捏成一个篮子，跟大盘比一比",
+      "intro": "等权重买入七家公司，从 2022 年初持有到今天，这个篮子跟 S&P 500 和 Nasdaq-100 差了多少？注意，这个实验恰好从加息周期的起点开始——经历了 2022 年的暴跌和 2023-2026 的 AI 狂潮，是最近一轮完整周期的缩影。",
+      "guide": "红线 = 等权七巨头，灰线 = S&P 500，蓝线 = Nasdaq-100。差距越大，说明头部公司越在“脱离地心引力”。当七巨头开始持续跑输大盘时，往往意味着市场风格在从成长切向价值——这是过去两年从未出现过的场景。",
+      "blocks": [
+        { "type": "component", "component": "Mag7EqualWeight" }
+      ]
+    },
+    {
+      "id": "mag7-members",
+      "navLabel": "拆开看七家",
+      "label": "§ II",
+      "title": "拆开看：七种商业模式，七种命运",
+      "intro": "Nvidia 卖 AI 基础设施（芯片），Apple 卖消费电子生态，Meta 卖注意力（广告），Microsoft 卖企业软件和云，Amazon 卖一切（电商+云），Alphabet 卖搜索+云+YouTube，Tesla 卖电动车和能源。把它们归一化到同一个起点：谁跑赢了谁？谁的波动最大？",
+      "guide": "每条线从 100 出发。Nvidia 的线最高但也最曲折——高回报伴随着更大的回撤。Apple 和 Microsoft 的线最平滑——它们是这个群体里的“蓝筹”。Tesla 的故事最有戏剧性：暴涨→暴跌→再暴涨→再回落。这就是“高收益高风险”在七巨头内部的真实样本。",
+      "blocks": [
+        { "type": "component", "component": "Mag7Prices" }
+      ]
+    },
+    {
+      "id": "mag7-drawdowns",
+      "navLabel": "每家的至暗时刻",
+      "label": "§ III",
+      "title": "即使是最强的公司，也有自己的熊市",
+      "intro": "Meta 在 2022 年跌掉了四分之三的市值——扎克伯格全面押注元宇宙，华尔街用脚投票。然后它用 14 个月翻倍了回来。Tesla 从高点回落超过 70% 已经不止一次。Nvidia 在 2022 年也跌过 60%——就在 ChatGPT 发布之前。每一家都有过自己的“世界末日”，然后都活下来了。当前的绿色柱 = 离历史高点还有多远；浅红色 = 历史上最深的一次为止。",
+      "blocks": [
+        { "type": "component", "component": "Mag7Drawdowns" }
+      ]
+    },
+    {
+      "id": "mag7-correlation",
+      "navLabel": "七家还是七分之一？",
+      "label": "§ IV",
+      "title": "它们是一起涨跌，还是各走各的？",
+      "intro": "当市场恐慌时，所有的股票都一起跌——这叫“相关性趋同”。但当市场平静时，七家公司的走势应该各有各的方向。如果某段时间七家的相关性异常高——那说明市场把七家当成“一篮子 AI 概念”在交易，而不是七个独立的公司。",
+      "blocks": []
+    },
+    {
+      "id": "mag7-valuation",
+      "navLabel": "跟 1999 年比",
+      "label": "§ V",
+      "title": "今天的 Nvidia，是 1999 年的 Cisco 吗？",
+      "intro": "1999 年互联网泡沫顶峰，Cisco 的市盈率最高冲到 140 倍——市场相信互联网基础设施的需求会无限增长。这个判断本身没有错：互联网确实改变了世界。但估值太高了，直到今天 Cisco 的股价也没回到 2000 年的高点。今天 Nvidia 作为 AI 时代的算力核心，历史再一次考验同一个问题：给颠覆性技术定价，到底应该给多少倍？",
+      "guide": "PE 不是预测工具，它是估值的“重力”。PE 越高，容错空间越小。但有个关键区别：2026 年的 Nvidia，每个季度都在用 100%+ 的盈利增长来回答质疑；1999 年的 Cisco，估值建立在“未来会增长”的预期上，而不是已经兑现的业绩。一个是“贵但有业绩支撑”，一个是“贵且只有故事”——这可能是两代算力周期最本质的区别。",
+      "blocks": [
+        { "type": "component", "component": "Mag7Valuation" }
+      ]
+    },
+    {
+      "id": "mag7-lineage",
+      "navLabel": "从哪里来的",
+      "label": "§ VI",
+      "title": "七巨头不是凭空出现的——科技龙头的代际更替",
+      "intro": "1970 年代有 Nifty Fifty（柯达、宝丽来、施乐——它们当年的地位不亚于今天的 Mag7）。1990 年代有四骑士（Cisco、Intel、Microsoft、Dell）。2013 年有了 FANG（Facebook、Amazon、Netflix、Google）。2017 年加了 Apple 变成 FAANG。2023 年才正式叫做 Magnificent 7。每一代都有自己时代的烙印——也有自己的泡沫。了解这个谱系，你才知道今天的七巨头在历史长河中的位置。",
+      "blocks": []
+    }
+  ]
+}

@@ -21,19 +21,23 @@ export type ArcChartKind =
 export type ArcChartSpec = {
   dataPath: string;
   description: string;
+  eyebrow?: string | undefined;
   id: string;
+  interpretation?: readonly string[] | undefined;
   kind: ArcChartKind;
-  scaleType?: "linear" | "log";
+  note?: string | undefined;
+  scaleType?: "linear" | "log" | undefined;
   source: string;
   series?: readonly {
-    axis?: number;
+    axis?: number | undefined;
     key: string;
     label: string;
-    unit?: string;
-    valueKey?: string;
-  }[];
+    unit?: string | undefined;
+    valueKey?: string | undefined;
+  }[] | undefined;
   title: string;
-  valueKey?: string;
-  valueLabel?: string;
-  yUnit?: string;
+  valueKey?: string | undefined;
+  valueLabel?: string | undefined;
+  whatToWatch?: readonly string[] | undefined;
+  yUnit?: string | undefined;
 };

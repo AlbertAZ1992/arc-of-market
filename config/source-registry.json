@@ -77,6 +77,15 @@
       "required_notice": "Research-only input pending a commercial display and derived-data license."
     },
     {
+      "id": "shiller-yale",
+      "name": "Robert J. Shiller Online Data",
+      "url": "https://www.econ.yale.edu/~shiller/data.htm",
+      "role": "Monthly U.S. stock prices, dividends, earnings, CPI, and CAPE since 1871",
+      "public_status": "citation-required",
+      "terms_url": "https://www.econ.yale.edu/~shiller/data.htm",
+      "required_notice": "Source: Robert J. Shiller, “U.S. Stock Markets 1871-Present and CAPE Ratio,” Yale University. ArcOfMarket is not affiliated with or endorsed by Yale University."
+    },
+    {
       "id": "sp-dji",
       "name": "S&P Dow Jones Indices",
       "url": "https://www.spglobal.com/spdji/",
@@ -101,6 +110,15 @@
       "role": "Nasdaq Composite and Nasdaq-100 index values",
       "public_status": "license-required",
       "required_notice": "Do not publicly display or commercialize official Nasdaq index values until the applicable index-data rights are recorded."
+    },
+    {
+      "id": "nasdaq-ndx-constituents",
+      "name": "Nasdaq-100 Companies",
+      "url": "https://www.nasdaq.com/solutions/global-indexes/nasdaq-100/companies",
+      "role": "Current Nasdaq-100 constituent symbols and company names",
+      "public_status": "license-required",
+      "terms_url": "https://www.nasdaq.com/terms-of-use",
+      "required_notice": "Only constituent identity is used as an input to ArcOfMarket-derived rankings; no Nasdaq index values are redistributed."
     },
     {
       "id": "ice-data-indices",

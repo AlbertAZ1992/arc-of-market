@@ -227,7 +227,7 @@ export const chartGroups: readonly ChartGroup[] = [
       entry(
         "调入与调出的历史",
         "公开可追溯的成分变更事件。",
-        "/sp500/#sp500-changes-chart",
+        "/sp500/#sp500-anatomy",
       ),
     ],
   },
@@ -238,9 +238,9 @@ export const chartGroups: readonly ChartGroup[] = [
     href: "/nasdaq/",
     charts: [
       entry(
-        "纳斯达克市场代理",
-        "QQQ、QQQM 与 ONEQ。",
-        "/nasdaq/#nasdaq-price-proxy",
+        "纳斯达克综合指数",
+        "半个世纪的成长与泡沫。",
+        "/nasdaq/#nasdaq-composite-suite",
       ),
       entry(
         "综合指数长期价格",

@@ -1,9 +1,11 @@
 ---
-import ArcJsonChart from "@/components/charts/ArcJsonChart.astro";
 import FinancialStressChart from "@/components/charts/FinancialStressChart.astro";
 import MacroDashboard from "@/components/charts/MacroDashboard.astro";
+import { formatProse } from "@/content/format-prose";
+import { pageContent } from "@/content/page-content";
 import SiteShell from "@/layouts/SiteShell.astro";
 
+const content = pageContent.macro;
 const dockItems = [
   { href: "#macro-policy-rates", label: "SOFR × EFFR × 目标利率" },
   { href: "#macro-term-structure", label: "期限结构" },
@@ -20,18 +22,15 @@ const dockItems = [
 
 <SiteShell
   bodyClass="chart-page"
-  description="用公开、可追溯的数据观察美国利率、物价、增长、仓位和全球金融压力。"
-  pageNavigation={{ current: "宏观环境", items: dockItems }}
-  title="宏观环境 · ArcOfMarket"
+  description={content.seo.description}
+  pageNavigation={{ current: content.hero.eyebrow, items: dockItems }}
+  title={content.seo.title}
 >
   <header class="page-header">
     <div class="page-header__inner">
-      <p class="eyebrow">MACRO ENVIRONMENT</p>
-      <h1>从资金价格到市场压力</h1>
-      <p class="muted">
-        利率、物价、增长、仓位和金融压力使用不同频率与发布时间。
-        这里保留每条数据的有效日期，不把月度和季度数据伪装成实时读数。
-      </p>
+      <p class="eyebrow">{content.hero.eyebrow}</p>
+      <h1>{content.hero.headline}</h1>
+      <p class="muted" set:html={formatProse(content.hero.intro)} />
     </div>
   </header>
 
@@ -39,18 +38,6 @@ const dockItems = [
     <MacroDashboard />
     <hr class="rule" />
     <FinancialStressChart />
-    <ArcJsonChart
-      dataPath="/data/macro_credit.json"
-      description="高收益与投资级期权调整利差，用于观察企业信用风险定价。"
-      id="macro-credit"
-      kind="nested"
-      series={[
-        { key: "hy_oas", label: "高收益 OAS", unit: "%" },
-        { key: "ig_oas", label: "投资级 OAS", unit: "%" },
-      ]}
-      source="FRED · ICE Data Indices"
-      title="信用利差"
-    />
   </main>
 
   <footer class="page-footer">

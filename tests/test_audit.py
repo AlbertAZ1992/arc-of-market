@@ -47,6 +47,17 @@ def test_quality_validation_detects_duplicate_dates_and_length_mismatch(tmp_path
     assert "root.values length 1 != dates length 2" in messages
 
 
+def test_quality_validation_allows_dimension_labels_next_to_dates(tmp_path: Path) -> None:
+    data = tmp_path / "data"
+    data.mkdir()
+    (data / "sample.json").write_text(
+        '{"dates":["2025-01-01","2025-01-02"],"tickers":["AAPL","MSFT","NVDA"]}\n',
+        encoding="utf-8",
+    )
+
+    assert validate_data(data, validate_rights=False) == []
+
+
 def test_quality_validation_includes_other_profile_failures(tmp_path: Path) -> None:
     data = tmp_path / "data"
     data.mkdir()

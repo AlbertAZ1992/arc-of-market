@@ -1,0 +1,64 @@
+<div id="ndx-rankings" class="ndx-rankings" aria-label="纳斯达克 100 成分涨跌排名">
+  <p data-ranking-status>正在加载排名数据…</p>
+  <table hidden>
+    <thead>
+      <tr><th>排名</th><th>代码</th><th>名称</th><th>收盘价</th><th>1周</th><th>1月</th><th>YTD</th><th>1年</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<script>
+  fetch("/data/ndx_rankings.json").then(r => r.json()).then(data => {
+    const el = document.getElementById("ndx-rankings")!;
+    const status = el.querySelector("[data-ranking-status]");
+    const table = el.querySelector("table")!;
+    const tbody = table.querySelector("tbody")!;
+    const rows = data.rows as any[];
+    rows.forEach((row, i) => {
+      const tr = document.createElement("tr");
+      const fmt = (v: number | null) => v == null ? "—" : `<span style="color:${v>=0?'#00a487':'#f60c3e'}">${v>0?'+':''}${v}%</span>`;
+      tr.innerHTML = `<td>${i+1}</td><td><strong>${row.ticker}</strong></td><td>${row.name}</td><td>${row.close}</td><td>${fmt(row.r1w)}</td><td>${fmt(row.r1m)}</td><td>${fmt(row.ytd)}</td><td>${fmt(row.r1y)}</td>`;
+      tbody.appendChild(tr);
+    });
+    status?.remove();
+    table.hidden = false;
+  }).catch(() => {
+    const s = document.querySelector("[data-ranking-status]");
+    if (s) s.textContent = `排名数据暂不可用`;
+  });
+</script>
+
+<style>
+  .ndx-rankings {
+    margin: 2rem 0 3.5rem;
+    max-width: 52rem;
+    overflow-x: auto;
+  }
+  .ndx-rankings table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+  .ndx-rankings th {
+    border-bottom: 1px solid var(--ink);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    padding: 0.5rem 0.65rem;
+    text-align: right;
+    text-transform: uppercase;
+  }
+  .ndx-rankings th:first-child, .ndx-rankings th:nth-child(2), .ndx-rankings th:nth-child(3) { text-align: left; }
+  .ndx-rankings td {
+    border-bottom: 1px solid var(--rule);
+    padding: 0.45rem 0.65rem;
+    text-align: right;
+    white-space: nowrap;
+  }
+  .ndx-rankings td:first-child { color: var(--ink-faint); text-align: left; }
+  .ndx-rankings td:nth-child(2) { text-align: left; }
+  .ndx-rankings td:nth-child(3) { color: var(--ink-soft); text-align: left; max-width: 8rem; overflow: hidden; text-overflow: ellipsis; }
+  [data-ranking-status] {
+    color: var(--ink-faint);
+    font-size: 0.72rem;
+    padding: 1rem;
+  }
+</style>
