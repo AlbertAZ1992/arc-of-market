@@ -1,0 +1,44 @@
+---
+type Props = {
+  title?: string;
+};
+
+const { title = "学到一个东西" } = Astro.props;
+---
+
+<aside class="takeaway-box">
+  <p class="takeaway-label">{title}</p>
+  <div class="takeaway-body">
+    <slot />
+  </div>
+</aside>
+
+<style>
+  .takeaway-box {
+    background: rgba(0, 164, 135, 0.04);
+    border: 1px solid rgba(0, 164, 135, 0.15);
+    margin: 2rem 0 0;
+    max-width: 48rem;
+    padding: 1.2rem 1.4rem;
+  }
+
+  .takeaway-label {
+    color: #00a487;
+    font-family: var(--font-serif);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    margin: 0 0 0.55rem;
+    text-transform: uppercase;
+  }
+
+  .takeaway-body {
+    color: var(--ink-soft);
+    font-size: 0.82rem;
+    line-height: 1.75;
+  }
+
+  .takeaway-body :global(strong) {
+    color: var(--ink);
+  }
+</style>

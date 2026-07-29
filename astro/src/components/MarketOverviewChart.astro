@@ -1,0 +1,159 @@
+<div
+  aria-label="S&P 500、Nasdaq-100、道琼斯和七巨头近一年相对表现"
+  class="market-overview-chart"
+  data-market-overview-chart
+  role="img"
+>
+  <p data-chart-status>正在读取已验证数据…</p>
+</div>
+
+<script>
+  import { LineChart } from "echarts/charts";
+  import {
+    AriaComponent,
+    GridComponent,
+    LegendComponent,
+    TooltipComponent,
+  } from "echarts/components";
+  import * as echarts from "echarts/core";
+  import { CanvasRenderer } from "echarts/renderers";
+
+  type NumberSeries = {
+    dates: string[];
+    values: number[];
+  };
+
+  type ProxyData = {
+    dates: string[];
+    series: Record<string, { label: string; values: number[] }>;
+  };
+
+  echarts.use([
+    AriaComponent,
+    CanvasRenderer,
+    GridComponent,
+    LegendComponent,
+    LineChart,
+    TooltipComponent,
+  ]);
+
+  function oneYearStart(latestDate: string): string {
+    const date = new Date(`${latestDate}T00:00:00Z`);
+    date.setUTCFullYear(date.getUTCFullYear() - 1);
+    return date.toISOString().slice(0, 10);
+  }
+
+  function normalizedPoints(
+    dates: string[],
+    values: number[],
+    start: string,
+  ): Array<[string, number]> {
+    const startIndex = dates.findIndex((date) => date >= start);
+    const safeIndex = startIndex < 0 ? 0 : startIndex;
+    const base = values[safeIndex] ?? 1;
+    return dates.slice(safeIndex).flatMap((date, index) => {
+      const value = values[safeIndex + index];
+      return value === undefined ? [] : [[date, (value / base) * 100]];
+    });
+  }
+
+  async function renderMarketOverview(element: HTMLElement) {
+    const [proxyResponse, mag7Response] = await Promise.all([
+      fetch("/data/etf_proxies.json"),
+      fetch("/data/mag7_equal_weight.json"),
+    ]);
+    if (!proxyResponse.ok || !mag7Response.ok) {
+      throw new Error("verified datasets unavailable");
+    }
+
+    const proxies = (await proxyResponse.json()) as ProxyData;
+    const mag7 = (await mag7Response.json()) as NumberSeries;
+    const latestDate = proxies.dates.at(-1) ?? "";
+    const start = oneYearStart(latestDate);
+    const definitions = [
+      { color: "#272727", key: "SPY", label: "S&P 500" },
+      { color: "#315da8", key: "QQQ", label: "Nasdaq-100" },
+      { color: "#777777", key: "DIA", label: "Dow" },
+    ] as const;
+    const benchmarkSeries = definitions.flatMap((definition) => {
+      const source = proxies.series[definition.key];
+      return source
+        ? [{
+            data: normalizedPoints(proxies.dates, source.values, start),
+            lineStyle: { color: definition.color, width: 1.7 },
+            name: definition.label,
+            sampling: "lttb",
+            showSymbol: false,
+            type: "line" as const,
+          }]
+        : [];
+    });
+    const series = [
+      ...benchmarkSeries,
+      {
+        data: normalizedPoints(mag7.dates, mag7.values, start),
+        lineStyle: { color: "#f60c3e", width: 2 },
+        name: "Mag7 等权",
+        sampling: "lttb",
+        showSymbol: false,
+        type: "line" as const,
+      },
+    ];
+    element.querySelector("[data-chart-status]")?.remove();
+
+    const chart = echarts.init(element);
+    chart.setOption({
+      animation: false,
+      aria: { enabled: true },
+      grid: { bottom: 44, containLabel: true, left: 4, right: 8, top: 42 },
+      legend: { right: 4, textStyle: { color: "#595959", fontSize: 11 }, top: 0 },
+      tooltip: { trigger: "axis", valueFormatter: (value: number) => value.toFixed(1) },
+      xAxis: {
+        axisLabel: { color: "#595959", hideOverlap: true },
+        axisLine: { lineStyle: { color: "#bdbdbd" } },
+        splitLine: { show: false },
+        type: "time",
+      },
+      yAxis: {
+        axisLabel: { color: "#595959" },
+        name: "一年前 = 100",
+        splitLine: { lineStyle: { color: "#dedede", type: "dashed" } },
+        type: "value",
+      },
+      series,
+    });
+
+    new ResizeObserver(() => chart.resize()).observe(element);
+  }
+
+  document
+    .querySelectorAll<HTMLElement>("[data-market-overview-chart]")
+    .forEach((element) => {
+      renderMarketOverview(element).catch(() => {
+        element.hidden = true;
+      });
+    });
+</script>
+
+<style>
+  .market-overview-chart {
+    height: 25rem;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .market-overview-chart [data-chart-status] {
+    align-items: center;
+    color: var(--ink-faint);
+    display: flex;
+    font-size: 0.72rem;
+    height: 100%;
+    justify-content: center;
+  }
+
+  @media (max-width: 700px) {
+    .market-overview-chart {
+      height: 21rem;
+    }
+  }
+</style>

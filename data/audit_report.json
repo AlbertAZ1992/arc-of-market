@@ -1,22 +1,383 @@
 {
-  "updated": "2026-07-26T16:30:04Z",
-  "changes": [],
-  "changed_files": [],
-  "delta": 0,
+  "updated": "2026-07-28T16:24:38Z",
+  "changes": [
+    {
+      "status": " M",
+      "path": "data/breadth_pulse.json"
+    },
+    {
+      "status": " M",
+      "path": "data/cot_vix.json"
+    },
+    {
+      "status": " M",
+      "path": "data/equity_allocation.json"
+    },
+    {
+      "status": " M",
+      "path": "data/financial_stress.json"
+    },
+    {
+      "status": " M",
+      "path": "data/ixic_annual.json"
+    },
+    {
+      "status": " M",
+      "path": "data/ixic_bullbear.json"
+    },
+    {
+      "status": " M",
+      "path": "data/ixic_century.json"
+    },
+    {
+      "status": " M",
+      "path": "data/ixic_distribution.json"
+    },
+    {
+      "status": " M",
+      "path": "data/ixic_drawdowns.json"
+    },
+    {
+      "status": " M",
+      "path": "data/ixic_extremes.json"
+    },
+    {
+      "status": " M",
+      "path": "data/ixic_holding.json"
+    },
+    {
+      "status": " M",
+      "path": "data/ixic_intrayear.json"
+    },
+    {
+      "status": " M",
+      "path": "data/ixic_rolling5y.json"
+    },
+    {
+      "status": " M",
+      "path": "data/ixic_rollmatrix.json"
+    },
+    {
+      "status": " M",
+      "path": "data/ixic_seasonality.json"
+    },
+    {
+      "status": " M",
+      "path": "data/ixic_volatility.json"
+    },
+    {
+      "status": " M",
+      "path": "data/macro_growth.json"
+    },
+    {
+      "status": " M",
+      "path": "data/macro_prices.json"
+    },
+    {
+      "status": " M",
+      "path": "data/macro_rates.json"
+    },
+    {
+      "status": " M",
+      "path": "data/meta.json"
+    },
+    {
+      "status": " M",
+      "path": "data/ndx_annual.json"
+    },
+    {
+      "status": " M",
+      "path": "data/ndx_bullbear.json"
+    },
+    {
+      "status": " M",
+      "path": "data/ndx_century.json"
+    },
+    {
+      "status": " M",
+      "path": "data/ndx_distribution.json"
+    },
+    {
+      "status": " M",
+      "path": "data/ndx_drawdowns.json"
+    },
+    {
+      "status": " M",
+      "path": "data/ndx_extremes.json"
+    },
+    {
+      "status": " M",
+      "path": "data/ndx_holding.json"
+    },
+    {
+      "status": " M",
+      "path": "data/ndx_intrayear.json"
+    },
+    {
+      "status": " M",
+      "path": "data/ndx_rolling5y.json"
+    },
+    {
+      "status": " M",
+      "path": "data/ndx_rollmatrix.json"
+    },
+    {
+      "status": " M",
+      "path": "data/ndx_seasonality.json"
+    },
+    {
+      "status": " M",
+      "path": "data/ndx_valuation_proxy.json"
+    },
+    {
+      "status": " M",
+      "path": "data/ndx_volatility.json"
+    },
+    {
+      "status": " M",
+      "path": "data/recessions.json"
+    },
+    {
+      "status": " M",
+      "path": "data/regime_rotation.json"
+    },
+    {
+      "status": " M",
+      "path": "data/rs_leaders.json"
+    },
+    {
+      "status": " M",
+      "path": "data/source_catalog.json"
+    },
+    {
+      "status": " M",
+      "path": "data/sp500_annual.json"
+    },
+    {
+      "status": " M",
+      "path": "data/sp500_bullbear.json"
+    },
+    {
+      "status": " M",
+      "path": "data/sp500_century.json"
+    },
+    {
+      "status": " M",
+      "path": "data/sp500_changes.json"
+    },
+    {
+      "status": " M",
+      "path": "data/sp500_constituents.json"
+    },
+    {
+      "status": " M",
+      "path": "data/sp500_distribution.json"
+    },
+    {
+      "status": " M",
+      "path": "data/sp500_drawdowns.json"
+    },
+    {
+      "status": " M",
+      "path": "data/sp500_extremes.json"
+    },
+    {
+      "status": " M",
+      "path": "data/sp500_holding.json"
+    },
+    {
+      "status": " M",
+      "path": "data/sp500_intrayear.json"
+    },
+    {
+      "status": " M",
+      "path": "data/sp500_rolling5y.json"
+    },
+    {
+      "status": " M",
+      "path": "data/sp500_rollmatrix.json"
+    },
+    {
+      "status": " M",
+      "path": "data/sp500_seasonality.json"
+    },
+    {
+      "status": " M",
+      "path": "data/sp500_total_return.json"
+    },
+    {
+      "status": " M",
+      "path": "data/sp500_volatility.json"
+    },
+    {
+      "status": " M",
+      "path": "data/vol_family.json"
+    },
+    {
+      "status": "??",
+      "path": "data/dji_annual.json"
+    },
+    {
+      "status": "??",
+      "path": "data/dji_century.json"
+    },
+    {
+      "status": "??",
+      "path": "data/dji_drawdowns.json"
+    },
+    {
+      "status": "??",
+      "path": "data/etf_proxies.json"
+    },
+    {
+      "status": "??",
+      "path": "data/insider_trades.json"
+    },
+    {
+      "status": "??",
+      "path": "data/inst_holdings.json"
+    },
+    {
+      "status": "??",
+      "path": "data/mag7_correlation.json"
+    },
+    {
+      "status": "??",
+      "path": "data/mag7_equal_weight.json"
+    },
+    {
+      "status": "??",
+      "path": "data/mag7_prices.json"
+    },
+    {
+      "status": "??",
+      "path": "data/mag7_weight.json"
+    },
+    {
+      "status": "??",
+      "path": "data/ndx_breadth.json"
+    },
+    {
+      "status": "??",
+      "path": "data/ndx_daily_dist.json"
+    },
+    {
+      "status": "??",
+      "path": "data/ndx_monthly_heatmap.json"
+    },
+    {
+      "status": "??",
+      "path": "data/ndx_rankings.json"
+    },
+    {
+      "status": "??",
+      "path": "data/nvda_csco_valuation.json"
+    },
+    {
+      "status": "??",
+      "path": "data/shiller_cape.json"
+    },
+    {
+      "status": "??",
+      "path": "data/sp500_breadth.json"
+    },
+    {
+      "status": "??",
+      "path": "data/sp500_daily_dist.json"
+    },
+    {
+      "status": "??",
+      "path": "data/sp500_monthly_heatmap.json"
+    },
+    {
+      "status": "??",
+      "path": "data/sp500_return_decomp.json"
+    },
+    {
+      "status": "??",
+      "path": "data/vxn.json"
+    }
+  ],
+  "changed_files": [
+    "data/breadth_pulse.json",
+    "data/cot_vix.json",
+    "data/equity_allocation.json",
+    "data/financial_stress.json",
+    "data/ixic_annual.json",
+    "data/ixic_bullbear.json",
+    "data/ixic_century.json",
+    "data/ixic_distribution.json",
+    "data/ixic_drawdowns.json",
+    "data/ixic_extremes.json",
+    "data/ixic_holding.json",
+    "data/ixic_intrayear.json",
+    "data/ixic_rolling5y.json",
+    "data/ixic_rollmatrix.json",
+    "data/ixic_seasonality.json",
+    "data/ixic_volatility.json",
+    "data/macro_growth.json",
+    "data/macro_prices.json",
+    "data/macro_rates.json",
+    "data/meta.json",
+    "data/ndx_annual.json",
+    "data/ndx_bullbear.json",
+    "data/ndx_century.json",
+    "data/ndx_distribution.json",
+    "data/ndx_drawdowns.json",
+    "data/ndx_extremes.json",
+    "data/ndx_holding.json",
+    "data/ndx_intrayear.json",
+    "data/ndx_rolling5y.json",
+    "data/ndx_rollmatrix.json",
+    "data/ndx_seasonality.json",
+    "data/ndx_valuation_proxy.json",
+    "data/ndx_volatility.json",
+    "data/recessions.json",
+    "data/regime_rotation.json",
+    "data/rs_leaders.json",
+    "data/source_catalog.json",
+    "data/sp500_annual.json",
+    "data/sp500_bullbear.json",
+    "data/sp500_century.json",
+    "data/sp500_changes.json",
+    "data/sp500_constituents.json",
+    "data/sp500_distribution.json",
+    "data/sp500_drawdowns.json",
+    "data/sp500_extremes.json",
+    "data/sp500_holding.json",
+    "data/sp500_intrayear.json",
+    "data/sp500_rolling5y.json",
+    "data/sp500_rollmatrix.json",
+    "data/sp500_seasonality.json",
+    "data/sp500_total_return.json",
+    "data/sp500_volatility.json",
+    "data/vol_family.json",
+    "data/dji_annual.json",
+    "data/dji_century.json",
+    "data/dji_drawdowns.json",
+    "data/etf_proxies.json",
+    "data/insider_trades.json",
+    "data/inst_holdings.json",
+    "data/mag7_correlation.json",
+    "data/mag7_equal_weight.json",
+    "data/mag7_prices.json",
+    "data/mag7_weight.json",
+    "data/ndx_breadth.json",
+    "data/ndx_daily_dist.json",
+    "data/ndx_monthly_heatmap.json",
+    "data/ndx_rankings.json",
+    "data/nvda_csco_valuation.json",
+    "data/shiller_cape.json",
+    "data/sp500_breadth.json",
+    "data/sp500_daily_dist.json",
+    "data/sp500_monthly_heatmap.json",
+    "data/sp500_return_decomp.json",
+    "data/vxn.json"
+  ],
+  "delta": 74,
   "reliable": true,
   "deleted_files": [],
   "retired_files": [],
-  "quality_issues": [
-    {
-      "severity": "warning",
-      "path": "meta.json",
-      "issue": "source insider: missing-sec-identity-or-edgartools"
-    },
-    {
-      "severity": "warning",
-      "path": "meta.json",
-      "issue": "source thirteenf: missing-sec-identity-or-edgartools"
-    }
-  ],
+  "quality_issues": [],
   "note": "本报告记录当前工作区相对 Git HEAD 的数据变更，并检查必需文件、覆盖、新鲜度、日期及数组一致性；哈希链负责检测已发布链记录的删改。"
 }

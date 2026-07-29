@@ -1,4 +1,9 @@
 ---
+import cotVixJson from "../../../../data/cot_vix.json";
+import equityAllocationJson from "../../../../data/equity_allocation.json";
+import macroGrowthJson from "../../../../data/macro_growth.json";
+import macroPricesJson from "../../../../data/macro_prices.json";
+import macroRatesJson from "../../../../data/macro_rates.json";
 import recessionsJson from "../../../../data/recessions.json";
 
 type Recession = {
@@ -10,16 +15,61 @@ type RecessionDataset = {
   periods: Recession[];
 };
 
+type NumberSeries = {
+  dates: string[];
+  values: number[];
+};
+
+type MacroDataset = Record<string, NumberSeries | unknown>;
+type AllocationData = NumberSeries & {
+  meta: {
+    current_percentile: number;
+  };
+};
+type CotData = {
+  latest: {
+    am_net_pct_oi: number;
+    date: string;
+    lev_net_pct_oi: number;
+  };
+};
+
+function latest(dataset: Record<string, NumberSeries | unknown>, key: string): number {
+  const series = dataset[key] as NumberSeries | undefined;
+  return series?.values.at(-1) ?? 0;
+}
+
 const recentRecessions = (recessionsJson as RecessionDataset).periods.slice(-8).reverse();
+const rates = macroRatesJson as unknown as MacroDataset;
+const prices = macroPricesJson as unknown as MacroDataset;
+const growth = macroGrowthJson as unknown as MacroDataset;
+const allocation = equityAllocationJson as AllocationData;
+const cot = cotVixJson as CotData;
+const sofr = latest(rates, "sofr");
+const effr = latest(rates, "effr");
+const dgs2 = latest(rates, "dgs2");
+const dgs10 = latest(rates, "dgs10");
+const dgs30 = latest(rates, "dgs30");
+const spread = latest(rates, "t10y2y");
+const cpi = latest(prices, "cpi_yoy");
+const corePce = latest(prices, "core_pce_yoy");
+const ppi = latest(prices, "ppi_yoy");
+const gdp = latest(growth, "gdp_qoq");
+const unemployment = latest(growth, "unrate");
+const payrolls = latest(growth, "nfp");
+const allocationValue = (allocation.values.at(-1) ?? 0) * 100;
 ---
 
 <section class="macro-dashboard" aria-labelledby="macro-dashboard-title">
   <header class="measure">
     <p class="faint">MACRO · CURRENT READINGS</p>
-    <h2 id="macro-dashboard-title">宏观环境：利率、物价、增长与仓位</h2>
+    <h2 id="macro-dashboard-title">
+      SOFR 为 {sofr.toFixed(2)}%，CPI 同比 {cpi.toFixed(2)}%：
+      资金成本和通胀都没有回到低位
+    </h2>
     <p class="muted">
-      这些图描述当前宏观位置，不预测下一步方向。FRED 数据采用最新修订版本，
-      因此今天看到的历史值可能与当时首次发布的数值不同。
+      下面按资金成本、期限结构、物价、增长、就业和市场压力依次展开。
+      FRED 数据采用最新修订版本，历史值可能与首次发布时不同。
     </p>
   </header>
 
@@ -59,8 +109,11 @@ const recentRecessions = (recessionsJson as RecessionDataset).periods.slice(-8).
   <div class="chapter measure-wide" id="macro-policy-rates">
     <div class="chapter__copy">
       <p class="faint">01 · POLICY RATES</p>
-      <h3>SOFR × EFFR × 目标利率</h3>
-      <p class="muted">隔夜担保融资利率与有效联邦基金利率描述美国短端资金价格。</p>
+      <h3>SOFR {sofr.toFixed(2)}%，EFFR {effr.toFixed(2)}%</h3>
+      <p class="muted">
+        两个隔夜利率仅相差 {Math.abs(sofr - effr).toFixed(2)} 个百分点，
+        短端融资价格仍紧贴政策利率。
+      </p>
     </div>
     <div
       id="macro-policy-chart"
@@ -75,8 +128,10 @@ const recentRecessions = (recessionsJson as RecessionDataset).periods.slice(-8).
   <div class="chapter measure-wide" id="macro-term-structure">
     <div class="chapter__copy">
       <p class="faint">02 · TREASURY CURVE</p>
-      <h3>期限结构</h3>
-      <p class="muted">2 年、10 年与 30 年美国国债收益率。</p>
+      <h3>2 年 {dgs2.toFixed(2)}%，10 年 {dgs10.toFixed(2)}%，30 年 {dgs30.toFixed(2)}%</h3>
+      <p class="muted">
+        长端收益率高于 2 年期，持有更长期限债券需要更高收益率补偿。
+      </p>
     </div>
     <div
       id="macro-rates-chart"
@@ -91,8 +146,11 @@ const recentRecessions = (recessionsJson as RecessionDataset).periods.slice(-8).
   <div class="chapter measure-wide" id="macro-yield-spread">
     <div class="chapter__copy">
       <p class="faint">03 · YIELD SPREAD</p>
-      <h3>10Y − 2Y 期限利差</h3>
-      <p class="muted">观察期限曲线倒挂、再陡峭化与经济周期位置。</p>
+      <h3>10 年减 2 年利差为 {spread.toFixed(2)} 个百分点</h3>
+      <p class="muted">
+        曲线已经从倒挂转回正值；这描述融资期限结构变化，
+        不给出精确衰退日期。
+      </p>
     </div>
     <div
       id="macro-spread-chart"
@@ -107,9 +165,13 @@ const recentRecessions = (recessionsJson as RecessionDataset).periods.slice(-8).
   <div class="chapter measure-wide" id="macro-prices">
     <div class="chapter__copy">
       <p class="faint">04 · PRICES</p>
-      <h3>物价压力</h3>
+      <h3>
+        CPI {cpi.toFixed(2)}%，核心 PCE {corePce.toFixed(2)}%，
+        全部商品 PPI {ppi.toFixed(2)}%
+      </h3>
       <p class="muted">
-        CPI、核心 PCE 与全部商品 PPI 同比。PPIACO 不是最终需求 PPI，不能混称。
+        CPI、核心 PCE 与全部商品 PPI 同比。PPIACO 不是最终需求 PPI，
+        不能混称。
       </p>
     </div>
     <div
@@ -125,8 +187,11 @@ const recentRecessions = (recessionsJson as RecessionDataset).periods.slice(-8).
   <div class="chapter measure-wide" id="macro-gdp">
     <div class="chapter__copy">
       <p class="faint">05 · GROWTH</p>
-      <h3>实际 GDP</h3>
-      <p class="muted">季度实际 GDP 环比年化增长率，历史值可能被后续修订。</p>
+      <h3>实际 GDP 环比年化增长 {gdp.toFixed(1)}%</h3>
+      <p class="muted">
+        当前读数仍为正增长；GDP 按季度发布且会修订，
+        不能与日频市场数据同步解读。
+      </p>
     </div>
     <div
       id="macro-growth-chart"
@@ -141,8 +206,11 @@ const recentRecessions = (recessionsJson as RecessionDataset).periods.slice(-8).
   <div class="chapter measure-wide" id="macro-employment">
     <div class="chapter__copy">
       <p class="faint">06 · EMPLOYMENT</p>
-      <h3>就业</h3>
-      <p class="muted">非农新增就业与失业率使用双轴并列观察。</p>
+      <h3>新增非农 {payrolls.toFixed(0)} 千人，失业率 {unemployment.toFixed(1)}%</h3>
+      <p class="muted">
+        新增就业衡量当月变化，失业率衡量劳动力市场存量；
+        两者需要并列观察。
+      </p>
     </div>
     <div
       id="macro-employment-chart"
@@ -157,9 +225,13 @@ const recentRecessions = (recessionsJson as RecessionDataset).periods.slice(-8).
   <div class="chapter measure-wide" id="macro-equity-allocation">
     <div class="chapter__copy">
       <p class="faint">07 · ALLOCATION</p>
-      <h3>美国金融资产股票配置占比</h3>
+      <h3>
+        股票配置占比 {allocationValue.toFixed(1)}%，位于历史第
+        {allocation.meta.current_percentile.toFixed(1)} 百分位
+      </h3>
       <p class="muted">
-        用美联储 Z.1 七个序列计算股票市值占股票市值与指定债务余额之和的比例。
+        用美联储 Z.1 七个序列计算股票市值占股票市值与指定债务余额
+        之和的比例。
       </p>
     </div>
     <div
@@ -175,10 +247,14 @@ const recentRecessions = (recessionsJson as RecessionDataset).periods.slice(-8).
   <div class="chapter measure-wide" id="macro-positioning">
     <div class="chapter__copy">
       <p class="faint">09 · POSITIONING</p>
-      <h3>VIX 期货持仓</h3>
+      <h3>
+        VIX 期货：杠杆基金净多 {cot.latest.lev_net_pct_oi.toFixed(2)}%，
+        资管机构净空 {Math.abs(cot.latest.am_net_pct_oi).toFixed(2)}%
+      </h3>
       <p class="muted">
-        杠杆基金与资管机构净头寸占未平仓合约比例。周二持仓通常周五发布，
-        严格回测必须使用记录的首次观察时间。
+        截至 {cot.latest.date}，两类机构站在相反方向。
+        周二持仓通常周五发布，
+        它描述仓位差异，不代表谁会在下一周获利。
       </p>
     </div>
     <div
@@ -523,11 +599,16 @@ const recentRecessions = (recessionsJson as RecessionDataset).periods.slice(-8).
     renderCot(cot);
   }
 
-  renderMacroDashboard().catch((error: unknown) => {
-    document.querySelectorAll("[data-chart-status]").forEach((element) => {
-      element.textContent = `数据读取失败：${String(error)}`;
+  const macroDashboard = document.querySelector(".macro-dashboard");
+  if (macroDashboard) {
+    renderMacroDashboard().catch((error: unknown) => {
+      macroDashboard
+        .querySelectorAll("[data-chart-status]")
+        .forEach((element) => {
+          element.textContent = `数据读取失败：${String(error)}`;
+        });
     });
-  });
+  }
 </script>
 
 <style>

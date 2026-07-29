@@ -1,13 +1,16 @@
 ---
 import SolarIcon from "@/components/SolarIcon.astro";
+import StrategySignalPreview from "@/components/StrategySignalPreview.astro";
 import SiteShell from "@/layouts/SiteShell.astro";
+import { loadSignalPublication } from "@/lib/signal-publication";
 import { strategyLenses } from "@/lib/strategy-lenses";
 
+const publication = loadSignalPublication();
 const readingOrder = [
-  ["01", "方向", "趋势引擎先回答市场的主要方向。"],
-  ["02", "确认", "市场脉冲再判断这段变化得到多少参与和风险确认。"],
-  ["03", "分配", "风格天平观察力量正集中在哪一类资产。"],
-  ["04", "背景", "创新时钟把短期变化放进更长的产业周期。"],
+  ["01", "趋势", "计划输入价格、50 日和 200 日均线，输出扩张、观望或防守状态。"],
+  ["02", "广度", "计划输入 50 日和 200 日广度与 VIX，检查指数涨跌的参与范围。"],
+  ["03", "风格", "计划比较成长、价值和主要行业 ETF 的一周与一月相对回报。"],
+  ["04", "周期", "计划按月比较资本开支、半导体回报和利率，标记技术投资阶段。"],
 ] as const;
 ---
 
@@ -18,13 +21,15 @@ const readingOrder = [
 >
   <main class="signals">
     <header class="signals-hero">
-      <p class="eyebrow">STRATEGY SIGNALS</p>
-      <h1>四种视角，<br />读懂同一个市场。</h1>
+      <p class="eyebrow">STRATEGY SIGNALS · SUBSCRIBER PRODUCT</p>
+      <h1>四项策略仍在定义和验证，<br />当前不发布信号值。</h1>
       <p>
-        市场很少只由一条曲线决定。ArcOfMarket
-        把主要趋势、市场强弱、风格迁移与长期周期整理成四个互相补充的观察坐标。
+        当前页面公开每项策略的输入范围、计划更新频率和可用数据区间。公式冻结并完成
+        样本外验证后，订阅版才会提供方向、目标仓位、下一触发、失效条件和变更提醒。
       </p>
     </header>
+
+    <StrategySignalPreview />
 
     <section class="strategy-list" aria-label="四个市场观察维度">
       {
@@ -45,11 +50,44 @@ const readingOrder = [
       }
     </section>
 
+    <section class="product-boundary" aria-labelledby="boundary-title">
+      <header>
+        <p class="eyebrow">FREE VS SUBSCRIBER</p>
+        <h2 id="boundary-title">免费页面公开研究依据，订阅版提供五项执行信息。</h2>
+      </header>
+      <div class="boundary-grid">
+        <article>
+          <span>公开可见</span>
+          <h3>研究数据与计算口径</h3>
+          <ul>
+            <li>主要指数、广度、估值、风险与宏观图表</li>
+            <li>模型覆盖范围、更新频率和研究样本</li>
+            <li>数据来源、计算口径、限制条件</li>
+          </ul>
+        </article>
+        <article class="boundary-grid__paid">
+          <span>订阅后可见</span>
+          <h3>当日信号与变更提醒</h3>
+          <ul>
+            {
+              publication.lockedFields.map((field) => <li>{field}</li>)
+            }
+            <li>信号变更原因与及时提醒</li>
+          </ul>
+        </article>
+      </div>
+      <p class="boundary-status">
+        当前状态：{publication.subscriptionEnabled
+          ? "订阅入口已开放"
+          : "公式尚未冻结，付费入口未开放。"}
+      </p>
+    </section>
+
     <section class="reading" aria-labelledby="reading-title">
       <header>
         <p class="eyebrow">HOW TO READ</p>
-        <h2 id="reading-title">从方向开始，到长期背景结束。</h2>
-        <p>四项读数按顺序回答不同问题，避免用一个指标解释所有市场变化。</p>
+        <h2 id="reading-title">四项策略分别检查趋势、广度、风格和产业周期。</h2>
+        <p>每项策略使用不同数据，不会把单一指标扩展成完整市场结论。</p>
       </header>
       <div class="reading-grid">
         {
@@ -67,9 +105,9 @@ const readingOrder = [
     <section class="signals-end">
       <div>
         <p class="eyebrow">THE MARKET MAP</p>
-        <h2>先看事实，再读状态。</h2>
+        <h2>查看当日市场数据、历史图表和现有计算方法。</h2>
         <p>
-          首页给出当日市场环境，全部图表保留长期历史，方法论说明每项判断使用什么数据和规则。
+          首页列出最新价格、广度和风险读数；专题页保留完整历史；方法页说明已上线指标的口径。
         </p>
       </div>
       <nav aria-label="继续阅读">
@@ -171,6 +209,68 @@ const readingOrder = [
 
   .strategy-meta strong {
     font-family: var(--font-mono);
+  }
+
+  .product-boundary {
+    border-bottom: 1px dotted var(--rule);
+    padding: 4rem 0;
+  }
+
+  .product-boundary > header {
+    max-width: 52rem;
+  }
+
+  .product-boundary h2 {
+    margin: 0.55rem 0 1.5rem;
+  }
+
+  .boundary-grid {
+    border-block: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .boundary-grid article {
+    min-height: 14rem;
+    padding: 1.4rem 1.5rem 1.4rem 0;
+  }
+
+  .boundary-grid article + article {
+    border-left: 1px solid var(--rule);
+    padding-left: 1.5rem;
+  }
+
+  .boundary-grid span {
+    color: var(--ink-faint);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+  }
+
+  .boundary-grid h3 {
+    font-size: 1rem;
+    margin: 1.5rem 0 0.7rem;
+  }
+
+  .boundary-grid ul {
+    color: var(--ink-soft);
+    font-size: 0.76rem;
+    line-height: 1.75;
+    margin: 0;
+    padding-left: 1rem;
+  }
+
+  .boundary-grid__paid {
+    background: rgba(246, 12, 62, 0.035);
+  }
+
+  .boundary-grid__paid span {
+    color: var(--main);
+  }
+
+  .boundary-status {
+    color: var(--ink-faint);
+    font-size: 0.68rem;
+    margin: 0.8rem 0 0;
   }
 
   .reading {
@@ -278,6 +378,16 @@ const readingOrder = [
       grid-column: 2 / -1;
       grid-template-columns: auto auto;
       justify-content: start;
+    }
+
+    .boundary-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .boundary-grid article + article {
+      border-left: 0;
+      border-top: 1px solid var(--rule);
+      padding-left: 0;
     }
   }
 

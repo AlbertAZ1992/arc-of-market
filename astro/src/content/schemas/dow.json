@@ -1,0 +1,28 @@
+{
+  "id": "dow",
+  "route": "/dow/",
+  "seo": "seo",
+  "hero": "hero",
+  "chapters": [
+    {
+      "id": "dow-benchmarks",
+      "navLabel": "指数对比",
+      "label": "§ I · BENCHMARKS",
+      "copy": "chapter-benchmarks",
+      "blocks": [
+        { "type": "chart", "chart": "dow-etf-proxies" }
+      ]
+    },
+    {
+      "id": "dow-century",
+      "navLabel": "长期回报与回撤",
+      "label": "§ II · LONG-TERM HISTORY",
+      "copy": "chapter-century",
+      "blocks": [
+        { "type": "chart", "chart": "dow-century" },
+        { "type": "chart", "chart": "dow-annual" },
+        { "type": "chart", "chart": "dow-drawdowns" }
+      ]
+    }
+  ]
+}

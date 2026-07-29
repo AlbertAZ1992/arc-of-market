@@ -242,7 +242,8 @@ function nestedOption(
         ]
       : { name: specs[0]?.unit ?? "", type: "value" },
     series: specs.map((spec) => {
-      const nested = record(data[spec.key]);
+      const grouped = record(data["series"]);
+      const nested = record(data[spec.key] ?? grouped[spec.key]);
       const dates = strings(nested["dates"]);
       const values = numbers(nested[spec.valueKey ?? "values"]);
       return {
@@ -439,30 +440,30 @@ function seasonalityOption(data: JsonRecord): EChartsCoreOption {
 }
 
 function driversOption(data: JsonRecord): EChartsCoreOption {
-  const values = rows(data["rows"]);
+  const years = strings(data["years"]);
+  const priceReturn = numbers(data["price_return"]);
+  const dividendContribution = numbers(data["dividend_contribution"]);
+  const totalReturn = numbers(data["total_return"]);
   return {
     ...axisOption("%"),
-    legend: { data: ["盈利贡献", "估值贡献", "年度回报"] },
-    xAxis: {
-      data: values.map((item) => String(item["year"] ?? "")),
-      type: "category",
-    },
+    legend: { data: ["价格回报", "股息贡献", "总回报"] },
+    xAxis: { data: years, type: "category" },
     series: [
       {
-        data: values.map((item) => Number(item["r_eps"] ?? 0)),
-        name: "盈利贡献",
+        data: priceReturn,
+        name: "价格回报",
         stack: "driver",
         type: "bar",
       },
       {
-        data: values.map((item) => Number(item["r_valuation"] ?? 0)),
-        name: "估值贡献",
+        data: dividendContribution,
+        name: "股息贡献",
         stack: "driver",
         type: "bar",
       },
       {
-        data: values.map((item) => Number(item["r_total"] ?? 0)),
-        name: "年度回报",
+        data: totalReturn,
+        name: "总回报",
         showSymbol: false,
         type: "line",
       },

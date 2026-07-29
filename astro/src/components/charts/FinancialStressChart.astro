@@ -1,29 +1,47 @@
 ---
+import financialStressJson from "../../../../data/financial_stress.json";
+
+type StressData = {
+  latest: {
+    credit: number;
+    date: string;
+    fsi: number;
+    funding: number;
+  };
+};
+
 const sourceUrl = "https://www.financialresearch.gov/financial-stress-index/";
+const latest = (financialStressJson as StressData).latest;
+const latestState = latest.fsi > 0 ? "高于历史均值" : "低于历史均值";
 ---
 
 <section class="stress-section" aria-labelledby="stress-title">
   <header class="measure">
     <p class="faint">MACRO · FINANCIAL STRESS</p>
-    <h2 id="stress-title">全球金融压力：总指数与信用、融资贡献</h2>
+    <h2 id="stress-title">
+      OFR FSI 为 {latest.fsi.toFixed(2)}：当前金融压力低于历史均值
+    </h2>
     <p class="muted">
-      OFR FSI 把 33 个市场变量合成为一条日频压力曲线。零代表历史平均水平；
-      高于零表示压力高于平均。它是对市场压力的广义观察，不等于 ICE 高收益或投资级 OAS。
+      OFR FSI 把 33 个市场变量合成为一条日频压力曲线。
+      零代表历史平均水平；
+      当前信用贡献为 {latest.credit.toFixed(2)}，融资贡献为
+      {latest.funding.toFixed(2)}。它是广义压力指标，
+      不等于 ICE 高收益或投资级 OAS。
     </p>
   </header>
 
   <div class="latest-strip measure-wide" aria-live="polite">
     <div>
       <span class="faint">最新 OFR FSI</span>
-      <strong data-latest-value>—</strong>
+      <strong data-latest-value>{latest.fsi.toFixed(2)}</strong>
     </div>
     <div>
       <span class="faint">状态</span>
-      <strong data-latest-state>读取中</strong>
+      <strong data-latest-state>{latestState}</strong>
     </div>
     <div>
       <span class="faint">数据日期</span>
-      <strong data-latest-date>—</strong>
+      <strong data-latest-date>{latest.date}</strong>
     </div>
   </div>
 

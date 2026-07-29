@@ -1,0 +1,278 @@
+---
+import SolarIcon from "@/components/SolarIcon.astro";
+import { loadSignalPublication } from "@/lib/signal-publication";
+
+type Props = {
+  compact?: boolean;
+};
+
+const { compact = false } = Astro.props;
+const publication = loadSignalPublication();
+const sampleLabel = `${publication.evidence.sampleStart.slice(0, 4)}–${
+  publication.evidence.sampleEnd.slice(0, 4)
+}`;
+---
+
+<section
+  aria-labelledby="signal-preview-title"
+  class:list={["signal-gate", { "signal-gate--compact": compact }]}
+  id={compact ? "strategy-signals" : undefined}
+>
+  <header class="signal-gate__intro">
+    <div>
+      <p class="eyebrow">STRATEGY SIGNALS · PAID LAYER</p>
+      <h2 id="signal-preview-title">免费页面不显示当前方向、仓位、触发和失效条件。</h2>
+    </div>
+    <p>
+      当前公开输入范围、计划频率和数据覆盖；公式、回测和发布审核完成后才开放订阅。
+    </p>
+  </header>
+
+  <div class="signal-gate__engines" aria-label="四套策略模型">
+    {
+      publication.engines.map((engine) => (
+        <article>
+          <div class="signal-gate__name">
+            <span>{engine.code}</span>
+            <strong>{engine.title}</strong>
+            <small>{engine.dimension} · 计划 {engine.cadence}更新</small>
+          </div>
+          <div class="signal-gate__locked">
+            <SolarIcon name="lock-keyhole-linear" size={18} />
+            <span>{engine.lockedFields.join(" · ")}</span>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+
+  <footer class="signal-gate__proof">
+    <div>
+      <span>可用数据区间</span>
+      <strong>{sampleLabel}</strong>
+    </div>
+    <div>
+      <span>日度数据</span>
+      <strong>{publication.evidence.observations.toLocaleString("zh-CN")} 条</strong>
+    </div>
+    <div>
+      <span>发布状态</span>
+      <strong>{publication.evidence.status}</strong>
+    </div>
+    <div class="signal-gate__actions">
+      {
+        compact ? (
+          <a class="signal-gate__primary" href="/signals/">查看信号产品</a>
+        ) : (
+          <span aria-disabled="true" class="signal-gate__primary">
+            订阅入口尚未开放
+          </span>
+        )
+      }
+      <a href="/methodology/">核对计算方法</a>
+    </div>
+  </footer>
+</section>
+
+<style>
+  .signal-gate {
+    border-block: 1px dotted var(--rule);
+    padding: 2.25rem 0;
+  }
+
+  .signal-gate__intro {
+    align-items: end;
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.55fr);
+    margin-bottom: 1.5rem;
+  }
+
+  .signal-gate__intro h2 {
+    font-size: 1.45rem;
+    margin: 0.35rem 0 0;
+    max-width: 46rem;
+  }
+
+  .signal-gate__intro > p {
+    color: var(--ink-soft);
+    font-size: 0.74rem;
+    margin: 0;
+  }
+
+  .signal-gate__engines {
+    border-block: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .signal-gate__engines article {
+    display: grid;
+    gap: 1rem;
+    min-height: 9rem;
+    padding: 1.15rem;
+  }
+
+  .signal-gate__engines article:first-child {
+    padding-left: 0;
+  }
+
+  .signal-gate__engines article + article {
+    border-left: 1px solid var(--rule);
+  }
+
+  .signal-gate__name span,
+  .signal-gate__name small {
+    display: block;
+    font-family: var(--font-mono);
+  }
+
+  .signal-gate__name span {
+    color: var(--main);
+    font-size: 0.58rem;
+  }
+
+  .signal-gate__name strong {
+    display: block;
+    font-family: var(--font-serif);
+    font-size: 0.92rem;
+    margin: 0.25rem 0;
+  }
+
+  .signal-gate__name small {
+    color: var(--ink-faint);
+    font-size: 0.6rem;
+  }
+
+  .signal-gate__locked {
+    align-items: center;
+    align-self: end;
+    color: var(--ink-faint);
+    display: flex;
+    gap: 0.45rem;
+  }
+
+  .signal-gate__locked span {
+    font-size: 0.62rem;
+    line-height: 1.45;
+  }
+
+  .signal-gate__proof {
+    align-items: center;
+    display: grid;
+    grid-template-columns: 0.6fr 0.6fr 1.2fr minmax(13rem, 0.8fr);
+  }
+
+  .signal-gate__proof > div {
+    padding: 1rem 1.2rem;
+  }
+
+  .signal-gate__proof > div:first-child {
+    padding-left: 0;
+  }
+
+  .signal-gate__proof > div + div {
+    border-left: 1px solid var(--rule);
+  }
+
+  .signal-gate__proof span,
+  .signal-gate__proof strong {
+    display: block;
+    font-size: 0.66rem;
+  }
+
+  .signal-gate__proof span {
+    color: var(--ink-faint);
+  }
+
+  .signal-gate__proof strong {
+    margin-top: 0.22rem;
+  }
+
+  .signal-gate__actions {
+    align-items: center;
+    display: flex;
+    gap: 0.85rem;
+    justify-content: end;
+  }
+
+  .signal-gate__actions a {
+    font-size: 0.7rem;
+    text-align: center;
+  }
+
+  .signal-gate__primary {
+    background: var(--main);
+    color: #fff;
+    font-family: var(--font-serif);
+    font-weight: 700;
+    padding: 0.7rem 0.9rem;
+  }
+
+  .signal-gate__primary[aria-disabled="true"] {
+    cursor: default;
+    opacity: 0.72;
+  }
+
+  .signal-gate__primary:hover {
+    color: #fff;
+  }
+
+  @media (max-width: 900px) {
+    .signal-gate__engines {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .signal-gate__engines article:nth-child(3) {
+      border-left: 0;
+      border-top: 1px solid var(--rule);
+      padding-left: 0;
+    }
+
+    .signal-gate__engines article:nth-child(4) {
+      border-top: 1px solid var(--rule);
+    }
+
+    .signal-gate__proof {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .signal-gate__actions {
+      border-left: 0 !important;
+      border-top: 1px solid var(--rule);
+      grid-column: 1 / -1;
+      justify-content: start;
+      padding-left: 0 !important;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .signal-gate__intro {
+      display: block;
+    }
+
+    .signal-gate__intro > p {
+      margin-top: 0.75rem;
+    }
+
+    .signal-gate__engines,
+    .signal-gate__proof {
+      display: block;
+    }
+
+    .signal-gate__engines article,
+    .signal-gate__engines article:nth-child(3) {
+      border-left: 0;
+      border-top: 1px solid var(--rule);
+      min-height: 7.2rem;
+      padding-left: 0;
+    }
+
+    .signal-gate__proof > div,
+    .signal-gate__proof > div + div {
+      border-left: 0;
+      border-top: 1px solid var(--rule);
+      padding-left: 0;
+    }
+  }
+</style>

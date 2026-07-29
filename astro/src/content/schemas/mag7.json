@@ -1,0 +1,26 @@
+{
+  "id": "mag7",
+  "route": "/magnificent-seven/",
+  "seo": "seo",
+  "hero": "hero",
+  "chapters": [
+    {
+      "id": "mag7-evidence",
+      "navLabel": "权重与回报",
+      "label": "§ I · MAGNIFICENT SEVEN",
+      "copy": "chapter-evidence",
+      "blocks": [
+        { "type": "component", "component": "Mag7Dashboard" }
+      ]
+    },
+    {
+      "id": "mag7-frameworks",
+      "navLabel": "历史群体与框架",
+      "label": "§ II · FRAMEWORKS",
+      "copy": "chapter-frameworks",
+      "blocks": [
+        { "type": "prose", "prose": "frameworks" }
+      ]
+    }
+  ]
+}

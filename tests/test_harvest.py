@@ -257,6 +257,54 @@ def test_cboe_daily_close_normalizes_columns_and_dates(monkeypatch) -> None:
     assert result.tolist() == [19.5, 18.25]
 
 
+def test_shiller_month_code_is_not_treated_as_a_year_fraction() -> None:
+    assert harvest.shiller_month_to_date(1871.01) == "1871-01-15"
+    assert harvest.shiller_month_to_date(1871.1) == "1871-10-15"
+    assert harvest.shiller_month_to_date(1871.12) == "1871-12-15"
+    with pytest.raises(ValueError, match="invalid Shiller month code"):
+        harvest.shiller_month_to_date(1871.13)
+
+
+def test_shiller_payload_keeps_pre_cape_eps_history(monkeypatch) -> None:
+    captured: dict[str, dict] = {}
+    frame = pd.DataFrame(
+        {
+            "Date": [1871.01, 1881.01, 2023.09],
+            "P": [4.44, 6.19, 4515.77],
+            "D": [0.26, 0.27, None],
+            "E": [0.40, 0.49, None],
+            "CPI": [12.46, 10.16, 306.13],
+            "Fraction": [1871.04, 1881.04, 2023.71],
+            "Rate GS10": [5.32, 3.70, 4.09],
+            "Price": [109.05, 170.0, 4515.77],
+            "Dividend": [6.39, 7.4, None],
+            "Price.1": [109.05, 170.0, 2_961_388.0],
+            "Earnings": [9.82, 13.4, None],
+            "Earnings.1": [9.82, 13.4, None],
+            "CAPE": [None, 18.47, 30.81],
+        }
+    )
+    response = SimpleNamespace(
+        content=b"workbook",
+        raise_for_status=lambda: None,
+    )
+    monkeypatch.setattr(harvest.requests, "get", lambda *_args, **_kwargs: response)
+    monkeypatch.setattr(harvest.pd, "read_excel", lambda *_args, **_kwargs: frame)
+    monkeypatch.setattr(
+        harvest,
+        "pin",
+        lambda name, payload, **_kwargs: captured.update({name: payload}),
+    )
+
+    harvest.build_shiller_data()
+
+    payload = captured["shiller_cape.json"]
+    assert payload["dates"][0] == "1871-01-15"
+    assert payload["cape"][0] is None
+    assert payload["pe_ttm"][0] == 11.1
+    assert payload["meta"]["latest_cape_date"] == "2023-09-15"
+
+
 def test_parse_ofr_fsi_preserves_categories_and_latest_values() -> None:
     rows = []
     start = pd.Timestamp("2000-01-03")
@@ -489,6 +537,7 @@ def test_weekly_sec_failures_block_only_when_identity_is_configured(monkeypatch)
         return True
 
     monkeypatch.setattr(harvest, "run_section", fake_run_section)
+    monkeypatch.setattr(harvest, "_fetch_close", lambda _ticker: None)
     monkeypatch.delenv("SEC_IDENTITY", raising=False)
     harvest.run_weekly()
     assert ("内幕交易 Form4", False) in calls
@@ -499,6 +548,160 @@ def test_weekly_sec_failures_block_only_when_identity_is_configured(monkeypatch)
     harvest.run_weekly()
     assert ("内幕交易 Form4", True) in calls
     assert ("13F 机构持仓", True) in calls
+
+
+def test_mag7_equal_weight_normalizes_each_member_from_its_own_base(monkeypatch) -> None:
+    captured: dict[str, dict] = {}
+    index = pd.date_range("2024-01-01", periods=501, freq="B")
+    growth = pd.Series(
+        [1 + index_value / 5_000 for index_value in range(501)],
+        index=index,
+    )
+    prices = {
+        ticker: growth * (ticker_index + 1) * 10
+        for ticker_index, ticker in enumerate(harvest.MAG7_TICKERS)
+    }
+
+    monkeypatch.setattr(harvest, "_fetch_close", lambda ticker: prices[ticker])
+    monkeypatch.setattr(
+        harvest,
+        "pin",
+        lambda name, payload, **_kwargs: captured.update({name: payload}),
+    )
+
+    harvest.build_mag7_data()
+
+    values = captured["mag7_equal_weight.json"]["values"]
+    assert values[0] == 100.0
+    assert values[-1] == 110.0
+
+
+def test_daily_distribution_keeps_extreme_tail_observations(monkeypatch) -> None:
+    captured: dict[str, dict] = {}
+    close = pd.Series(
+        [100.0, 90.0, 100.8, 101.0],
+        index=pd.date_range("2026-01-01", periods=4, freq="D"),
+    )
+    monkeypatch.setattr(
+        harvest,
+        "pin",
+        lambda name, payload: captured.update({name: payload}),
+    )
+
+    harvest.build_daily_distribution("sp500", close)
+
+    payload = captured["sp500_daily_dist.json"]
+    assert sum(payload["counts"]) == payload["meta"]["n_days"] == 3
+    assert payload["bins"][0] == "< -8.0%"
+    assert payload["counts"][0] == 1
+    assert payload["bins"][-1] == "≥ 8.0%"
+    assert payload["counts"][-1] == 1
+
+
+def test_period_return_uses_exact_number_of_sessions() -> None:
+    close = pd.Series(
+        [100.0, 101.0, 102.0, 103.0, 104.0, 110.0],
+        index=pd.date_range("2026-01-01", periods=6, freq="B"),
+    )
+
+    assert harvest.period_return(close, 5) == 10.0
+    assert harvest.period_return(close, 6) is None
+
+
+def test_fetch_ndx_constituents_requires_complete_official_list(monkeypatch) -> None:
+    rows = [
+        {"symbol": f"T{index:03d}", "companyName": f"Company {index}"}
+        for index in range(103)
+    ]
+    response = SimpleNamespace(
+        raise_for_status=lambda: None,
+        json=lambda: {"data": {"data": {"rows": rows}}},
+    )
+    monkeypatch.setattr(harvest.requests, "get", lambda *_args, **_kwargs: response)
+
+    names = harvest.fetch_ndx_constituents()
+
+    assert len(names) == 103
+    assert names["T000"] == "Company 0"
+
+
+def test_bulk_download_translates_class_share_symbols_for_yahoo(monkeypatch) -> None:
+    captured: dict[str, list[str]] = {}
+    index = pd.date_range("2026-01-01", periods=2, freq="B", tz="America/New_York")
+    columns = pd.MultiIndex.from_product([["Close"], ["BF-B", "BRK-B"]])
+    frame = pd.DataFrame([[10.0, 20.0], [11.0, 21.0]], index=index, columns=columns)
+
+    def fake_download(tickers, **_kwargs):
+        captured["tickers"] = tickers
+        return frame
+
+    monkeypatch.setattr(harvest.yf, "download", fake_download)
+
+    result = harvest._download_close_matrix(["BF.B", "BRK.B"], period="5y")
+
+    assert captured["tickers"] == ["BF-B", "BRK-B"]
+    assert result.columns.tolist() == ["BF.B", "BRK.B"]
+    assert result.index.tz is None
+
+
+def test_monthly_heatmap_keeps_full_available_history(monkeypatch) -> None:
+    captured: dict[str, dict] = {}
+    close = pd.Series(
+        range(100, 100 + 31 * 12),
+        index=pd.date_range("1995-01-31", periods=31 * 12, freq="ME"),
+        dtype=float,
+    )
+    monkeypatch.setattr(
+        harvest,
+        "pin",
+        lambda name, payload: captured.update({name: payload}),
+    )
+
+    harvest.build_monthly_heatmap("sp500", close)
+
+    payload = captured["sp500_monthly_heatmap.json"]
+    assert len(payload["years"]) == 31
+    assert payload["years"][0] == "1995"
+    assert payload["years"][-1] == "2025"
+
+
+def test_breadth_uses_per_date_eligible_denominator(monkeypatch) -> None:
+    captured: dict[str, dict] = {}
+    index = pd.date_range("2025-01-01", periods=260, freq="B")
+    benchmark = pd.Series(range(100, 360), index=index, dtype=float)
+    full_history = benchmark.copy()
+    recent_history = benchmark.iloc[-100:].copy()
+
+    close_matrix = pd.DataFrame(
+        {
+            "FULL-1": full_history,
+            "FULL-2": full_history,
+            "FULL-3": full_history,
+            "FULL-4": full_history,
+            "RECENT": recent_history,
+        }
+    )
+    monkeypatch.setattr(
+        harvest,
+        "_download_close_matrix",
+        lambda _tickers, **_kwargs: close_matrix,
+    )
+    monkeypatch.setattr(
+        harvest,
+        "pin",
+        lambda name, payload: captured.update({name: payload}),
+    )
+
+    harvest.build_breadth(
+        "sp500",
+        benchmark,
+        ["FULL-1", "FULL-2", "FULL-3", "FULL-4", "RECENT"],
+    )
+
+    payload = captured["sp500_breadth.json"]
+    assert payload["latest_50ma"] == 100.0
+    assert payload["latest_200ma"] == 100.0
+    assert payload["pct_above_200ma"][0] == 100.0
 
 
 def test_monthly_last_drops_current_incomplete_month() -> None:

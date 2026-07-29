@@ -18,7 +18,7 @@ ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
 DATASET_REGISTRY = ROOT / "config" / "dataset-registry.json"
 IGNORED_REPORTS = {"data/audit_report.json", "data/hash_chain.jsonl"}
-DATE_ARRAY_EXCLUSIONS = {"equity_curve", "episodes", "periods", "rows"}
+DATE_ARRAY_EXCLUSIONS = {"equity_curve", "episodes", "periods", "rows", "tickers"}
 
 DAILY_REQUIRED = {
     "breadth_pulse.json",
@@ -52,26 +52,54 @@ DAILY_REQUIRED = {
 WEEKLY_REQUIRED = {
     "cot_vix.json",
     "equity_allocation.json",
+    "mag7_correlation.json",
+    "mag7_weight.json",
     "macro_growth.json",
     "macro_prices.json",
+    "ndx_breadth.json",
+    "ndx_daily_dist.json",
+    "ndx_monthly_heatmap.json",
+    "ndx_rankings.json",
     "recessions.json",
+    "shiller_cape.json",
     "source_catalog.json",
+    "sp500_breadth.json",
     "sp500_changes.json",
     "sp500_constituents.json",
+    "sp500_daily_dist.json",
+    "sp500_monthly_heatmap.json",
+    "sp500_return_decomp.json",
+    "vxn.json",
 }
 
 COVERAGE_RULES = {
     "equity_allocation.json": ("dates", 250, 500),
     "financial_stress.json": ("series.fsi.dates", 5_000, 10),
     "ixic_century.json": ("dates", 10_000, 10),
+    "mag7_correlation.json": ("dates", 1_000, 14),
+    "mag7_weight.json": ("dates", 1, 45),
     "macro_growth.json": ("unrate.dates", 250, 100),
     "macro_prices.json": ("cpi_yoy.dates", 200, 100),
     "macro_rates.json": ("dgs10.dates", 1_000, 14),
+    "ndx_breadth.json": ("dates", 500, 14),
     "ndx_century.json": ("dates", 9_000, 10),
     "ndx_valuation_proxy.json": ("dates", 1, 10),
     "regime_rotation.json": ("dates", 3_000, 10),
+    # Yale's official workbook currently ends in 2023; source lag is exposed in metadata.
+    "shiller_cape.json": ("dates", 1_800, 1_500),
+    "sp500_breadth.json": ("dates", 500, 14),
     "sp500_century.json": ("dates", 20_000, 10),
     "sp500_total_return.json": ("dates", 9_000, 10),
+    "vxn.json": ("dates", 4_000, 14),
+}
+
+MINIMUM_LENGTH_RULES = {
+    "ndx_daily_dist.json": ("bins", 18),
+    "ndx_monthly_heatmap.json": ("years", 30),
+    "ndx_rankings.json": ("rows", 90),
+    "sp500_daily_dist.json": ("bins", 18),
+    "sp500_monthly_heatmap.json": ("years", 30),
+    "sp500_return_decomp.json": ("years", 30),
 }
 
 
@@ -276,6 +304,20 @@ def validate_data(
             )
 
     now = datetime.now(UTC).date()
+    for filename, (value_path, minimum_rows) in MINIMUM_LENGTH_RULES.items():
+        if filename not in objects:
+            continue
+        values = nested_value(objects[filename], value_path)
+        if not isinstance(values, list) or len(values) < minimum_rows:
+            actual = len(values) if isinstance(values, list) else 0
+            issues.append(
+                {
+                    "severity": "blocking",
+                    "path": filename,
+                    "issue": f"coverage {actual} rows below minimum {minimum_rows}",
+                }
+            )
+
     for filename, (date_path, minimum_rows, maximum_age_days) in COVERAGE_RULES.items():
         if filename not in objects:
             continue

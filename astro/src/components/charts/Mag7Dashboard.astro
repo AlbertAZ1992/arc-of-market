@@ -1,0 +1,712 @@
+---
+import correlationJson from "../../../../data/mag7_correlation.json";
+import mag7EqualWeightJson from "../../../../data/mag7_equal_weight.json";
+import mag7WeightJson from "../../../../data/mag7_weight.json";
+import valuationJson from "../../../../data/nvda_csco_valuation.json";
+
+type NumberSeries = {
+  dates: string[];
+  trailing_pe: number[];
+};
+
+type ValuationData = {
+  csco: NumberSeries;
+  nvda: NumberSeries;
+};
+
+type WeightData = {
+  dates: string[];
+  weight_pct: number[];
+};
+
+type DrawdownRecord = {
+  current_dd: number;
+  name: string;
+};
+
+type EqualWeightData = {
+  dates: string[];
+  member_drawdowns: Record<string, DrawdownRecord>;
+  values: number[];
+};
+
+type CorrelationData = {
+  avg_correlation: number[];
+  dates: string[];
+};
+
+const weightData = mag7WeightJson as WeightData;
+const valuationData = valuationJson as ValuationData;
+const equalWeightData = mag7EqualWeightJson as EqualWeightData;
+const correlationData = correlationJson as CorrelationData;
+const weightDate = weightData.dates.at(-1) ?? "—";
+const weightValue = weightData.weight_pct.at(-1) ?? 0;
+const valuationDate = valuationData.nvda.dates.at(-1) ?? "—";
+const nvdaPe = valuationData.nvda.trailing_pe.at(-1) ?? 0;
+const cscoPe = valuationData.csco.trailing_pe.at(-1) ?? 0;
+const valuationStart = valuationData.nvda.dates.at(0) ?? "—";
+const basketMultiple =
+  (equalWeightData.values.at(-1) ?? 0) / (equalWeightData.values.at(0) ?? 1);
+const currentDrawdowns = Object.entries(equalWeightData.member_drawdowns)
+  .map(([ticker, value]) => ({ ticker, value: value.current_dd }))
+  .sort((left, right) => left.value - right.value);
+const deepestCurrent = currentDrawdowns.at(0);
+const shallowestCurrent = currentDrawdowns.at(-1);
+const correlationDate = correlationData.dates.at(-1) ?? "—";
+const currentCorrelation = correlationData.avg_correlation.at(-1) ?? 0;
+const peakCorrelation = Math.max(...correlationData.avg_correlation);
+---
+
+<section class="mag7-dashboard" aria-labelledby="mag7-dashboard-title">
+  <!-- § I · 整体视角 -->
+  <section class="mag7-chapter" id="mag7-equal-weight">
+    <div class="chapter-intro">
+      <p class="chapter-label">§ I · THE BASKET</p>
+      <h2>
+        从 2012 年共同起点算，七巨头等权篮子已变为起点的
+        {basketMultiple.toFixed(1)} 倍
+      </h2>
+      <p>
+        Apple、Microsoft、Nvidia、Amazon、Alphabet、Meta 和 Tesla
+        各占七分之一，再与 S&P 500 和 Nasdaq-100 从共同日期归一化比较。
+        等权处理避免最大公司单独决定整条曲线。
+      </p>
+      <p class="guide">
+        这条长期曲线证明七家公司曾共同创造高回报；
+        它不能说明回报均匀分布，下一节会把七家公司拆开。
+      </p>
+    </div>
+    <div
+      id="mag7-eq-chart"
+      class="mag7-chart"
+      role="img"
+      aria-label="七巨头等权指数与 S&P 500、Nasdaq-100 对比"
+    >
+      <p data-chart-status>正在读取数据…</p>
+    </div>
+  </section>
+
+  <!-- § I.5 · 权重占比 -->
+  <section class="mag7-chapter" id="mag7-weight">
+    <div class="chapter-intro">
+      <p class="chapter-label">§ I.5 · CONCENTRATION</p>
+      <h2>七家公司合计占 S&P 500 {weightValue.toFixed(1)}%</h2>
+      <p>
+        截至 {weightDate}，七家公司合计权重为 {weightValue.toFixed(2)}%。计算使用
+        SPY 公布的前十大持仓，并同时计入 Alphabet 两类股份。
+      </p>
+      <p class="guide">
+        当前文件只有管道运行日的快照，不能据此重建 2018 年或
+        2024 年的历史权重。后续快照持续积累后，
+        才能判断集中度是上升还是下降。
+      </p>
+    </div>
+    <div
+      id="mag7-weight-chart"
+      class="mag7-chart"
+      role="img"
+      aria-label="七巨头占标普 500 权重历史"
+    >
+      <p data-chart-status>正在读取数据…</p>
+    </div>
+  </section>
+
+  <!-- § II · 成员分化 -->
+  <section class="mag7-chapter" id="mag7-members">
+    <div class="chapter-intro">
+      <p class="chapter-label">§ II · THE SEVEN</p>
+      <h2>同一个“七巨头”标签，长期回报并没有一起走</h2>
+      <p>
+        每家公司从共同可用日期归一化为 100。图中只比较价格路径，
+        不包含股息，也不把市值、盈利或估值差异合并进同一指标。
+      </p>
+      <p class="guide">
+        曲线差距来自各公司的盈利、估值和行业周期。
+        把它们重新平均成一条线，会掩盖组内最重要的差异。
+      </p>
+    </div>
+    <div
+      id="mag7-prices-chart"
+      class="mag7-chart"
+      role="img"
+      aria-label="七家公司归一化价格对比"
+    >
+      <p data-chart-status>正在读取数据…</p>
+    </div>
+  </section>
+
+  <!-- § III · 回撤面板 -->
+  <section class="mag7-chapter" id="mag7-drawdowns">
+    <div class="chapter-intro">
+      <p class="chapter-label">§ III · THE PAIN</p>
+      <h2>
+        当前回撤从 {shallowestCurrent?.ticker ?? "—"} 的
+        {(shallowestCurrent?.value ?? 0).toFixed(1)}% 到
+        {deepestCurrent?.ticker ?? "—"} 的 {(deepestCurrent?.value ?? 0).toFixed(1)}%
+      </h2>
+      <p>
+        当前回撤按最新价格相对各自历史高点计算；
+        历史最大回撤使用同一价格序列。回撤为零表示最新价格位于
+        样本期高点，不表示未来风险为零。
+      </p>
+    </div>
+    <div
+      id="mag7-dd-chart"
+      class="mag7-chart mag7-chart--tall"
+      role="img"
+      aria-label="七家公司当前距高点回撤"
+    >
+      <p data-chart-status>正在读取数据…</p>
+    </div>
+  </section>
+
+  <!-- § III.5 · 相关性 -->
+  <section class="mag7-chapter" id="mag7-correlation">
+    <div class="chapter-intro">
+      <p class="chapter-label">§ III.5 · ONE TRADE?</p>
+      <h2>
+        七家公司当前 60 日平均相关性为 {currentCorrelation.toFixed(2)}，
+        历史峰值为 {peakCorrelation.toFixed(2)}
+      </h2>
+      <p>
+        截至 {correlationDate}，七家公司同涨同跌的程度远低于样本峰值。
+        相关性接近 1 表示方向更一致，接近 0 表示线性关系较弱。
+      </p>
+      <p class="guide">
+        高指数权重不等于高相关性：七家公司可以同时很重要，
+        却在同一天走出不同方向。0.7 和 0.4 只是阅读分界，不是交易阈值。
+      </p>
+    </div>
+    <div
+      id="mag7-corr-chart"
+      class="mag7-chart"
+      role="img"
+      aria-label="七巨头 60 日滚动平均相关性"
+    >
+      <p data-chart-status>正在读取数据…</p>
+    </div>
+  </section>
+
+  <!-- § V · 谱系 -->
+  <section class="mag7-chapter" id="mag7-lineage">
+    <div class="chapter-intro">
+      <p class="chapter-label">§ V · THE LINEAGE</p>
+      <h2>七巨头不是第一组“不可替代”的大型成长股</h2>
+      <p>
+        Nifty Fifty、四骑士、FANG、FAANG 和 Magnificent Seven
+        是不同时期的市场标签。下面只记录成员和时代背景，
+        不把群体名称作为买卖信号。
+      </p>
+    </div>
+    <div class="lineage-timeline">
+      <div class="lineage-era">
+        <strong>1970s · Nifty Fifty（漂亮 50）</strong>
+        <p>
+          常见成员包括柯达、宝丽来、施乐、迪士尼、麦当劳、
+          强生和可口可乐。“一次决策、永久持有”是当时常见的市场说法；
+          1973–1974 年熊市检验了高估值大型成长股的下行风险。
+        </p>
+      </div>
+      <div class="lineage-era">
+        <strong>1990s · Four Horsemen（四骑士）</strong>
+        <p>
+          Cisco、Intel、Microsoft 和 Dell 代表 1990 年代
+          个人电脑与互联网基础设施。互联网泡沫破裂后，
+          四家公司的长期表现明显分化。
+        </p>
+      </div>
+      <div class="lineage-era">
+        <strong>2013 · FANG</strong>
+        <p>
+          Facebook、Amazon、Netflix 和 Google。这个缩写把四家大型互联网平台公司
+          放在同一组比较。
+        </p>
+      </div>
+      <div class="lineage-era">
+        <strong>2017 · FAANG</strong>
+        <p>
+          在 FANG 基础上加入 Apple，用于概括 2010 年代后半段表现突出的五家
+          大型科技与互联网公司。
+        </p>
+      </div>
+      <div class="lineage-era">
+        <strong>2023 · Magnificent 7</strong>
+        <p>
+          Apple、Microsoft、Nvidia、Amazon、Alphabet、Meta 和 Tesla。
+          该名称在 2023 年广泛使用，
+          用于描述对主要美股指数贡献较高的七家公司。
+        </p>
+      </div>
+    </div>
+    <p class="lineage-lesson">
+      <strong>可核对的结论：</strong>
+      这些标签的成员会变化，组内公司长期回报也会分化。<br />
+      <strong>使用限制：</strong>
+      历史群体只能用于比较集中度、估值和成员更替，
+      不能直接推断七巨头的下一次高点或低点。
+    </p>
+  </section>
+
+  <!-- § VI · 估值对标 -->
+  <section class="mag7-chapter" id="mag7-valuation">
+    <div class="chapter-intro">
+      <p class="chapter-label">§ VI · THE ANCHOR</p>
+      <h2>Nvidia 与 Cisco 的 TTM PE 快照</h2>
+      <p>
+        截至 {valuationDate}，Nvidia TTM PE 为 {nvdaPe.toFixed(1)} 倍，Cisco 为
+        {cscoPe.toFixed(1)} 倍。当前可比序列从 {valuationStart} 开始。
+      </p>
+      <p class="guide">
+        当前文件不包含 Cisco 1999 年的完整 PE 历史，因此不能用这张图验证
+        “Nvidia 与 1999 年 Cisco”的定量差距。后续快照只用于同口径跟踪。
+      </p>
+    </div>
+    <div
+      id="mag7-pe-chart"
+      class="mag7-chart"
+      role="img"
+      aria-label="Nvidia 与 Cisco TTM PE 历史对比"
+    >
+      <p data-chart-status>正在读取数据…</p>
+    </div>
+  </section>
+</section>
+
+<script>
+  import { LineChart, BarChart } from "echarts/charts";
+  import {
+    GridComponent,
+    LegendComponent,
+    TooltipComponent,
+  } from "echarts/components";
+  import * as echarts from "echarts/core";
+  import { CanvasRenderer } from "echarts/renderers";
+  import {
+    ARC_ECHARTS_THEME,
+    ARC_ECHARTS_THEME_DARK,
+  } from "../../lib/echarts-theme";
+
+  echarts.use([
+    BarChart,
+    LineChart,
+    GridComponent,
+    LegendComponent,
+    TooltipComponent,
+    CanvasRenderer,
+  ]);
+  echarts.registerTheme("arc", ARC_ECHARTS_THEME);
+  echarts.registerTheme("arc-dark", ARC_ECHARTS_THEME_DARK);
+
+  const theme = window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "arc-dark"
+    : "arc";
+
+  const MAG7_COLORS: Record<string, string> = {
+    AAPL: "#989898",
+    MSFT: "#00a487",
+    NVDA: "#f60c3e",
+    AMZN: "#f08a24",
+    GOOGL: "#4d6ea9",
+    META: "#0668b3",
+    TSLA: "#e60000",
+  };
+
+  function renderEqualWeight(data: any) {
+    const el = document.getElementById("mag7-eq-chart");
+    if (!el) return;
+    el.querySelector("[data-chart-status]")?.remove();
+    const dates = data.dates as string[];
+    const mag7 = data.values as number[];
+    const chart = echarts.init(el, theme);
+    chart.setOption({
+      animation: false,
+      legend: { data: ["七巨头等权", "S&P 500", "Nasdaq-100"] },
+      tooltip: { trigger: "axis", valueFormatter: (v: number) => v.toFixed(1) },
+      xAxis: { type: "category", data: dates },
+      yAxis: { type: "value", name: "基点 (100 = 起点)" },
+      series: [
+        {
+          name: "七巨头等权", type: "line", data: mag7,
+          lineStyle: { color: "#f60c3e", width: 2 },
+          showSymbol: false, sampling: "lttb",
+        },
+      ],
+      grid: { bottom: 52, containLabel: true, left: 12, right: 18, top: 52 },
+    });
+    new ResizeObserver(() => chart.resize()).observe(el);
+  }
+
+  async function overlaySPYandQQQ(chart: echarts.ECharts, dates: string[]) {
+    try {
+      const [etfRes, spRes] = await Promise.all([
+        fetch("/data/etf_proxies.json"),
+        fetch("/data/sp500_century.json"),
+      ]);
+      if (!etfRes.ok || !spRes.ok) return;
+      const etf = await etfRes.json();
+      const sp = await spRes.json();
+
+      // Rebase SP500 to match Mag7 start
+      const spDates = sp.dates as string[];
+      const spClose = sp.close as number[];
+      const startIdx = spDates.findIndex((d: string) => d === dates[0]);
+      if (startIdx < 0) return;
+      const spBase = spClose[startIdx] as number;
+      const spData = spClose.slice(startIdx, startIdx + dates.length).map((v: number) =>
+        (v / spBase) * 100,
+      );
+
+      chart.setOption({
+        series: [
+          {},
+          {
+            name: "S&P 500", type: "line",
+            data: spData.slice(0, dates.length),
+            lineStyle: { color: "#989898", width: 1.4 },
+            showSymbol: false, sampling: "lttb",
+          },
+          {
+            name: "Nasdaq-100",
+            type: "line",
+            data: (etf.series as any).QQQ.values.slice(0, dates.length),
+            lineStyle: { color: "#4d6ea9", width: 1.4 },
+            showSymbol: false, sampling: "lttb",
+          },
+        ],
+      });
+    } catch { /* overlay is optional */ }
+  }
+
+  function renderPrices(data: any) {
+    const el = document.getElementById("mag7-prices-chart");
+    if (!el) return;
+    el.querySelector("[data-chart-status]")?.remove();
+    const dates = data.dates as string[];
+    const tickers = data.tickers as Record<string, { name: string; values: number[] }>;
+    const chart = echarts.init(el, theme);
+    chart.setOption({
+      animation: false,
+      legend: { data: Object.values(tickers).map((t: any) => t.name) },
+      tooltip: { trigger: "axis", valueFormatter: (v: number) => v.toFixed(1) },
+      xAxis: { type: "category", data: dates },
+      yAxis: { type: "value", name: "归一化价格 (100 = 起点)" },
+      series: Object.entries(tickers).map(([ticker, info]: [string, any]) => ({
+        name: info.name,
+        type: "line",
+        data: info.values,
+        lineStyle: { color: MAG7_COLORS[ticker] ?? "#989898", width: 1.4 },
+        showSymbol: false,
+        sampling: "lttb",
+      })),
+      grid: { bottom: 52, containLabel: true, left: 12, right: 18, top: 52 },
+    });
+    new ResizeObserver(() => chart.resize()).observe(el);
+  }
+
+  function renderDrawdowns(data: any) {
+    const el = document.getElementById("mag7-dd-chart");
+    if (!el) return;
+    el.querySelector("[data-chart-status]")?.remove();
+    const dd = data.member_drawdowns as Record<
+      string,
+      { name: string; current_dd: number; deepest: any[] }
+    >;
+    const entries = Object.entries(dd);
+    const names = entries.map(([, v]) => v.name);
+    const current = entries.map(([, v]) => v.current_dd);
+    const deepest = entries.map(([, v]) => v.deepest[0]?.depth ?? 0);
+
+    const chart = echarts.init(el, theme);
+    chart.setOption({
+      animation: false,
+      legend: { data: ["当前回撤", "历史最深"] },
+      tooltip: { trigger: "axis", valueFormatter: (v: number) => `${v}%` },
+      xAxis: { type: "category", data: names, axisLabel: { rotate: 25 } },
+      yAxis: { type: "value", name: "从高点回撤 %", max: 0 },
+      series: [
+        {
+          name: "当前回撤", type: "bar",
+          data: current.map((v: number) => ({
+            value: v,
+            itemStyle: { color: v < -20 ? "#f60c3e" : "#f08a24" },
+          })),
+          label: { show: true, position: "bottom", formatter: "{c}%", fontSize: 10 },
+        },
+        {
+          name: "历史最深", type: "bar",
+          data: deepest.map((v: number) => ({
+            value: v,
+            itemStyle: { color: "rgba(246,12,62,0.25)", borderColor: "#f60c3e", borderWidth: 1 },
+          })),
+        },
+      ],
+      grid: { bottom: 52, containLabel: true, left: 12, right: 18, top: 52 },
+    });
+    new ResizeObserver(() => chart.resize()).observe(el);
+  }
+
+  function renderValuation(data: any) {
+    const el = document.getElementById("mag7-pe-chart");
+    if (!el) return;
+    el.querySelector("[data-chart-status]")?.remove();
+    const nvda = data.nvda || {};
+    const csco = data.csco || {};
+    const chart = echarts.init(el, theme);
+    const series: any[] = [];
+    if (nvda.dates?.length) {
+      series.push({
+        name: "Nvidia TTM PE",
+        type: "line",
+        data: nvda.dates.map((d: string, i: number) => [d, nvda.trailing_pe[i]]),
+        lineStyle: { color: "#f60c3e", width: 2 },
+        showSymbol: nvda.dates.length < 30,
+        sampling: "lttb",
+      });
+    }
+    if (csco.dates?.length) {
+      series.push({
+        name: "Cisco TTM PE",
+        type: "line",
+        data: csco.dates.map((d: string, i: number) => [d, csco.trailing_pe[i]]),
+        lineStyle: { color: "#4d6ea9", width: 1.5 },
+        showSymbol: csco.dates.length < 30,
+        sampling: "lttb",
+      });
+    }
+    chart.setOption({
+      animation: false,
+      legend: { data: series.map((s: any) => s.name) },
+      tooltip: { trigger: "axis", valueFormatter: (v: number) => `${v.toFixed(1)}x` },
+      xAxis: { type: "time" },
+      yAxis: { type: "value", name: "TTM PE（倍）" },
+      series,
+      grid: { bottom: 52, containLabel: true, left: 12, right: 18, top: 52 },
+    });
+    new ResizeObserver(() => chart.resize()).observe(el);
+  }
+
+  function renderWeight(data: any) {
+    const el = document.getElementById("mag7-weight-chart");
+    if (!el) return;
+    el.querySelector("[data-chart-status]")?.remove();
+    const chart = echarts.init(el, theme);
+    chart.setOption({
+      animation: false,
+      tooltip: { trigger: "axis", valueFormatter: (v: number) => `${v}%` },
+      xAxis: { type: "category", data: data.dates },
+      yAxis: { type: "value", name: "占标普 500 %", max: 50 },
+      series: [{
+        name: "七巨头合计占比", type: "line",
+        data: data.weight_pct,
+        areaStyle: { color: "rgba(246,12,62,0.08)" },
+        lineStyle: { color: "#f60c3e", width: 2 },
+        showSymbol: data.dates.length < 30,
+        sampling: "lttb",
+      }],
+      grid: { bottom: 52, containLabel: true, left: 12, right: 18, top: 52 },
+    });
+    new ResizeObserver(() => chart.resize()).observe(el);
+  }
+
+  function renderCorrelation(data: any) {
+    const el = document.getElementById("mag7-corr-chart");
+    if (!el) return;
+    el.querySelector("[data-chart-status]")?.remove();
+    const chart = echarts.init(el, theme);
+    chart.setOption({
+      animation: false,
+      tooltip: { trigger: "axis", valueFormatter: (v: number) => v.toFixed(3) },
+      xAxis: { type: "category", data: data.dates },
+      yAxis: { type: "value", name: "平均相关系数", min: 0, max: 1 },
+      series: [
+        {
+          name: "60日平均相关性",
+          type: "line",
+          data: data.avg_correlation,
+          areaStyle: { color: "rgba(246,12,62,0.06)" },
+          lineStyle: { color: "#f60c3e", width: 2 },
+          showSymbol: false,
+          sampling: "lttb",
+          markLine: {
+            silent: true,
+            data: [
+              {
+                yAxis: 0.7,
+                label: { formatter: "平均相关性 0.7", fontSize: 10 },
+                lineStyle: { color: "#f08a24", type: "dashed" },
+              },
+            ],
+          },
+        },
+      ],
+      grid: { bottom: 52, containLabel: true, left: 12, right: 18, top: 52 },
+    });
+    new ResizeObserver(() => chart.resize()).observe(el);
+  }
+
+  async function boot() {
+    const root = document.querySelector(".mag7-dashboard");
+    if (!root) return;
+    const [mag7Res, eqRes, peRes, weightRes, corrRes] = await Promise.all([
+      fetch("/data/mag7_prices.json"),
+      fetch("/data/mag7_equal_weight.json"),
+      fetch("/data/nvda_csco_valuation.json"),
+      fetch("/data/mag7_weight.json"),
+      fetch("/data/mag7_correlation.json"),
+    ]);
+    if (!mag7Res.ok || !eqRes.ok) {
+      root.querySelectorAll("[data-chart-status]").forEach(el => {
+        el.textContent = "数据暂不可用";
+      });
+      return;
+    }
+    const mag7 = await mag7Res.json();
+    const eq = await eqRes.json();
+    renderPrices(mag7);
+    renderEqualWeight(eq);
+    overlaySPYandQQQ(
+      echarts.getInstanceByDom(document.getElementById("mag7-eq-chart")!)!,
+      eq.dates,
+    );
+    renderDrawdowns(eq);
+    if (peRes.ok) {
+      const pe = await peRes.json();
+      renderValuation(pe);
+    }
+    if (weightRes.ok) {
+      const weight = await weightRes.json();
+      renderWeight(weight);
+    }
+    if (corrRes.ok) {
+      const corr = await corrRes.json();
+      renderCorrelation(corr);
+    }
+  }
+
+  boot().catch((e: unknown) => {
+    document
+      .querySelectorAll(".mag7-dashboard [data-chart-status]")
+      .forEach((element) => {
+        element.textContent = `数据读取失败：${String(e)}`;
+      });
+  });
+</script>
+
+<style>
+  .mag7-dashboard {
+    margin-block: var(--space-section);
+  }
+
+  .mag7-chapter {
+    border-top: 1px solid var(--rule);
+    padding-block: 3.5rem;
+    scroll-margin-top: 6rem;
+  }
+
+  .mag7-chapter:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .chapter-intro {
+    margin-bottom: 2rem;
+    max-width: 48rem;
+  }
+
+  .chapter-label {
+    color: var(--ink-faint);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+  }
+
+  .chapter-intro h2 {
+    font-size: 1.45rem;
+    margin: 0.35rem 0 0.75rem;
+  }
+
+  .chapter-intro > p {
+    color: var(--ink-soft);
+    font-size: 0.85rem;
+    line-height: 1.7;
+    margin-bottom: 0.65rem;
+  }
+
+  .guide {
+    background: rgba(246, 12, 62, 0.04);
+    border-left: 3px solid var(--main);
+    color: var(--ink-soft);
+    font-size: 0.78rem !important;
+    line-height: 1.65;
+    padding: 0.65rem 1rem;
+  }
+
+  .mag7-chart {
+    height: 28rem;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .mag7-chart--tall {
+    height: 20rem;
+  }
+
+  .mag7-chart [data-chart-status] {
+    align-items: center;
+    border-block: 1px dotted var(--rule);
+    color: var(--ink-faint);
+    display: flex;
+    font-size: 0.72rem;
+    height: 100%;
+    justify-content: center;
+  }
+
+  .lineage-timeline {
+    display: grid;
+    gap: 1.5rem;
+    margin-top: 2rem;
+    max-width: 48rem;
+  }
+
+  .lineage-era {
+    border-left: 2px solid var(--main);
+    padding: 0.3rem 0 0.5rem 1.2rem;
+  }
+
+  .lineage-era strong {
+    display: block;
+    font-family: var(--font-serif);
+    font-size: 0.88rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .lineage-era p {
+    color: var(--ink-soft);
+    font-size: 0.78rem;
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  .lineage-lesson {
+    background: rgba(246, 12, 62, 0.04);
+    border-left: 3px solid var(--main);
+    color: var(--ink-soft);
+    font-size: 0.78rem;
+    line-height: 1.75;
+    margin-top: 2rem;
+    max-width: 48rem;
+    padding: 1rem 1.2rem;
+  }
+
+  @media (max-width: 640px) {
+    .mag7-chapter {
+      padding-block: 2.6rem;
+    }
+
+    .mag7-chart {
+      height: 23rem;
+    }
+  }
+</style>

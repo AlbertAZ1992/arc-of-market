@@ -128,12 +128,12 @@
         "ice-data-indices"
       ],
       "access": {
-        "public": true,
+        "public": false,
         "subscriber": false
       },
-      "derived_output": "allowed-with-attribution",
-      "status": "approved-for-public-chart-display",
-      "approval_reference": "Product owner data-display decision 2026-07-26"
+      "derived_output": "internal-only",
+      "status": "internal-research-not-for-publication",
+      "approval_reference": "ICE license restricts public redistribution"
     },
     {
       "id": "cftc-vix-positioning",
@@ -332,12 +332,206 @@
         "yahoo-finance"
       ],
       "access": {
+        "public": false,
+        "subscriber": false
+      },
+      "derived_output": "internal-only",
+      "status": "internal-strategy-output",
+      "approval_reference": "Paid signal publication boundary 2026-07-29"
+    },
+    {
+      "id": "mag7-research-panels",
+      "files": [
+        "mag7_prices.json",
+        "mag7_equal_weight.json",
+        "nvda_csco_valuation.json"
+      ],
+      "source_ids": [
+        "yahoo-finance",
+        "arc-methodology"
+      ],
+      "access": {
         "public": true,
         "subscriber": false
       },
       "derived_output": "allowed",
-      "status": "approved-for-public-research-display",
-      "approval_reference": "Product owner data-display decision 2026-07-26"
+      "status": "approved-for-public-chart-display",
+      "approval_reference": "Product owner data-display decision 2026-07-28"
+    },
+    {
+      "id": "dow-research-panels",
+      "files": [
+        "dji_century.json",
+        "dji_annual.json",
+        "dji_drawdowns.json",
+        "etf_proxies.json"
+      ],
+      "source_ids": [
+        "yahoo-finance",
+        "arc-methodology"
+      ],
+      "access": {
+        "public": true,
+        "subscriber": false
+      },
+      "derived_output": "allowed",
+      "status": "approved-for-public-chart-display",
+      "approval_reference": "Product owner data-display decision 2026-07-28"
+    },
+    {
+      "id": "shiller-valuation",
+      "files": [
+        "shiller_cape.json"
+      ],
+      "source_ids": [
+        "shiller-yale"
+      ],
+      "access": {
+        "public": true,
+        "subscriber": false
+      },
+      "derived_output": "allowed",
+      "status": "approved-for-public-chart-display",
+      "approval_reference": "Product owner data-display decision 2026-07-28"
+    },
+    {
+      "id": "cboe-vxn",
+      "files": [
+        "vxn.json"
+      ],
+      "source_ids": [
+        "cboe"
+      ],
+      "access": {
+        "public": true,
+        "subscriber": false
+      },
+      "derived_output": "allowed",
+      "status": "approved-for-public-chart-display",
+      "approval_reference": "Product owner data-display decision 2026-07-28"
+    },
+    {
+      "id": "mag7-weight-panel",
+      "files": [
+        "mag7_weight.json"
+      ],
+      "source_ids": [
+        "yahoo-finance",
+        "arc-methodology"
+      ],
+      "access": {
+        "public": true,
+        "subscriber": false
+      },
+      "derived_output": "allowed",
+      "status": "approved-for-public-chart-display",
+      "approval_reference": "Product owner data-display decision 2026-07-28"
+    },
+    {
+      "id": "p1-distribution-panels",
+      "files": [
+        "sp500_daily_dist.json",
+        "ndx_daily_dist.json"
+      ],
+      "source_ids": [
+        "yahoo-finance",
+        "arc-methodology"
+      ],
+      "access": {
+        "public": true,
+        "subscriber": false
+      },
+      "derived_output": "allowed",
+      "status": "approved-for-public-chart-display",
+      "approval_reference": "Product owner data-display decision 2026-07-28"
+    },
+    {
+      "id": "p1-return-decomp",
+      "files": [
+        "sp500_return_decomp.json"
+      ],
+      "source_ids": [
+        "yahoo-finance",
+        "arc-methodology"
+      ],
+      "access": {
+        "public": true,
+        "subscriber": false
+      },
+      "derived_output": "allowed",
+      "status": "approved-for-public-chart-display",
+      "approval_reference": "Product owner data-display decision 2026-07-28"
+    },
+    {
+      "id": "p1-mag7-correlation",
+      "files": [
+        "mag7_correlation.json"
+      ],
+      "source_ids": [
+        "yahoo-finance",
+        "arc-methodology"
+      ],
+      "access": {
+        "public": true,
+        "subscriber": false
+      },
+      "derived_output": "allowed",
+      "status": "approved-for-public-chart-display",
+      "approval_reference": "Product owner data-display decision 2026-07-28"
+    },
+    {
+      "id": "d1-ndx-rankings",
+      "files": [
+        "ndx_rankings.json"
+      ],
+      "source_ids": [
+        "nasdaq-ndx-constituents",
+        "yahoo-finance",
+        "arc-methodology"
+      ],
+      "access": {
+        "public": true,
+        "subscriber": false
+      },
+      "derived_output": "allowed",
+      "status": "approved-for-public-chart-display",
+      "approval_reference": "Product owner data-display decision 2026-07-28"
+    },
+    {
+      "id": "d2-heatmaps",
+      "files": [
+        "sp500_monthly_heatmap.json",
+        "ndx_monthly_heatmap.json"
+      ],
+      "source_ids": [
+        "yahoo-finance",
+        "arc-methodology"
+      ],
+      "access": {
+        "public": true,
+        "subscriber": false
+      },
+      "derived_output": "allowed",
+      "status": "approved-for-public-chart-display",
+      "approval_reference": "Product owner data-display decision 2026-07-28"
+    },
+    {
+      "id": "d3-breadth",
+      "files": [
+        "sp500_breadth.json",
+        "ndx_breadth.json"
+      ],
+      "source_ids": [
+        "yahoo-finance",
+        "arc-methodology"
+      ],
+      "access": {
+        "public": true,
+        "subscriber": false
+      },
+      "derived_output": "allowed",
+      "status": "approved-for-public-chart-display",
+      "approval_reference": "Product owner data-display decision 2026-07-28"
     }
   ]
 }

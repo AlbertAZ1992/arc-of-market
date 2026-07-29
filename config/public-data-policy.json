@@ -43,8 +43,8 @@
       "basis": "OFR federal work with requested credit and source disclaimer"
     },
     "macro_credit.json": {
-      "public": true,
-      "basis": "Public chart display with source attribution"
+      "public": false,
+      "basis": "ICE BofA indices require license for public redistribution; internal research only"
     },
     "sp500_annual.json": {
       "public": true,
@@ -203,16 +203,77 @@
       "basis": "Derived volatility chart display with source attribution"
     },
     "breadth_pulse.json": {
-      "public": true,
-      "basis": "ArcOfMarket research output"
+      "public": false,
+      "basis": "ArcOfMarket strategy output reserved for the paid product layer"
     },
     "regime_rotation.json": {
-      "public": true,
-      "basis": "ArcOfMarket research output"
+      "public": false,
+      "basis": "ArcOfMarket strategy output reserved for the paid product layer"
     },
     "rs_leaders.json": {
+      "public": false,
+      "basis": "ArcOfMarket strategy output reserved for the paid product layer"
+    },
+    "mag7_prices.json": {
       "public": true,
-      "basis": "ArcOfMarket research output"
-    }
+      "basis": "Derived normalized price chart display with source attribution"
+    },
+    "mag7_equal_weight.json": {
+      "public": true,
+      "basis": "Derived equal-weight index chart display with source attribution"
+    },
+    "nvda_csco_valuation.json": {
+      "public": true,
+      "basis": "Derived valuation comparison chart display with source attribution"
+    },
+    "dji_century.json": {
+      "public": true,
+      "basis": "Derived historical chart display with source attribution"
+    },
+    "dji_annual.json": {
+      "public": true,
+      "basis": "Derived historical chart display with source attribution"
+    },
+    "dji_drawdowns.json": {
+      "public": true,
+      "basis": "Derived drawdown chart display with source attribution"
+    },
+    "etf_proxies.json": {
+      "public": true,
+      "basis": "Derived ETF comparison chart display with source attribution"
+    },
+    "shiller_cape.json": {
+      "public": true,
+      "basis": "Robert Shiller published data with full attribution"
+    },
+    "vxn.json": {
+      "public": true,
+      "basis": "Cboe VXN volatility index with source attribution"
+    },
+    "mag7_weight.json": {
+      "public": true,
+      "basis": "Derived market-cap weight chart with source attribution"
+    },
+    "sp500_daily_dist.json": {
+      "public": true,
+      "basis": "Derived daily return distribution chart with source attribution"
+    },
+    "ndx_daily_dist.json": {
+      "public": true,
+      "basis": "Derived daily return distribution chart with source attribution"
+    },
+    "sp500_return_decomp.json": {
+      "public": true,
+      "basis": "Derived return decomposition chart with source attribution"
+    },
+    "mag7_correlation.json": {
+      "public": true,
+      "basis": "Derived correlation analysis chart with source attribution"
+    },
+    "ndx_rankings.json": {"public": true, "basis": "Constituent return ranking with source attribution"},
+    "sp500_monthly_heatmap.json": {"public": true, "basis": "Derived heatmap chart with source attribution"},
+    "ndx_monthly_heatmap.json": {"public": true, "basis": "Derived heatmap chart with source attribution"},
+    "sp500_breadth.json": {"public": true, "basis": "Derived breadth indicator with source attribution"},
+    "ndx_breadth.json": {"public": true, "basis": "Derived breadth indicator with source attribution"}
   }
 }

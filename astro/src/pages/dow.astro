@@ -1,32 +1,5 @@
 ---
-import MarketArchivePage from "@/layouts/MarketArchivePage.astro";
-
-const sections = [
-  {
-    heading: "道琼斯与大盘",
-    description: "用 DIA 对照 SPY 与 QQQ，观察蓝筹、大盘和大型成长风格的价格差异。",
-    symbols: [
-      ["SPDR Dow Jones Industrial Average ETF", "AMEX:DIA|1D"],
-      ["SPDR S&P 500 ETF", "AMEX:SPY|1D"],
-      ["Invesco QQQ", "NASDAQ:QQQ|1D"],
-    ],
-  },
-  {
-    heading: "蓝筹行业暴露",
-    description: "用工业、金融和消费板块 ETF 观察道琼斯蓝筹风格背后的行业周期。",
-    symbols: [
-      ["工业 XLI", "AMEX:XLI|1D"],
-      ["金融 XLF", "AMEX:XLF|1D"],
-      ["必需消费 XLP", "AMEX:XLP|1D"],
-      ["可选消费 XLY", "AMEX:XLY|1D"],
-    ],
-  },
-] as const;
+import ResearchPage from "@/components/content/ResearchPage.astro";
 ---
 
-<MarketArchivePage
-  description="从道琼斯蓝筹代理进入大盘风格与行业周期。"
-  eyebrow="DOW JONES · BLUE CHIPS"
-  sections={sections}
-  title="道琼斯"
-/>
+<ResearchPage pageKey="dow" />

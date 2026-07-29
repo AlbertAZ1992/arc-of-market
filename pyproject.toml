@@ -9,6 +9,7 @@ dependencies = [
   "requests",
   "lxml",
   "openpyxl",
+  "xlrd>=2.0.1,<3",
   "edgartools",
   "httpx",
   "scipy>=1.18.0",

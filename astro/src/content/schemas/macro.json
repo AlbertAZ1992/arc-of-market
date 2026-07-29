@@ -1,0 +1,18 @@
+{
+  "id": "macro",
+  "route": "/macro/",
+  "seo": "seo",
+  "hero": "hero",
+  "chapters": [
+    {
+      "id": "macro-environment",
+      "navLabel": "宏观环境",
+      "label": "§ I · MACRO ENVIRONMENT",
+      "copy": "chapter-environment",
+      "blocks": [
+        { "type": "component", "component": "MacroDashboard" },
+        { "type": "component", "component": "FinancialStress" }
+      ]
+    }
+  ]
+}

@@ -34,7 +34,23 @@ jobs:
             refs/heads/data/automated-updates >/dev/null; then
             git fetch origin data/automated-updates
             git switch --create data/automated-updates --track origin/data/automated-updates
-            git merge --no-edit "$GITHUB_SHA"
+            if ! git merge --no-commit --no-ff "$GITHUB_SHA"; then
+              while IFS= read -r conflict_path; do
+                case "$conflict_path" in
+                  data/*)
+                    git restore --ours --worktree "$conflict_path"
+                    git add "$conflict_path"
+                    ;;
+                  *)
+                    echo "Unresolved non-data merge conflict: $conflict_path" >&2
+                    exit 1
+                    ;;
+                esac
+              done < <(git diff --name-only --diff-filter=U)
+            fi
+            if git rev-parse --verify --quiet MERGE_HEAD >/dev/null; then
+              git commit --no-edit
+            fi
           else
             git switch --create data/automated-updates
           fi
@@ -51,11 +67,10 @@ jobs:
       - name: Install Python dependencies
         run: uv sync --locked --group dev
 
-      - name: Validate Python
+      - name: Validate Python code
         run: |
           uv run ruff check scripts tests
           uv run ty check scripts
-          uv run pytest -q
 
       - name: Update data
         env:
@@ -66,6 +81,11 @@ jobs:
           SP500_FORWARD_EPS_SOURCE: ${{ vars.SP500_FORWARD_EPS_SOURCE }}
           SP500_FORWARD_EPS_LICENSE_SCOPE: ${{ vars.SP500_FORWARD_EPS_LICENSE_SCOPE }}
         run: uv run python -m scripts.update --profile "${{ inputs.profile }}"
+
+      - name: Validate generated data
+        run: |
+          uv run pytest -q
+          uv run python -m scripts.license_gate
 
       - uses: actions/setup-node@v4
         with:
@@ -97,63 +117,3 @@ jobs:
             git commit -m "data: ${{ inputs.profile }} update $(date -u +%F)"
           fi
           git push origin HEAD:data/automated-updates
-
-  publish:
-    needs: update
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: data/automated-updates
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@v6
-        with:
-          enable-cache: true
-          version: "0.10.11"
-
-      - name: Enforce tracked license approval
-        run: uv run python -m scripts.license_gate
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-
-      - uses: pnpm/action-setup@v4
-        with:
-          run_install: false
-          version: "10.24.0"
-
-      - name: Build public site
-        working-directory: astro
-        run: |
-          pnpm install --frozen-lockfile
-          pnpm build
-
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v4
-        with:
-          path: dist
-
-  deploy:
-    needs: publish
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
