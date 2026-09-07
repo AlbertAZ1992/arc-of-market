@@ -1,0 +1,790 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/AlbertAZ1992/arc-of-market/main/contracts/market-release.schema.json",
+    "title": "ArcOfMarket Market Release Core 2.0",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "schemaVersion",
+        "methodologyVersion",
+        "asOf",
+        "qualityStatus",
+        "producerCommit",
+        "sources",
+        "data",
+        "signals"
+    ],
+    "properties": {
+        "schemaVersion": {"const": "2.0"},
+        "methodologyVersion": {"enum": ["2.1.0", "2.2.0"]},
+        "asOf": {"$ref": "#/$defs/date"},
+        "qualityStatus": {"enum": ["APPROVED", "DEGRADED"]},
+        "producerCommit": {"type": "string", "pattern": "^[0-9a-f]{7,64}$"},
+        "sources": {"type": "array", "items": {"$ref": "#/$defs/source"}},
+        "signals": {"$ref": "#/$defs/signalSnapshot"},
+        "data": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "marketOverview",
+                "trendSnapshot",
+                "participation",
+                "style",
+                "breadth",
+                "sectors",
+                "semiconductorPulse",
+                "mega7",
+                "risk",
+                "treasuryCurve",
+                "macro",
+                "financialStress"
+            ],
+            "properties": {
+                "marketOverview": {
+                    "type": "array",
+                    "items": {"$ref": "#/$defs/benchmark"},
+                    "maxItems": 4
+                },
+                "marketHistory": {
+                    "type": "array",
+                    "items": {"$ref": "#/$defs/marketHistorySeries"},
+                    "maxItems": 4
+                },
+                "timeSeries": {
+                    "type": "array",
+                    "items": {"$ref": "#/$defs/timeSeries"},
+                    "maxItems": 7
+                },
+                "trendSnapshot": {
+                    "type": "array",
+                    "items": {"$ref": "#/$defs/trendPoint"},
+                    "maxItems": 2
+                },
+                "participation": {
+                    "type": "array",
+                    "items": {"$ref": "#/$defs/participation"},
+                    "maxItems": 2
+                },
+                "style": {"$ref": "#/$defs/roc35"},
+                "coreRotationInputs": {
+                    "oneOf": [{"type": "null"}, {"$ref": "#/$defs/coreRotationInputs"}]
+                },
+                "breadth": {"type": "array", "items": {"$ref": "#/$defs/breadth"}, "maxItems": 3},
+                "sectors": {"type": "array", "items": {"$ref": "#/$defs/sector"}, "maxItems": 11},
+                "semiconductorPulse": {"$ref": "#/$defs/semiconductorPulse"},
+                "mega7": {"$ref": "#/$defs/mega7"},
+                "risk": {"$ref": "#/$defs/risk"},
+                "treasuryCurve": {
+                    "oneOf": [
+                        {"type": "object", "maxProperties": 0},
+                        {"$ref": "#/$defs/treasuryCurve"}
+                    ]
+                },
+                "macro": {"type": "object", "additionalProperties": {"$ref": "#/$defs/macroValue"}},
+                "financialStress": {
+                    "oneOf": [
+                        {"type": "object", "maxProperties": 0},
+                        {"$ref": "#/$defs/financialStress"}
+                    ]
+                }
+            }
+        }
+    },
+    "$defs": {
+        "coreRotationInputs": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "asOf", "previousSession", "roc35", "value", "ma50", "ma200",
+                "ma50FiveSessionsAgo", "recentHigh", "calculationDigest"
+            ],
+            "properties": {
+                "asOf": {"$ref": "#/$defs/date"},
+                "previousSession": {"$ref": "#/$defs/date"},
+                "roc35": {"type": "number"},
+                "value": {"type": "number", "exclusiveMinimum": 0},
+                "ma50": {"type": "number", "exclusiveMinimum": 0},
+                "ma200": {"type": "number", "exclusiveMinimum": 0},
+                "ma50FiveSessionsAgo": {"type": "number", "exclusiveMinimum": 0},
+                "recentHigh": {"type": "boolean"},
+                "calculationDigest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+            }
+        },
+        "date": {"type": "string", "format": "date"},
+        "nullableNumber": {"type": ["number", "null"]},
+        "nullableScore": {"type": ["number", "null"], "minimum": 0, "maximum": 100},
+        "marketHistoryPoint": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["asOf", "value"],
+            "properties": {"asOf": {"$ref": "#/$defs/date"}, "value": {"type": "number"}}
+        },
+        "marketHistorySeries": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["benchmarkId", "proxyTicker", "basis", "startAsOf", "endAsOf", "points"],
+            "properties": {
+                "benchmarkId": {"type": "string"},
+                "proxyTicker": {"enum": ["SPY", "QQQ", "DIA", "IWM"]},
+                "basis": {"const": "cumulative_return_pct"},
+                "startAsOf": {"$ref": "#/$defs/date"},
+                "endAsOf": {"$ref": "#/$defs/date"},
+                "points": {
+                    "type": "array",
+                    "items": {"$ref": "#/$defs/marketHistoryPoint"},
+                    "minItems": 2,
+                    "maxItems": 252
+                }
+            }
+        },
+        "timeSeries": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "seriesId",
+                "sourceIds",
+                "cadence",
+                "basis",
+                "startAsOf",
+                "endAsOf",
+                "points"
+            ],
+            "properties": {
+                "seriesId": {
+                    "enum": [
+                        "mega7-equal-weight",
+                        "cyclicals-defensives",
+                        "financial-stress",
+                        "cot-vix",
+                        "equity-allocation"
+                    ]
+                },
+                "sourceIds": {
+                    "type": "array",
+                    "items": {"type": "string", "minLength": 1},
+                    "minItems": 1,
+                    "maxItems": 2,
+                    "uniqueItems": true
+                },
+                "cadence": {"enum": ["daily", "weekly", "quarterly"]},
+                "basis": {
+                    "enum": [
+                        "cumulative_return_pct",
+                        "relative_cumulative_return_pct",
+                        "index_level",
+                        "net_pct_open_interest",
+                        "allocation_pct"
+                    ]
+                },
+                "startAsOf": {"$ref": "#/$defs/date"},
+                "endAsOf": {"$ref": "#/$defs/date"},
+                "points": {
+                    "type": "array",
+                    "items": {"$ref": "#/$defs/marketHistoryPoint"},
+                    "minItems": 2,
+                    "maxItems": 252
+                }
+            }
+        },
+        "returns": {
+            "type": "object",
+            "required": ["return1d", "return1w", "return1m", "returnYtd"],
+            "properties": {
+                "return1d": {"type": "number"},
+                "return1w": {"type": "number"},
+                "return1m": {"type": "number"},
+                "returnYtd": {"$ref": "#/$defs/nullableNumber"}
+            }
+        },
+        "source": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "sourceId",
+                "status",
+                "asOf",
+                "message",
+                "url",
+                "publishPolicy",
+                "attribution"
+            ],
+            "properties": {
+                "sourceId": {"type": "string", "minLength": 1},
+                "status": {"enum": ["APPROVED", "FAILED"]},
+                "asOf": {"oneOf": [{"$ref": "#/$defs/date"}, {"type": "null"}]},
+                "message": {"type": ["string", "null"], "maxLength": 240},
+                "url": {"type": ["string", "null"]},
+                "publishPolicy": {"type": ["string", "null"]},
+                "attribution": {"type": ["string", "null"]}
+            }
+        },
+        "benchmark": {
+            "allOf": [
+                {"$ref": "#/$defs/returns"},
+                {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                        "benchmarkId",
+                        "proxyTicker",
+                        "asOf",
+                        "return1d",
+                        "return1w",
+                        "return1m",
+                        "returnYtd",
+                        "aboveMa50",
+                        "aboveMa200",
+                        "trendState",
+                        "drawdown52w",
+                        "realizedVol20d",
+                        "realizedVol60d"
+                    ],
+                    "properties": {
+                        "benchmarkId": {"type": "string"},
+                        "proxyTicker": {"type": "string"},
+                        "asOf": {"$ref": "#/$defs/date"},
+                        "return1d": {"type": "number"},
+                        "return1w": {"type": "number"},
+                        "return1m": {"type": "number"},
+                        "returnYtd": {"$ref": "#/$defs/nullableNumber"},
+                        "aboveMa50": {"type": ["boolean", "null"]},
+                        "aboveMa200": {"type": ["boolean", "null"]},
+                        "trendState": {
+                            "enum": ["uptrend", "downtrend", "transition", "insufficient"]
+                        },
+                        "drawdown52w": {"$ref": "#/$defs/nullableNumber"},
+                        "realizedVol20d": {"$ref": "#/$defs/nullableNumber"},
+                        "realizedVol60d": {"$ref": "#/$defs/nullableNumber"}
+                    }
+                }
+            ]
+        },
+        "participation": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "pairId",
+                "equalWeightTicker",
+                "capWeightTicker",
+                "asOf",
+                "relativeReturn1m",
+                "ratioAboveMa50",
+                "participationState"
+            ],
+            "properties": {
+                "pairId": {"type": "string"},
+                "equalWeightTicker": {"type": "string"},
+                "capWeightTicker": {"type": "string"},
+                "asOf": {"$ref": "#/$defs/date"},
+                "relativeReturn1m": {"type": "number"},
+                "ratioAboveMa50": {"type": "boolean"},
+                "participationState": {"enum": ["broadening", "narrowing", "mixed"]}
+            }
+        },
+        "trendPoint": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "ticker",
+                "asOf",
+                "value",
+                "priceBasis",
+                "ma5",
+                "ma10",
+                "ma20",
+                "ma50",
+                "aboveMa20",
+                "aboveMa50",
+                "distanceMa20Pct",
+                "distanceMa50Pct",
+                "drawdown52w"
+            ],
+            "properties": {
+                "ticker": {"enum": ["SPY", "QQQ"]},
+                "asOf": {"$ref": "#/$defs/date"},
+                "value": {"type": "number", "exclusiveMinimum": 0},
+                "priceBasis": {"const": "adjusted_close"},
+                "ma5": {"type": "number", "exclusiveMinimum": 0},
+                "ma10": {"type": "number", "exclusiveMinimum": 0},
+                "ma20": {"type": "number", "exclusiveMinimum": 0},
+                "ma50": {"type": "number", "exclusiveMinimum": 0},
+                "aboveMa20": {"type": "boolean"},
+                "aboveMa50": {"type": "boolean"},
+                "distanceMa20Pct": {"type": "number"},
+                "distanceMa50Pct": {"type": "number"},
+                "drawdown52w": {"$ref": "#/$defs/nullableNumber"}
+            }
+        },
+        "roc35Point": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["asOf", "value"],
+            "properties": {"asOf": {"$ref": "#/$defs/date"}, "value": {"type": "number"}}
+        },
+        "roc35Evidence": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["asOf", "valueAdjustedClose", "growthAdjustedClose"],
+            "properties": {
+                "asOf": {"$ref": "#/$defs/date"},
+                "valueAdjustedClose": {"type": "number", "exclusiveMinimum": 0},
+                "growthAdjustedClose": {"type": "number", "exclusiveMinimum": 0}
+            }
+        },
+        "roc35": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "indicatorId",
+                "engineVersion",
+                "valueTicker",
+                "growthTicker",
+                "asOf",
+                "comparisonAsOf",
+                "value",
+                "previousValue",
+                "change1dPp",
+                "ratio",
+                "ratioChange1dPct",
+                "direction",
+                "zeroCross",
+                "distanceFromZeroPp",
+                "recent",
+                "evidence"
+            ],
+            "properties": {
+                "indicatorId": {"const": "roc35"},
+                "engineVersion": {"const": "1.0.0"},
+                "valueTicker": {"const": "VTV"},
+                "growthTicker": {"const": "QQQ"},
+                "asOf": {"$ref": "#/$defs/date"},
+                "comparisonAsOf": {"$ref": "#/$defs/date"},
+                "value": {"type": "number"},
+                "previousValue": {"type": "number"},
+                "change1dPp": {"type": "number"},
+                "ratio": {"type": "number", "exclusiveMinimum": 0},
+                "ratioChange1dPct": {"type": "number"},
+                "direction": {"enum": ["RISING", "FALLING", "FLAT"]},
+                "zeroCross": {"enum": ["UP", "DOWN", "NONE"]},
+                "distanceFromZeroPp": {"type": "number"},
+                "recent": {"type": "array", "items": {"$ref": "#/$defs/roc35Point"}, "maxItems": 5},
+                "evidence": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["current", "comparison"],
+                    "properties": {
+                        "current": {"$ref": "#/$defs/roc35Evidence"},
+                        "comparison": {"$ref": "#/$defs/roc35Evidence"}
+                    }
+                }
+            }
+        },
+        "breadth": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "indexId",
+                "asOf",
+                "universeObservedAt",
+                "universeCount",
+                "eligibleCountMa50",
+                "eligibleCountMa200",
+                "pctAboveMa50",
+                "pctAboveMa200",
+                "breadthState",
+                "caveat"
+            ],
+            "properties": {
+                "indexId": {"enum": ["sp500", "nasdaq100", "dow30"]},
+                "asOf": {"$ref": "#/$defs/date"},
+                "universeObservedAt": {"$ref": "#/$defs/date"},
+                "universeCount": {"type": "integer", "minimum": 1},
+                "eligibleCountMa50": {"type": "integer", "minimum": 0},
+                "eligibleCountMa200": {"type": "integer", "minimum": 0},
+                "pctAboveMa50": {"type": "number", "minimum": 0, "maximum": 100},
+                "pctAboveMa200": {"type": "number", "minimum": 0, "maximum": 100},
+                "breadthState": {"enum": ["strong", "weak", "mixed"]},
+                "caveat": {"const": "current-universe survivorship bias"}
+            }
+        },
+        "sector": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "ticker",
+                "label",
+                "asOf",
+                "return1d",
+                "return1w",
+                "return1m",
+                "returnYtd",
+                "relative1m",
+                "rank"
+            ],
+            "properties": {
+                "ticker": {"type": "string"},
+                "label": {"type": "string"},
+                "asOf": {"$ref": "#/$defs/date"},
+                "return1d": {"type": "number"},
+                "return1w": {"type": "number"},
+                "return1m": {"type": "number"},
+                "returnYtd": {"$ref": "#/$defs/nullableNumber"},
+                "relative1m": {"type": "number"},
+                "rank": {"type": "integer", "minimum": 1}
+            }
+        },
+        "semiconductorPulse": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "ticker",
+                "benchmarkTicker",
+                "asOf",
+                "return1d",
+                "return1w",
+                "return1m",
+                "relativeReturn1d",
+                "relativeReturn1w",
+                "relativeReturn1m"
+            ],
+            "properties": {
+                "ticker": {"const": "SMH"},
+                "benchmarkTicker": {"const": "QQQ"},
+                "asOf": {"$ref": "#/$defs/date"},
+                "return1d": {"type": "number"},
+                "return1w": {"type": "number"},
+                "return1m": {"type": "number"},
+                "relativeReturn1d": {"type": "number"},
+                "relativeReturn1w": {"type": "number"},
+                "relativeReturn1m": {"type": "number"}
+            }
+        },
+        "mega7Member": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "ticker",
+                "asOf",
+                "return1d",
+                "return1w",
+                "return1m",
+                "returnYtd",
+                "relativeSpy1m",
+                "relativeQqq1m",
+                "rank"
+            ],
+            "properties": {
+                "ticker": {"type": "string"},
+                "asOf": {"$ref": "#/$defs/date"},
+                "return1d": {"type": "number"},
+                "return1w": {"type": "number"},
+                "return1m": {"type": "number"},
+                "returnYtd": {"$ref": "#/$defs/nullableNumber"},
+                "relativeSpy1m": {"type": "number"},
+                "relativeQqq1m": {"type": "number"},
+                "rank": {"type": "integer", "minimum": 1}
+            }
+        },
+        "equalWeight": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "return1d": {"type": "number"},
+                "return1w": {"type": "number"},
+                "return1m": {"type": "number"},
+                "returnYtd": {"type": "number"}
+            }
+        },
+        "mega7": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["basketVersion", "members", "equalWeight"],
+            "properties": {
+                "basketVersion": {"const": "mega7-2026-01"},
+                "members": {
+                    "type": "array",
+                    "items": {"$ref": "#/$defs/mega7Member"},
+                    "maxItems": 7
+                },
+                "equalWeight": {"$ref": "#/$defs/equalWeight"}
+            }
+        },
+        "risk": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "asOf",
+                "realizedVol20d",
+                "realizedVol60d",
+                "currentDrawdown",
+                "riskState",
+                "vixValue",
+                "vixAsOf",
+                "vixPreviousValue",
+                "vixPreviousAsOf",
+                "vixChange1dPct",
+                "vixRegime"
+            ],
+            "properties": {
+                "asOf": {"$ref": "#/$defs/date"},
+                "realizedVol20d": {"$ref": "#/$defs/nullableNumber"},
+                "realizedVol60d": {"$ref": "#/$defs/nullableNumber"},
+                "currentDrawdown": {"$ref": "#/$defs/nullableNumber"},
+                "riskState": {"enum": ["calm", "normal", "elevated", "stress", "insufficient"]},
+                "vixValue": {"$ref": "#/$defs/nullableNumber"},
+                "vixAsOf": {"oneOf": [{"$ref": "#/$defs/date"}, {"type": "null"}]},
+                "vixPreviousValue": {"$ref": "#/$defs/nullableNumber"},
+                "vixPreviousAsOf": {"oneOf": [{"$ref": "#/$defs/date"}, {"type": "null"}]},
+                "vixChange1dPct": {"$ref": "#/$defs/nullableNumber"},
+                "vixRegime": {"enum": ["low", "neutral", "elevated", "stress", null]}
+            }
+        },
+        "treasuryCurve": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "asOf",
+                "treasury2y",
+                "treasury10y",
+                "curve2s10s",
+                "treasury2yChange1dBp",
+                "treasury10yChange1dBp",
+                "treasury10yChange3dBp"
+            ],
+            "properties": {
+                "asOf": {"$ref": "#/$defs/date"},
+                "treasury2y": {"type": "number"},
+                "treasury10y": {"type": "number"},
+                "curve2s10s": {"type": "number"},
+                "treasury2yChange1dBp": {"type": "number"},
+                "treasury10yChange1dBp": {"type": "number"},
+                "treasury10yChange3dBp": {"type": "number"}
+            }
+        },
+        "scoreComponent": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["componentId", "value", "score", "weight", "contribution"],
+            "properties": {
+                "componentId": {"type": "string", "minLength": 1},
+                "value": {"type": ["number", "boolean", "string", "null"]},
+                "score": {"type": "number", "minimum": 0, "maximum": 100},
+                "weight": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
+                "contribution": {"type": "number", "minimum": 0, "maximum": 100}
+            }
+        },
+        "scoreComponents": {
+            "type": "array",
+            "items": {"$ref": "#/$defs/scoreComponent"},
+            "maxItems": 8
+        },
+        "trendIndicator": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "indicatorId",
+                "engineVersion",
+                "state",
+                "score",
+                "confidence",
+                "components",
+                "spyAboveMa20",
+                "spyAboveMa50",
+                "qqqAboveMa20",
+                "qqqAboveMa50"
+            ],
+            "properties": {
+                "indicatorId": {"const": "trend"},
+                "engineVersion": {"const": "2.0.0"},
+                "state": {"enum": ["BULLISH", "NEUTRAL", "BEARISH", "UNAVAILABLE"]},
+                "score": {"$ref": "#/$defs/nullableScore"},
+                "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+                "components": {"$ref": "#/$defs/scoreComponents"},
+                "spyAboveMa20": {"type": ["boolean", "null"]},
+                "spyAboveMa50": {"type": ["boolean", "null"]},
+                "qqqAboveMa20": {"type": ["boolean", "null"]},
+                "qqqAboveMa50": {"type": ["boolean", "null"]}
+            }
+        },
+        "participationIndicator": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "indicatorId",
+                "engineVersion",
+                "state",
+                "score",
+                "confidence",
+                "components",
+                "breadthStates",
+                "ratioStates"
+            ],
+            "properties": {
+                "indicatorId": {"const": "participation"},
+                "engineVersion": {"const": "2.0.0"},
+                "state": {"enum": ["BROAD", "MIXED", "NARROW", "UNAVAILABLE"]},
+                "score": {"$ref": "#/$defs/nullableScore"},
+                "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+                "components": {"$ref": "#/$defs/scoreComponents"},
+                "breadthStates": {"type": "object", "additionalProperties": {"type": "string"}},
+                "ratioStates": {"type": "object", "additionalProperties": {"type": "string"}}
+            }
+        },
+        "styleIndicator": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["indicatorId", "engineVersion", "state", "roc35", "direction"],
+            "properties": {
+                "indicatorId": {"const": "style"},
+                "engineVersion": {"const": "1.0.0"},
+                "state": {"enum": ["VALUE_LEADING", "GROWTH_LEADING", "NEUTRAL", "UNAVAILABLE"]},
+                "roc35": {"$ref": "#/$defs/nullableNumber"},
+                "direction": {"enum": ["RISING", "FALLING", "FLAT", null]}
+            }
+        },
+        "cycleIndicator": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "indicatorId",
+                "engineVersion",
+                "state",
+                "score",
+                "confidence",
+                "components",
+                "semiconductorRelative1w",
+                "semiconductorRelative1m"
+            ],
+            "properties": {
+                "indicatorId": {"const": "cycle"},
+                "engineVersion": {"const": "2.0.0"},
+                "state": {"enum": ["LEADING", "MIXED", "LAGGING", "UNAVAILABLE"]},
+                "score": {"$ref": "#/$defs/nullableScore"},
+                "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+                "components": {"$ref": "#/$defs/scoreComponents"},
+                "semiconductorRelative1w": {"$ref": "#/$defs/nullableNumber"},
+                "semiconductorRelative1m": {"$ref": "#/$defs/nullableNumber"}
+            }
+        },
+        "riskWindow": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "indicatorId",
+                "engineVersion",
+                "state",
+                "riskScore",
+                "confidence",
+                "components",
+                "flags",
+                "thresholds"
+            ],
+            "properties": {
+                "indicatorId": {"const": "risk-window"},
+                "engineVersion": {"const": "2.0.0"},
+                "state": {"enum": ["OPEN", "CAUTION", "CLOSED", "UNAVAILABLE"]},
+                "riskScore": {"$ref": "#/$defs/nullableScore"},
+                "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+                "components": {"$ref": "#/$defs/scoreComponents"},
+                "flags": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+                "thresholds": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["cautionRiskScore", "closedRiskScore"],
+                    "properties": {
+                        "cautionRiskScore": {"const": 55},
+                        "closedRiskScore": {"const": 75}
+                    }
+                }
+            }
+        },
+        "marketSignal": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "signalId",
+                "engineVersion",
+                "state",
+                "score",
+                "confidence",
+                "observationStates",
+                "riskWindowState",
+                "styleIncludedInScore"
+            ],
+            "properties": {
+                "signalId": {"const": "market-regime"},
+                "engineVersion": {"const": "2.0.0"},
+                "state": {"enum": ["RISK_ON", "WATCH", "DEFENSIVE", "UNAVAILABLE"]},
+                "score": {"$ref": "#/$defs/nullableScore"},
+                "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+                "observationStates": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["trend", "participation", "style", "cycle"],
+                    "properties": {
+                        "trend": {"enum": ["BULLISH", "NEUTRAL", "BEARISH", "UNAVAILABLE"]},
+                        "participation": {"enum": ["BROAD", "MIXED", "NARROW", "UNAVAILABLE"]},
+                        "style": {
+                            "enum": ["VALUE_LEADING", "GROWTH_LEADING", "NEUTRAL", "UNAVAILABLE"]
+                        },
+                        "cycle": {"enum": ["LEADING", "MIXED", "LAGGING", "UNAVAILABLE"]}
+                    }
+                },
+                "riskWindowState": {"enum": ["OPEN", "CAUTION", "CLOSED", "UNAVAILABLE"]},
+                "styleIncludedInScore": {"const": false}
+            }
+        },
+        "signalSnapshot": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["asOf", "observations", "riskWindow", "marketSignal"],
+            "properties": {
+                "asOf": {"$ref": "#/$defs/date"},
+                "observations": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["trend", "participation", "style", "cycle"],
+                    "properties": {
+                        "trend": {"$ref": "#/$defs/trendIndicator"},
+                        "participation": {"$ref": "#/$defs/participationIndicator"},
+                        "style": {"$ref": "#/$defs/styleIndicator"},
+                        "cycle": {"$ref": "#/$defs/cycleIndicator"}
+                    }
+                },
+                "riskWindow": {"$ref": "#/$defs/riskWindow"},
+                "marketSignal": {"$ref": "#/$defs/marketSignal"}
+            }
+        },
+        "macroValue": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["value", "asOf", "unit", "sourceSeries", "vintage"],
+            "properties": {
+                "value": {"type": "number"},
+                "asOf": {"$ref": "#/$defs/date"},
+                "unit": {"type": "string"},
+                "sourceSeries": {
+                    "oneOf": [
+                        {"type": "string"},
+                        {"type": "array", "items": {"type": "string"}, "minItems": 1}
+                    ]
+                },
+                "vintage": {"const": "latest revised; not point-in-time safe"}
+            }
+        },
+        "numberMap": {"type": "object", "additionalProperties": {"type": "number"}},
+        "financialStress": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["asOf", "value", "components", "regions", "stressState", "vintage"],
+            "properties": {
+                "asOf": {"$ref": "#/$defs/date"},
+                "value": {"type": "number"},
+                "components": {"$ref": "#/$defs/numberMap"},
+                "regions": {"$ref": "#/$defs/numberMap"},
+                "stressState": {"enum": ["low", "normal", "elevated", "stress"]},
+                "vintage": {"const": "latest revised; not point-in-time safe"}
+            }
+        }
+    }
+}

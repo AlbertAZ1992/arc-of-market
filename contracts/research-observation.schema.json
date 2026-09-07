@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/AlbertAZ1992/arc-of-market/main/contracts/research-observation.schema.json",
+  "title": "ArcOfMarket Point-in-Time Research Observation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "releaseId",
+    "coreDigest",
+    "asOf",
+    "availableAt",
+    "methodologyVersion",
+    "qualityStatus",
+    "sourceAvailability",
+    "signals",
+    "pitPolicy"
+  ],
+  "properties": {
+    "schemaVersion": {"const": "1.0"},
+    "releaseId": {"type": "string", "pattern": "^mr_[0-9a-f]{64}$"},
+    "coreDigest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "asOf": {"type": "string", "format": "date"},
+    "availableAt": {"type": "string", "format": "date-time"},
+    "methodologyVersion": {"type": "string", "minLength": 1},
+    "qualityStatus": {"enum": ["APPROVED", "DEGRADED"]},
+    "sourceAvailability": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["sourceId", "status", "sourceAsOf"],
+        "properties": {
+          "sourceId": {"type": "string", "minLength": 1},
+          "status": {"enum": ["APPROVED", "FAILED"]},
+          "sourceAsOf": {"type": ["string", "null"], "format": "date"}
+        }
+      }
+    },
+    "signals": {
+      "type": "object",
+      "required": ["asOf", "observations", "riskWindow", "marketSignal"]
+    },
+    "pitPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["availableAtBasis", "revisions", "macroVintage"],
+      "properties": {
+        "availableAtBasis": {"const": "market-release-generated-at"},
+        "revisions": {"const": "append-only"},
+        "macroVintage": {"const": "captured-as-received"}
+      }
+    }
+  }
+}

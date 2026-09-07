@@ -1,0 +1,119 @@
+{
+  "schemaVersion": "2.0",
+  "methodologyVersion": "2.2.0",
+  "priceGroups": {
+    "benchmarks": {
+      "sp500_proxy": "SPY",
+      "nasdaq100_proxy": "QQQ",
+      "dow30_proxy": "DIA",
+      "russell2000_proxy": "IWM"
+    },
+    "participation": [
+      {
+        "pairId": "sp500_equal_weight",
+        "equalWeightTicker": "RSP",
+        "capWeightTicker": "SPY"
+      },
+      {
+        "pairId": "nasdaq100_equal_weight",
+        "equalWeightTicker": "QQEW",
+        "capWeightTicker": "QQQ"
+      }
+    ]
+  },
+  "style": {
+    "valueTicker": "VTV",
+    "growthTicker": "QQQ",
+    "lookbackSessions": 35
+  },
+  "cycle": {
+    "semiconductorTicker": "SMH",
+    "benchmarkTicker": "QQQ"
+  },
+  "sectorLabels": {
+    "XLB": "原材料",
+    "XLC": "通信服务",
+    "XLE": "能源",
+    "XLF": "金融",
+    "XLI": "工业",
+    "XLK": "信息科技",
+    "XLP": "必需消费",
+    "XLRE": "房地产",
+    "XLU": "公用事业",
+    "XLV": "医疗保健",
+    "XLY": "可选消费"
+  },
+  "mega7": [
+    "AAPL",
+    "MSFT",
+    "AMZN",
+    "GOOGL",
+    "META",
+    "NVDA",
+    "TSLA"
+  ],
+  "breadth": {
+    "sp500": {"sourceId": "wikipedia-sp500", "minimumCoverage": 0.995},
+    "nasdaq100": {"sourceId": "wikipedia-nasdaq100", "minimumCoverage": 0.98},
+    "dow30": {"sourceId": "wikipedia-dow", "minimumCoverage": 1.0}
+  },
+  "fredSeries": {
+    "sofr": {"seriesId": "SOFR", "unit": "percent", "transform": "latest"},
+    "effr": {"seriesId": "EFFR", "unit": "percent", "transform": "latest"},
+    "rrp": {"seriesId": "RRPONTSYD", "unit": "usd_billions", "transform": "latest"},
+    "fedBalanceSheet": {"seriesId": "WALCL", "unit": "usd_trillions", "transform": "millions_to_trillions"},
+    "treasury2y": {"seriesId": "DGS2", "unit": "percent", "transform": "latest"},
+    "treasury10y": {"seriesId": "DGS10", "unit": "percent", "transform": "latest"},
+    "realYield10y": {"seriesId": "DFII10", "unit": "percent", "transform": "latest"},
+    "curve2s10s": {"seriesId": "T10Y2Y", "unit": "percentage_points", "transform": "latest"},
+    "cpiYoy": {"seriesId": "CPIAUCSL", "unit": "percent_yoy", "transform": "yoy"},
+    "coreCpiYoy": {"seriesId": "CPILFESL", "unit": "percent_yoy", "transform": "yoy"},
+    "corePceYoy": {"seriesId": "PCEPILFE", "unit": "percent_yoy", "transform": "yoy"},
+    "unemployment": {"seriesId": "UNRATE", "unit": "percent", "transform": "latest"},
+    "payrollChange": {"seriesId": "PAYEMS", "unit": "thousands", "transform": "change"},
+    "allocationEquityNonfinancial": {"seriesId": "NCBEILQ027S", "unit": "usd_millions", "transform": "component"},
+    "allocationEquityFinancial": {"seriesId": "FBCELLQ027S", "unit": "usd_millions", "transform": "component"},
+    "allocationDebtCorporate": {"seriesId": "BCNSDODNS", "unit": "usd_millions", "transform": "component"},
+    "allocationDebtMarket": {"seriesId": "CMDEBT", "unit": "usd_millions", "transform": "component"},
+    "allocationDebtFederal": {"seriesId": "FGSDODNS", "unit": "usd_millions", "transform": "component"},
+    "allocationDebtStateLocal": {"seriesId": "SLGSDODNS", "unit": "usd_millions", "transform": "component"},
+    "allocationDebtMortgage": {"seriesId": "WCMITCMFODNS", "unit": "usd_millions", "transform": "component"}
+  },
+  "sources": {
+    "yahoo-finance": {
+      "url": "https://finance.yahoo.com/",
+      "publishPolicy": "derived-only",
+      "attribution": "Source: Yahoo Finance via yfinance; ArcOfMarket publishes compact research calculations, not raw price history."
+    },
+    "wikipedia": {
+      "url": "https://www.wikipedia.org/",
+      "publishPolicy": "current-membership-derived-breadth",
+      "attribution": "Adapted from Wikipedia contributors under CC BY-SA 4.0; membership is current-cross-section only."
+    },
+    "fred": {
+      "url": "https://fred.stlouisfed.org/",
+      "publishPolicy": "reviewed-government-series-only",
+      "attribution": "Source: FRED and the identified original government publishers; latest revised values."
+    },
+    "ofr": {
+      "url": "https://www.financialresearch.gov/financial-stress-index/",
+      "publishPolicy": "compact-history-and-latest-components",
+      "attribution": "Source: Office of Financial Research, Financial Stress Index; ArcOfMarket is not endorsed by OFR or the U.S. Treasury."
+    },
+    "cboe": {
+      "url": "https://www.cboe.com/tradable-products/vix/vix-historical-data/",
+      "publishPolicy": "current-values-and-derived-state-only",
+      "attribution": "Source: Cboe Global Markets; ArcOfMarket publishes the latest and previous VIX close plus its own derived state, not the historical file."
+    },
+    "cftc": {
+      "url": "https://www.cftc.gov/MarketReports/CommitmentsofTraders/index.htm",
+      "publishPolicy": "public-domain-time-series",
+      "attribution": "Source: U.S. CFTC Traders in Financial Futures; net positions as a share of open interest are ArcOfMarket calculations."
+    },
+    "us-treasury": {
+      "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/",
+      "publishPolicy": "compact-current-curve-and-changes",
+      "attribution": "Source: U.S. Department of the Treasury daily par yield curve rates; latest 2Y/10Y values and ArcOfMarket changes."
+    }
+  }
+}

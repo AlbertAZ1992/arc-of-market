@@ -1,0 +1,990 @@
+{
+  "schemaVersion": "1.0",
+  "signalId": "roc35",
+  "entries": [
+    {
+      "asOf": "2026-08-03",
+      "value": "5.6579",
+      "state": "VALUE_LEADING",
+      "previousState": "VALUE_LEADING",
+      "direction": "RISING",
+      "event": "UNCHANGED",
+      "pendulum": {
+        "value": 5.6579,
+        "previousValue": 5.2384,
+        "change1d": 0.4195,
+        "direction": "RISING",
+        "state": "VALUE_LEADING",
+        "risingStreak": 1
+      },
+      "qqq": {
+        "value": 700.07,
+        "ma20": 699.881,
+        "ma50": 714.5072,
+        "distanceMa20Pct": 0.027,
+        "distanceMa50Pct": -2.0206
+      },
+      "strategyInputs": {
+        "asOf": "2026-08-03",
+        "previousSession": "2026-07-31",
+        "roc35": 5.657911483932931,
+        "value": 700.0700073242188,
+        "ma50": 714.5072314453125,
+        "ma200": 644.3523687744141,
+        "ma50FiveSessionsAgo": 717.2383093261719,
+        "recentHigh": true,
+        "calculationDigest": "d653e5c8139ddeea1619bf5cfaac9a473525a93ba5cfb9d96080a532c056395f"
+      },
+      "releaseId": "sr_reconstructed_e86e8d3e85ff7397207cd9e794abed1876f4fd7ab5fe725c8c54e0bcb0673abc",
+      "reconstruction": {
+        "computedAt": "2026-09-05T10:11:23.362687+00:00",
+        "methodology": "roc35@1.0.0",
+        "source": "Yahoo Finance · adjusted daily close",
+        "inputDigest": "130d31a5c5a0ad9e550c78d8485b94b389984603683c5260f9d4290af45756a3"
+      }
+    },
+    {
+      "asOf": "2026-08-04",
+      "value": "3.1590",
+      "state": "VALUE_LEADING",
+      "previousState": "VALUE_LEADING",
+      "direction": "FALLING",
+      "event": "UNCHANGED",
+      "pendulum": {
+        "value": 3.159,
+        "previousValue": 5.6579,
+        "change1d": -2.4989,
+        "direction": "FALLING",
+        "state": "VALUE_LEADING",
+        "risingStreak": 0
+      },
+      "qqq": {
+        "value": 723.85,
+        "ma20": 700.602,
+        "ma50": 714.7097,
+        "distanceMa20Pct": 3.3183,
+        "distanceMa50Pct": 1.2789
+      },
+      "strategyInputs": {
+        "asOf": "2026-08-04",
+        "previousSession": "2026-08-03",
+        "roc35": 3.158958594326622,
+        "value": 723.8499755859375,
+        "ma50": 714.7097180175781,
+        "ma200": 644.9714770507812,
+        "ma50FiveSessionsAgo": 716.3681127929688,
+        "recentHigh": true,
+        "calculationDigest": "5a55b15f546ebc1650b54abd956ab3a6a9d97f07292571ec13ae3d81ce4e7658"
+      },
+      "releaseId": "sr_reconstructed_6a85a15cbc73960ec2dd782e4b46d4cc4c44302579b464476f21395938cee20c",
+      "reconstruction": {
+        "computedAt": "2026-09-05T10:11:23.362687+00:00",
+        "methodology": "roc35@1.0.0",
+        "source": "Yahoo Finance · adjusted daily close",
+        "inputDigest": "dc0e0c6872c26a6b75d8a786c085aa94d4c70b0b772816c32791accee4e2a4d2"
+      }
+    },
+    {
+      "asOf": "2026-08-05",
+      "value": "6.8626",
+      "state": "VALUE_LEADING",
+      "previousState": "VALUE_LEADING",
+      "direction": "RISING",
+      "event": "UNCHANGED",
+      "pendulum": {
+        "value": 6.8626,
+        "previousValue": 3.159,
+        "change1d": 3.7036,
+        "direction": "RISING",
+        "state": "VALUE_LEADING",
+        "risingStreak": 1
+      },
+      "qqq": {
+        "value": 717.3,
+        "ma20": 700.895,
+        "ma50": 714.7207,
+        "distanceMa20Pct": 2.3406,
+        "distanceMa50Pct": 0.3609
+      },
+      "strategyInputs": {
+        "asOf": "2026-08-05",
+        "previousSession": "2026-08-04",
+        "roc35": 6.862619710728213,
+        "value": 717.2999877929688,
+        "ma50": 714.7206713867188,
+        "ma200": 645.5689447021484,
+        "ma50FiveSessionsAgo": 715.4396765136719,
+        "recentHigh": true,
+        "calculationDigest": "a2bb22c9aa7139800d9a83f3818ba54e61bee8467cddbe9368cd292a1776677b"
+      },
+      "releaseId": "sr_reconstructed_3b4cde7687fb08f5b1bf162cfdcbecdf24c0c2deaae7037896866577742e8d99",
+      "reconstruction": {
+        "computedAt": "2026-09-05T10:11:23.362687+00:00",
+        "methodology": "roc35@1.0.0",
+        "source": "Yahoo Finance · adjusted daily close",
+        "inputDigest": "3ba68783f7a50b5fc8aba05e911868d46ab04b383cc8a6d0337581e77192fd15"
+      }
+    },
+    {
+      "asOf": "2026-08-06",
+      "value": "5.0302",
+      "state": "VALUE_LEADING",
+      "previousState": "VALUE_LEADING",
+      "direction": "FALLING",
+      "event": "UNCHANGED",
+      "pendulum": {
+        "value": 5.0302,
+        "previousValue": 6.8626,
+        "change1d": -1.8324,
+        "direction": "FALLING",
+        "state": "VALUE_LEADING",
+        "risingStreak": 0
+      },
+      "qqq": {
+        "value": 714.65,
+        "ma20": 700.4635,
+        "ma50": 714.4241,
+        "distanceMa20Pct": 2.0253,
+        "distanceMa50Pct": 0.0316
+      },
+      "strategyInputs": {
+        "asOf": "2026-08-06",
+        "previousSession": "2026-08-05",
+        "roc35": 5.030191338692025,
+        "value": 714.6500244140625,
+        "ma50": 714.4241040039062,
+        "ma200": 646.1335345458984,
+        "ma50FiveSessionsAgo": 715.00857421875,
+        "recentHigh": true,
+        "calculationDigest": "b22c9a227c228fea7d57aab082cfbb605d874c8cd2eee79782f94160043fc9dc"
+      },
+      "releaseId": "sr_reconstructed_d0c7ebed13bd6df6073c0f82762be9be958b16daedfe7932b8ea277f48f243de",
+      "reconstruction": {
+        "computedAt": "2026-09-05T10:11:23.362687+00:00",
+        "methodology": "roc35@1.0.0",
+        "source": "Yahoo Finance · adjusted daily close",
+        "inputDigest": "f20d8c3a0a05c0b9c98dbbf0b011ba4d9aa7503b9be10e281b3f308010ccf7b4"
+      }
+    },
+    {
+      "asOf": "2026-08-07",
+      "value": "4.1264",
+      "state": "VALUE_LEADING",
+      "previousState": "VALUE_LEADING",
+      "direction": "FALLING",
+      "event": "UNCHANGED",
+      "pendulum": {
+        "value": 4.1264,
+        "previousValue": 5.0302,
+        "change1d": -0.9038,
+        "direction": "FALLING",
+        "state": "VALUE_LEADING",
+        "risingStreak": 0
+      },
+      "qqq": {
+        "value": 723.03,
+        "ma20": 700.3395,
+        "ma50": 714.3117,
+        "distanceMa20Pct": 3.2399,
+        "distanceMa50Pct": 1.2205
+      },
+      "strategyInputs": {
+        "asOf": "2026-08-07",
+        "previousSession": "2026-08-06",
+        "roc35": 4.126417096214818,
+        "value": 723.030029296875,
+        "ma50": 714.31171875,
+        "ma200": 646.7021130371094,
+        "ma50FiveSessionsAgo": 714.7531750488281,
+        "recentHigh": true,
+        "calculationDigest": "2351c507cd9ffdf00e819e5d84677a92c0e82288d0fc3e6b7a392534501efe0c"
+      },
+      "releaseId": "sr_reconstructed_62341fb39143ecfa154cc8012f99488515105c888cd424dde84b3d247d1e547b",
+      "reconstruction": {
+        "computedAt": "2026-09-05T10:11:23.362687+00:00",
+        "methodology": "roc35@1.0.0",
+        "source": "Yahoo Finance · adjusted daily close",
+        "inputDigest": "b07210c00ff8400200fb3693a15beab449ec17fb980de66a1fd11112d773aa8f"
+      }
+    },
+    {
+      "asOf": "2026-08-10",
+      "value": "7.1917",
+      "state": "VALUE_LEADING",
+      "previousState": "VALUE_LEADING",
+      "direction": "RISING",
+      "event": "UNCHANGED",
+      "pendulum": {
+        "value": 7.1917,
+        "previousValue": 4.1264,
+        "change1d": 3.0653,
+        "direction": "RISING",
+        "state": "VALUE_LEADING",
+        "risingStreak": 1
+      },
+      "qqq": {
+        "value": 720.87,
+        "ma20": 700.796,
+        "ma50": 714.0333,
+        "distanceMa20Pct": 2.8645,
+        "distanceMa50Pct": 0.9575
+      },
+      "strategyInputs": {
+        "asOf": "2026-08-10",
+        "previousSession": "2026-08-07",
+        "roc35": 7.1917016001328715,
+        "value": 720.8699951171875,
+        "ma50": 714.0332690429688,
+        "ma200": 647.2606881713867,
+        "ma50FiveSessionsAgo": 714.5072314453125,
+        "recentHigh": true,
+        "calculationDigest": "609bb6b6d1770765c31359c9903a997ace37c3bd6ea09bb77eaf7af8ad6cf04d"
+      },
+      "releaseId": "sr_reconstructed_fed6d25200196b45edbae91237358dac0b760586641e8cb301f082ec183a0823",
+      "reconstruction": {
+        "computedAt": "2026-09-05T10:11:23.362687+00:00",
+        "methodology": "roc35@1.0.0",
+        "source": "Yahoo Finance · adjusted daily close",
+        "inputDigest": "875411ced398c47b3c5a20280c3e3438403b04785adb61568965e37fcebb3fd7"
+      }
+    },
+    {
+      "asOf": "2026-08-11",
+      "value": "6.3837",
+      "state": "VALUE_LEADING",
+      "previousState": "VALUE_LEADING",
+      "direction": "FALLING",
+      "event": "UNCHANGED",
+      "pendulum": {
+        "value": 6.3837,
+        "previousValue": 7.1917,
+        "change1d": -0.808,
+        "direction": "FALLING",
+        "state": "VALUE_LEADING",
+        "risingStreak": 0
+      },
+      "qqq": {
+        "value": 718.45,
+        "ma20": 700.734,
+        "ma50": 713.6523,
+        "distanceMa20Pct": 2.5282,
+        "distanceMa50Pct": 0.6723
+      },
+      "strategyInputs": {
+        "asOf": "2026-08-11",
+        "previousSession": "2026-08-10",
+        "roc35": 6.383659359128213,
+        "value": 718.4500122070312,
+        "ma50": 713.6522790527343,
+        "ma200": 647.8365063476563,
+        "ma50FiveSessionsAgo": 714.7097180175781,
+        "recentHigh": true,
+        "calculationDigest": "8f702a45b0a1d68c4de55a1fad566970ec53c2ffc3e0f89e0d1733c3939c7f1a"
+      },
+      "releaseId": "sr_reconstructed_75b4430628355e6466f1306f7494dac2cca0b95e79c399019673863887ff3d08",
+      "reconstruction": {
+        "computedAt": "2026-09-05T10:11:23.362687+00:00",
+        "methodology": "roc35@1.0.0",
+        "source": "Yahoo Finance · adjusted daily close",
+        "inputDigest": "84d46819196faf1b48fdf266f6e97f31dca3c5a350338a1f54d08644dfb0f610"
+      }
+    },
+    {
+      "asOf": "2026-08-12",
+      "value": "3.1357",
+      "state": "VALUE_LEADING",
+      "previousState": "VALUE_LEADING",
+      "direction": "FALLING",
+      "event": "UNCHANGED",
+      "pendulum": {
+        "value": 3.1357,
+        "previousValue": 6.3837,
+        "change1d": -3.248,
+        "direction": "FALLING",
+        "state": "VALUE_LEADING",
+        "risingStreak": 0
+      },
+      "qqq": {
+        "value": 723.7,
+        "ma20": 701.032,
+        "ma50": 713.2878,
+        "distanceMa20Pct": 3.2335,
+        "distanceMa50Pct": 1.4598
+      },
+      "strategyInputs": {
+        "asOf": "2026-08-12",
+        "previousSession": "2026-08-11",
+        "roc35": 3.135706229174273,
+        "value": 723.7000122070312,
+        "ma50": 713.2877856445313,
+        "ma200": 648.413217163086,
+        "ma50FiveSessionsAgo": 714.7206713867188,
+        "recentHigh": true,
+        "calculationDigest": "99799561888dd9a229f68b290ef234ccef1fac027a49034326d49fb0557e47e6"
+      },
+      "releaseId": "sr_reconstructed_41bbbbef9e41ef0f454bac8ba7ed9fda106564244282aedcda6b4c6125052478",
+      "reconstruction": {
+        "computedAt": "2026-09-05T10:11:23.362687+00:00",
+        "methodology": "roc35@1.0.0",
+        "source": "Yahoo Finance · adjusted daily close",
+        "inputDigest": "6822d6bf923ecb2bf2354b121d9686a267fdbb4865dfa2d0f7ae45c0740fcc1e"
+      }
+    },
+    {
+      "asOf": "2026-08-13",
+      "value": "1.7897",
+      "state": "VALUE_LEADING",
+      "previousState": "VALUE_LEADING",
+      "direction": "FALLING",
+      "event": "UNCHANGED",
+      "pendulum": {
+        "value": 1.7897,
+        "previousValue": 3.1357,
+        "change1d": -1.346,
+        "direction": "FALLING",
+        "state": "VALUE_LEADING",
+        "risingStreak": 0
+      },
+      "qqq": {
+        "value": 732.07,
+        "ma20": 702.3385,
+        "ma50": 713.0224,
+        "distanceMa20Pct": 4.2332,
+        "distanceMa50Pct": 2.6714
+      },
+      "strategyInputs": {
+        "asOf": "2026-08-13",
+        "previousSession": "2026-08-12",
+        "roc35": 1.789697948718172,
+        "value": 732.0700073242188,
+        "ma50": 713.0223681640625,
+        "ma200": 648.999296875,
+        "ma50FiveSessionsAgo": 714.4241040039062,
+        "recentHigh": true,
+        "calculationDigest": "98dcaab901fd8a220def327dc909300ae64950e33487d3dad6c99ed261723bc8"
+      },
+      "releaseId": "sr_reconstructed_cfcf808bdc9e5c3b619833b2b359dd44c9dafdb2d1bc2c7090da416e2b4d2ef7",
+      "reconstruction": {
+        "computedAt": "2026-09-05T10:11:23.362687+00:00",
+        "methodology": "roc35@1.0.0",
+        "source": "Yahoo Finance · adjusted daily close",
+        "inputDigest": "2db222e9541cf0de171b17bd6d5971f62ef10c47dcfd8f1685a542f5481890d3"
+      }
+    },
+    {
+      "asOf": "2026-08-14",
+      "value": "1.6091",
+      "state": "VALUE_LEADING",
+      "previousState": "VALUE_LEADING",
+      "direction": "FALLING",
+      "event": "UNCHANGED",
+      "pendulum": {
+        "value": 1.6091,
+        "previousValue": 1.7897,
+        "change1d": -0.1806,
+        "direction": "FALLING",
+        "state": "VALUE_LEADING",
+        "risingStreak": 0
+      },
+      "qqq": {
+        "value": 731.07,
+        "ma20": 704.1255,
+        "ma50": 712.7759,
+        "distanceMa20Pct": 3.8267,
+        "distanceMa50Pct": 2.5666
+      },
+      "strategyInputs": {
+        "asOf": "2026-08-14",
+        "previousSession": "2026-08-13",
+        "roc35": 1.6090756264872441,
+        "value": 731.0700073242188,
+        "ma50": 712.7759069824219,
+        "ma200": 649.5256259155274,
+        "ma50FiveSessionsAgo": 714.31171875,
+        "recentHigh": true,
+        "calculationDigest": "435f3848cb4aae6ca041393bc4b088d50edb8c885d7cae512c7fdcb62c4137a3"
+      },
+      "releaseId": "sr_reconstructed_8cbf39a960c13f57cf587c917cc4b11025f82052883a7ec1bff2e6160f426742",
+      "reconstruction": {
+        "computedAt": "2026-09-05T10:11:23.362687+00:00",
+        "methodology": "roc35@1.0.0",
+        "source": "Yahoo Finance · adjusted daily close",
+        "inputDigest": "2a055d00412abaec12f241a7fa1b4104ee377027bf83f89f6880bbfafbdf2e6a"
+      }
+    },
+    {
+      "asOf": "2026-08-17",
+      "value": "0.4798",
+      "state": "VALUE_LEADING",
+      "previousState": "VALUE_LEADING",
+      "direction": "FALLING",
+      "event": "UNCHANGED",
+      "pendulum": {
+        "value": 0.4798,
+        "previousValue": 1.6091,
+        "change1d": -1.1293,
+        "direction": "FALLING",
+        "state": "VALUE_LEADING",
+        "risingStreak": 0
+      },
+      "qqq": {
+        "value": 729.87,
+        "ma20": 705.816,
+        "ma50": 712.5774,
+        "distanceMa20Pct": 3.408,
+        "distanceMa50Pct": 2.4268
+      },
+      "strategyInputs": {
+        "asOf": "2026-08-17",
+        "previousSession": "2026-08-14",
+        "roc35": 0.4797583927053539,
+        "value": 729.8699951171875,
+        "ma50": 712.5773669433594,
+        "ma200": 650.0218933105468,
+        "ma50FiveSessionsAgo": 714.0332690429688,
+        "recentHigh": true,
+        "calculationDigest": "b68a60fd1ab14bc63a1d3fb0a0bbcd212d10a2f5d212aac7043b04535adb1f1d"
+      },
+      "releaseId": "sr_reconstructed_75fd31d8cc1d170b28cb105328834afa99fd5d5155849df02380397ecd2e75bf",
+      "reconstruction": {
+        "computedAt": "2026-09-05T10:11:23.362687+00:00",
+        "methodology": "roc35@1.0.0",
+        "source": "Yahoo Finance · adjusted daily close",
+        "inputDigest": "0ff377103461775a72dbad970a4f3323dbb22666001226aae69be5169063500d"
+      }
+    },
+    {
+      "asOf": "2026-08-18",
+      "value": "4.4652",
+      "state": "VALUE_LEADING",
+      "previousState": "VALUE_LEADING",
+      "direction": "RISING",
+      "event": "UNCHANGED",
+      "pendulum": {
+        "value": 4.4652,
+        "previousValue": 0.4798,
+        "change1d": 3.9854,
+        "direction": "RISING",
+        "state": "VALUE_LEADING",
+        "risingStreak": 1
+      },
+      "qqq": {
+        "value": 717.51,
+        "ma20": 706.243,
+        "ma50": 712.8418,
+        "distanceMa20Pct": 1.5953,
+        "distanceMa50Pct": 0.6549
+      },
+      "strategyInputs": {
+        "asOf": "2026-08-18",
+        "previousSession": "2026-08-17",
+        "roc35": 4.46523414170763,
+        "value": 717.510009765625,
+        "ma50": 712.8418469238281,
+        "ma200": 650.442162475586,
+        "ma50FiveSessionsAgo": 713.6522790527343,
+        "recentHigh": true,
+        "calculationDigest": "f95c1d37bb59724cbfbf6b3098ddb037eff6078b382efbc6fb62de28a47132af"
+      },
+      "releaseId": "sr_reconstructed_a71612be290efe4b322cbd995b51f4beb1382d44877c6f5bccd9df659d52f0c7",
+      "reconstruction": {
+        "computedAt": "2026-09-05T10:11:23.362687+00:00",
+        "methodology": "roc35@1.0.0",
+        "source": "Yahoo Finance · adjusted daily close",
+        "inputDigest": "3bd6546df834883ec0c0ecaa18f5597b03b2e9f33a5a8a38f1e483fad23e1ae4"
+      }
+    },
+    {
+      "asOf": "2026-08-19",
+      "value": "7.0941",
+      "state": "VALUE_LEADING",
+      "previousState": "VALUE_LEADING",
+      "direction": "RISING",
+      "event": "UNCHANGED",
+      "pendulum": {
+        "value": 7.0941,
+        "previousValue": 4.4652,
+        "change1d": 2.6289,
+        "direction": "RISING",
+        "state": "VALUE_LEADING",
+        "risingStreak": 2
+      },
+      "qqq": {
+        "value": 716.08,
+        "ma20": 706.7795,
+        "ma50": 712.8578,
+        "distanceMa20Pct": 1.3159,
+        "distanceMa50Pct": 0.452
+      },
+      "strategyInputs": {
+        "asOf": "2026-08-19",
+        "previousSession": "2026-08-18",
+        "roc35": 7.094068256638453,
+        "value": 716.0800170898438,
+        "ma50": 712.8577685546875,
+        "ma200": 650.9037048339844,
+        "ma50FiveSessionsAgo": 713.2877856445313,
+        "recentHigh": true,
+        "calculationDigest": "70abee033ca1e2efb0e21991e5f8f78181dbb79b4312458c2712b8e1ef468ba8"
+      },
+      "releaseId": "sr_reconstructed_51503997fb54e9109ed5c71bf4febb61cbed926ff1c6e54ad863237527f2fa00",
+      "reconstruction": {
+        "computedAt": "2026-09-05T10:11:23.362687+00:00",
+        "methodology": "roc35@1.0.0",
+        "source": "Yahoo Finance · adjusted daily close",
+        "inputDigest": "81b339ad92a2c1c3ba66f354bdd4559626967faab8efc65fd97d5d38a160734d"
+      }
+    },
+    {
+      "asOf": "2026-08-20",
+      "value": "5.6678",
+      "state": "VALUE_LEADING",
+      "previousState": "VALUE_LEADING",
+      "direction": "FALLING",
+      "event": "UNCHANGED",
+      "pendulum": {
+        "value": 5.6678,
+        "previousValue": 7.0941,
+        "change1d": -1.4263,
+        "direction": "FALLING",
+        "state": "VALUE_LEADING",
+        "risingStreak": 0
+      },
+      "qqq": {
+        "value": 710.93,
+        "ma20": 707.728,
+        "ma50": 712.9353,
+        "distanceMa20Pct": 0.4524,
+        "distanceMa50Pct": -0.2813
+      },
+      "strategyInputs": {
+        "asOf": "2026-08-20",
+        "previousSession": "2026-08-19",
+        "roc35": 5.6677582214960776,
+        "value": 710.9299926757812,
+        "ma50": 712.9353088378906,
+        "ma200": 651.3244519042969,
+        "ma50FiveSessionsAgo": 713.0223681640625,
+        "recentHigh": true,
+        "calculationDigest": "b892ab7164767b43b42a60853c843da3fbab658356145412a20f2de65de66756"
+      },
+      "releaseId": "sr_reconstructed_a9dfb0fa24da0f5073826d3fe0af59fbc76d5ec4b4693f3c8585bbcbd58a3a0c",
+      "reconstruction": {
+        "computedAt": "2026-09-05T10:11:23.362687+00:00",
+        "methodology": "roc35@1.0.0",
+        "source": "Yahoo Finance · adjusted daily close",
+        "inputDigest": "4a795571b2ed5578ba2f45858bcaf74eda2cb28ef9094fb36c7446b356bf0cc6"
+      }
+    },
+    {
+      "asOf": "2026-08-21",
+      "value": "3.1772",
+      "state": "VALUE_LEADING",
+      "previousState": "VALUE_LEADING",
+      "direction": "FALLING",
+      "event": "UNCHANGED",
+      "pendulum": {
+        "value": 3.1772,
+        "previousValue": 5.6678,
+        "change1d": -2.4906,
+        "direction": "FALLING",
+        "state": "VALUE_LEADING",
+        "risingStreak": 0
+      },
+      "qqq": {
+        "value": 713.44,
+        "ma20": 709.1885,
+        "ma50": 713.3455,
+        "distanceMa20Pct": 0.5995,
+        "distanceMa50Pct": 0.0132
+      },
+      "strategyInputs": {
+        "asOf": "2026-08-21",
+        "previousSession": "2026-08-20",
+        "roc35": 3.177179934386487,
+        "value": 713.4400024414062,
+        "ma50": 713.3455383300782,
+        "ma200": 651.74275390625,
+        "ma50FiveSessionsAgo": 712.7759069824219,
+        "recentHigh": true,
+        "calculationDigest": "322dbae3159ca161b4b66ab43e1e8c97e5b95aaa660b2e2408419d9030aa0ca2"
+      },
+      "releaseId": "sr_reconstructed_be9449fca964fae4270ed16746dcd6153b76040013076ba50eeb646b51a00e6e",
+      "reconstruction": {
+        "computedAt": "2026-09-05T10:11:23.362687+00:00",
+        "methodology": "roc35@1.0.0",
+        "source": "Yahoo Finance · adjusted daily close",
+        "inputDigest": "6ef0344e7651d2fba32d09ea8a6f6f9ba6d0d33750ce4ee3d470711dc9188b07"
+      }
+    },
+    {
+      "asOf": "2026-08-24",
+      "value": "5.7218",
+      "state": "VALUE_LEADING",
+      "previousState": "VALUE_LEADING",
+      "direction": "RISING",
+      "event": "UNCHANGED",
+      "pendulum": {
+        "value": 5.7218,
+        "previousValue": 3.1772,
+        "change1d": 2.5446,
+        "direction": "RISING",
+        "state": "VALUE_LEADING",
+        "risingStreak": 1
+      },
+      "qqq": {
+        "value": 706.32,
+        "ma20": 710.3985,
+        "ma50": 713.1453,
+        "distanceMa20Pct": -0.5741,
+        "distanceMa50Pct": -0.9571
+      },
+      "strategyInputs": {
+        "asOf": "2026-08-24",
+        "previousSession": "2026-08-21",
+        "roc35": 5.7217568934129215,
+        "value": 706.3200073242188,
+        "ma50": 713.145283203125,
+        "ma200": 652.189372253418,
+        "ma50FiveSessionsAgo": 712.5773669433594,
+        "recentHigh": true,
+        "calculationDigest": "f0b9a639ff582fb49117ab4f9bb51ed949abd52221240407423ce4bfb4e7c1a3"
+      },
+      "releaseId": "sr_reconstructed_ef191800b5d2facaea0406238a854dd862d15b4f835dbea1e5e73c60351dbb59",
+      "reconstruction": {
+        "computedAt": "2026-09-05T10:11:23.362687+00:00",
+        "methodology": "roc35@1.0.0",
+        "source": "Yahoo Finance · adjusted daily close",
+        "inputDigest": "749954104965fa1803afbb32317556513c5247704172beb62556ea5d373889c7"
+      }
+    },
+    {
+      "asOf": "2026-08-25",
+      "value": "3.1008",
+      "state": "VALUE_LEADING",
+      "previousState": "VALUE_LEADING",
+      "direction": "FALLING",
+      "event": "UNCHANGED",
+      "pendulum": {
+        "value": 3.1008,
+        "previousValue": 5.7218,
+        "change1d": -2.621,
+        "direction": "FALLING",
+        "state": "VALUE_LEADING",
+        "risingStreak": 0
+      },
+      "qqq": {
+        "value": 710.72,
+        "ma20": 712.16,
+        "ma50": 712.9487,
+        "distanceMa20Pct": -0.2022,
+        "distanceMa50Pct": -0.3126
+      },
+      "strategyInputs": {
+        "asOf": "2026-08-25",
+        "previousSession": "2026-08-24",
+        "roc35": 3.100767457485998,
+        "value": 710.719970703125,
+        "ma50": 712.9487194824219,
+        "ma200": 652.6379138183594,
+        "ma50FiveSessionsAgo": 712.8418469238281,
+        "recentHigh": true,
+        "calculationDigest": "3106f8886f5c7eb50aab6f6285da60e2c3d364d37380c83236c6c8bd918f00a9"
+      },
+      "releaseId": "sr_reconstructed_060c45898b1e4e89e15ba19a38334efda1e46331bcc49995686f00a7fd9bd1a0",
+      "reconstruction": {
+        "computedAt": "2026-09-05T10:11:23.362687+00:00",
+        "methodology": "roc35@1.0.0",
+        "source": "Yahoo Finance · adjusted daily close",
+        "inputDigest": "60f33c9ac7f2f7371f126339ecadbfbbeee7f612e71041599547a420a2bde1c2"
+      }
+    },
+    {
+      "asOf": "2026-08-26",
+      "value": "4.2328",
+      "state": "VALUE_LEADING",
+      "previousState": "VALUE_LEADING",
+      "direction": "RISING",
+      "event": "UNCHANGED",
+      "pendulum": {
+        "value": 4.2328,
+        "previousValue": 3.1008,
+        "change1d": 1.132,
+        "direction": "RISING",
+        "state": "VALUE_LEADING",
+        "risingStreak": 1
+      },
+      "qqq": {
+        "value": 711.37,
+        "ma20": 714.642,
+        "ma50": 712.3125,
+        "distanceMa20Pct": -0.4579,
+        "distanceMa50Pct": -0.1323
+      },
+      "strategyInputs": {
+        "asOf": "2026-08-26",
+        "previousSession": "2026-08-25",
+        "roc35": 4.2328272629512,
+        "value": 711.3699951171875,
+        "ma50": 712.3124536132813,
+        "ma200": 653.1475442504883,
+        "ma50FiveSessionsAgo": 712.8577685546875,
+        "recentHigh": true,
+        "calculationDigest": "3f4506365eac1f48ec321e06fdf89e3cc640f456d20e85ab361c109a7bf0262e"
+      },
+      "releaseId": "sr_reconstructed_76efe02f6a13c080c09b347fdf75a2ae53e70e2254ba970d93408bc8c147fddf",
+      "reconstruction": {
+        "computedAt": "2026-09-05T10:11:23.362687+00:00",
+        "methodology": "roc35@1.0.0",
+        "source": "Yahoo Finance · adjusted daily close",
+        "inputDigest": "77da3e21c709aa4d46df98bf53ff41b7247686ad8c3775ecc0e8f15f6597259f"
+      }
+    },
+    {
+      "asOf": "2026-08-27",
+      "value": "3.4629",
+      "state": "VALUE_LEADING",
+      "previousState": "VALUE_LEADING",
+      "direction": "FALLING",
+      "event": "UNCHANGED",
+      "pendulum": {
+        "value": 3.4629,
+        "previousValue": 4.2328,
+        "change1d": -0.7699,
+        "direction": "FALLING",
+        "state": "VALUE_LEADING",
+        "risingStreak": 0
+      },
+      "qqq": {
+        "value": 721.11,
+        "ma20": 716.52,
+        "ma50": 712.1535,
+        "distanceMa20Pct": 0.6406,
+        "distanceMa50Pct": 1.2577
+      },
+      "strategyInputs": {
+        "asOf": "2026-08-27",
+        "previousSession": "2026-08-26",
+        "roc35": 3.462869942739766,
+        "value": 721.1099853515625,
+        "ma50": 712.1534777832031,
+        "ma200": 653.715489807129,
+        "ma50FiveSessionsAgo": 712.9353088378906,
+        "recentHigh": true,
+        "calculationDigest": "416fca4da785abd2db9035f6df818e2123b383127e541daa175eb8a13c168db0"
+      },
+      "releaseId": "sr_reconstructed_317c4808b3abb3721976778284241d826d2366a2d66c2c7f70799eb381e3a882",
+      "reconstruction": {
+        "computedAt": "2026-09-05T10:11:23.362687+00:00",
+        "methodology": "roc35@1.0.0",
+        "source": "Yahoo Finance · adjusted daily close",
+        "inputDigest": "7897f61ebd7f0ab6538c0e859b68962a51af6577b3363f95d78faff719677419"
+      }
+    },
+    {
+      "asOf": "2026-08-28",
+      "value": "4.0809",
+      "state": "VALUE_LEADING",
+      "previousState": "VALUE_LEADING",
+      "direction": "RISING",
+      "event": "UNCHANGED",
+      "pendulum": {
+        "value": 4.0809,
+        "previousValue": 3.4629,
+        "change1d": 0.618,
+        "direction": "RISING",
+        "state": "VALUE_LEADING",
+        "risingStreak": 1
+      },
+      "qqq": {
+        "value": 716.43,
+        "ma20": 717.942,
+        "ma50": 712.0477,
+        "distanceMa20Pct": -0.2106,
+        "distanceMa50Pct": 0.6154
+      },
+      "strategyInputs": {
+        "asOf": "2026-08-28",
+        "previousSession": "2026-08-27",
+        "roc35": 4.080892612012144,
+        "value": 716.4299926757812,
+        "ma50": 712.0477404785156,
+        "ma200": 654.1928308105469,
+        "ma50FiveSessionsAgo": 713.3455383300782,
+        "recentHigh": true,
+        "calculationDigest": "1be299de1832764cbc9c25d7497bba344eb8eabdcdd695d8e65ffb7c9faf8acb"
+      },
+      "releaseId": "sr_reconstructed_33d07c79df1fe0e3fa346571ef813d1165b0246ce3a8796b028eba7e9c17105e",
+      "reconstruction": {
+        "computedAt": "2026-09-05T10:11:23.362687+00:00",
+        "methodology": "roc35@1.0.0",
+        "source": "Yahoo Finance · adjusted daily close",
+        "inputDigest": "997407c601e326de3217c7fcbafac7f9d3f1f619adf24dbedc473feee01ef17e"
+      }
+    },
+    {
+      "asOf": "2026-08-31",
+      "value": "1.7848",
+      "state": "VALUE_LEADING",
+      "previousState": "VALUE_LEADING",
+      "direction": "FALLING",
+      "event": "UNCHANGED",
+      "pendulum": {
+        "value": 1.7848,
+        "previousValue": 4.0809,
+        "change1d": -2.2961,
+        "direction": "FALLING",
+        "state": "VALUE_LEADING",
+        "risingStreak": 0
+      },
+      "qqq": {
+        "value": 716.76,
+        "ma20": 718.7765,
+        "ma50": 711.5868,
+        "distanceMa20Pct": -0.2805,
+        "distanceMa50Pct": 0.727
+      },
+      "strategyInputs": {
+        "asOf": "2026-08-31",
+        "previousSession": "2026-08-28",
+        "roc35": 1.7848325168817292,
+        "value": 716.760009765625,
+        "ma50": 711.5868005371094,
+        "ma200": 654.6800915527343,
+        "ma50FiveSessionsAgo": 713.145283203125,
+        "recentHigh": true,
+        "calculationDigest": "6976d5f8b18c3a7019dcca0e2c2f2ee9f35850c3a31d3090430c22e03e79eeef"
+      },
+      "releaseId": "sr_reconstructed_fec15e210daebbe6d1a38c8a26cac942c28e6562b7d8bbe4fedcefa95d7d3541",
+      "reconstruction": {
+        "computedAt": "2026-09-05T10:11:23.362687+00:00",
+        "methodology": "roc35@1.0.0",
+        "source": "Yahoo Finance · adjusted daily close",
+        "inputDigest": "e3c44e134d590eb21a1b114f7e1042ec8b5e7b31728d877e4db4e2eaa10d9d90"
+      }
+    },
+    {
+      "asOf": "2026-09-01",
+      "value": "4.1966",
+      "state": "VALUE_LEADING",
+      "previousState": "VALUE_LEADING",
+      "direction": "RISING",
+      "event": "UNCHANGED",
+      "pendulum": {
+        "value": 4.1966,
+        "previousValue": 1.7848,
+        "change1d": 2.4118,
+        "direction": "RISING",
+        "state": "VALUE_LEADING",
+        "risingStreak": 1
+      },
+      "qqq": {
+        "value": 707.64,
+        "ma20": 717.966,
+        "ma50": 710.9806,
+        "distanceMa20Pct": -1.4382,
+        "distanceMa50Pct": -0.4699
+      },
+      "strategyInputs": {
+        "asOf": "2026-09-01",
+        "previousSession": "2026-08-31",
+        "roc35": 4.196561883368188,
+        "value": 707.6400146484375,
+        "ma50": 710.9806005859375,
+        "ma200": 655.1241934204102,
+        "ma50FiveSessionsAgo": 712.9487194824219,
+        "recentHigh": true,
+        "calculationDigest": "f5a90398f6d7847384e4da0d0d59e3075a17c0728df73de980b0a200e951f851"
+      },
+      "releaseId": "sr_reconstructed_a55492fa7db22ff9009276aad1bff71c99ebeec5a1e47246f0d36b547415c3e2",
+      "reconstruction": {
+        "computedAt": "2026-09-05T10:11:23.362687+00:00",
+        "methodology": "roc35@1.0.0",
+        "source": "Yahoo Finance · adjusted daily close",
+        "inputDigest": "d3b7326735f4a1768d47edd84a576c9f9534c34b4007c661a9948497470bdec0"
+      }
+    },
+    {
+      "asOf": "2026-09-02",
+      "value": "4.8837",
+      "state": "VALUE_LEADING",
+      "previousState": "VALUE_LEADING",
+      "direction": "RISING",
+      "event": "UNCHANGED",
+      "pendulum": {
+        "value": 4.8837,
+        "previousValue": 4.1966,
+        "change1d": 0.6871,
+        "direction": "RISING",
+        "state": "VALUE_LEADING",
+        "risingStreak": 2
+      },
+      "qqq": {
+        "value": 709.24,
+        "ma20": 717.563,
+        "ma50": 710.8924,
+        "distanceMa20Pct": -1.1599,
+        "distanceMa50Pct": -0.2324
+      },
+      "strategyInputs": {
+        "asOf": "2026-09-02",
+        "previousSession": "2026-09-01",
+        "roc35": 4.8836544715801455,
+        "value": 709.239990234375,
+        "ma50": 710.8923999023438,
+        "ma200": 655.6394644165039,
+        "ma50FiveSessionsAgo": 712.3124536132813,
+        "recentHigh": true,
+        "calculationDigest": "e9d37940162ae0e7d8df389bdf23a99e85ecd7f38ad28e78a1221849b73b51ea"
+      },
+      "releaseId": "sr_reconstructed_6e53dad83cffbe0eed203bbe07baed082191f095ed08a3fa2c0e41dd0c7e8187",
+      "reconstruction": {
+        "computedAt": "2026-09-05T10:11:23.362687+00:00",
+        "methodology": "roc35@1.0.0",
+        "source": "Yahoo Finance · adjusted daily close",
+        "inputDigest": "23ab74b29b2d1145968e2a5df74ce2d71e949484834409e4a3223af0e29d5bea"
+      }
+    },
+    {
+      "asOf": "2026-09-03",
+      "value": "2.0330",
+      "state": "VALUE_LEADING",
+      "previousState": "VALUE_LEADING",
+      "direction": "FALLING",
+      "event": "UNCHANGED",
+      "pendulum": {
+        "value": 2.033,
+        "previousValue": 4.8837,
+        "change1d": -2.8507,
+        "direction": "FALLING",
+        "state": "VALUE_LEADING",
+        "risingStreak": 0
+      },
+      "qqq": {
+        "value": 717.67,
+        "ma20": 717.714,
+        "ma50": 711.0334,
+        "distanceMa20Pct": -0.0061,
+        "distanceMa50Pct": 0.9334
+      },
+      "strategyInputs": {
+        "asOf": "2026-09-03",
+        "previousSession": "2026-09-02",
+        "roc35": 2.03302009380546,
+        "value": 717.6699829101562,
+        "ma50": 711.0333996582032,
+        "ma200": 656.1945938110351,
+        "ma50FiveSessionsAgo": 712.1534777832031,
+        "recentHigh": true,
+        "calculationDigest": "6cec046da3edf2b8a3f7789576781810c40f10a2c9964f32525bcdff8fe88bc6"
+      },
+      "releaseId": "sr_reconstructed_ef305f9823ab3fab519c705c7dc48721d95ad8342522f7d5aab18243d21f4eef",
+      "reconstruction": {
+        "computedAt": "2026-09-05T10:11:23.362687+00:00",
+        "methodology": "roc35@1.0.0",
+        "source": "Yahoo Finance · adjusted daily close",
+        "inputDigest": "66526c5127f28964d73855ef3bc8d41462e150bdcb8a2cd17b2d47a9a5619750"
+      }
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+node_modules/
+dist/
+.DS_Store
+*.log
+.env
+.playwright-cli/
+.research-store/
+outputs/
+PROJECT_SOURCES.md
+project-export/

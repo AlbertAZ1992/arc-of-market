@@ -1,0 +1,103 @@
+name: update-data
+
+on:
+  workflow_call:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+
+      - name: Prepare automated data branch
+        run: |
+          git config user.name "arc-of-market-bot"
+          git config user.email "bot@arcofmarket.com"
+          if git ls-remote --exit-code --heads origin \
+            refs/heads/data/automated-updates >/dev/null; then
+            git fetch origin data/automated-updates
+            git switch --create data/automated-updates --track origin/data/automated-updates
+            if ! git merge --no-commit --no-ff "$GITHUB_SHA"; then
+              while IFS= read -r conflict_path; do
+                case "$conflict_path" in
+                  releases/market/*)
+                    git restore --ours --worktree "$conflict_path"
+                    git add "$conflict_path"
+                    ;;
+                  *)
+                    echo "Unresolved non-data merge conflict: $conflict_path" >&2
+                    exit 1
+                    ;;
+                esac
+              done < <(git diff --name-only --diff-filter=U)
+            fi
+            if git rev-parse --verify --quiet MERGE_HEAD >/dev/null; then
+              git commit --no-edit
+            fi
+          else
+            git switch --create data/automated-updates
+          fi
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e # v6
+        with:
+          enable-cache: true
+          version: "0.10.11"
+
+      - name: Install Python
+        run: uv python install 3.13
+
+      - name: Install Python dependencies
+        run: uv sync --locked --group dev
+
+      - name: Validate Python code
+        run: |
+          uv run ruff format --check scripts tests src
+          uv run ruff check scripts tests src
+          uv run ty check scripts src
+          uv run pytest -q
+
+      - name: Publish Market Release
+        id: release
+        run: |
+          set -euo pipefail
+          for attempt in 1 2 3; do
+            if uv run python scripts/market_data.py \
+              --github-output "$GITHUB_OUTPUT"; then
+              exit 0
+            fi
+            if [ "$attempt" -lt 3 ]; then
+              echo "Update attempt $attempt failed; retrying after upstream settlement window"
+              sleep 120
+            fi
+          done
+          exit 1
+
+      - name: Commit immutable release
+        run: |
+          git add releases/market
+          if git diff --cached --quiet; then
+            echo "No release changes to commit"
+          else
+            git commit -m "Publish market release $(date -u +%F)"
+          fi
+          git push origin HEAD:data/automated-updates
+
+      - name: Publish strategy decision
+        env:
+          ARC_CLOUD_ENDPOINT: ${{ vars.ARC_CLOUD_ENDPOINT }}
+          ARC_INGEST_KEY_ID: github-production
+          ARC_INGEST_SECRET: ${{ secrets.ARC_INGEST_SECRET }}
+        run: |
+          if [ -z "$ARC_CLOUD_ENDPOINT" ] || [ -z "$ARC_INGEST_SECRET" ]; then
+            echo "Strategy publication is not configured; skipping"
+            exit 0
+          fi
+          uv run python scripts/publish_strategy_decision.py \
+            --endpoint "$ARC_CLOUD_ENDPOINT" \
+            --release releases/market/latest.json
