@@ -22,6 +22,9 @@ ArcOfMarket 的公开美股数据与研究信号层。它每天从公开网页�
 
 ## 唯一数据链
 
+源码与正式 Market Release 都保存在默认的 `main` 分支。打开仓库即可检查当前
+`latest.json`、不可变历史文件和生成它们的代码，不需要切换到单独的数据分支。
+
 ```text
 config/market-data-v2.json
         ↓
@@ -99,8 +102,8 @@ uv run pytest -q
 
 维护与再现：
 
-- 日更由 [GitHub Actions](.github/workflows/daily.yml) 执行，正式发布物写入
-  `data/automated-updates` 分支；
+- 日更由 [GitHub Actions](.github/workflows/daily.yml) 执行，验证通过后将正式发布物提交回
+  `main`，再通知 Cloud 生成邮报与邮件；
 - 本地研究库和回测边界见
   [Research Store 与回测路线](docs/RESEARCH_STORE_AND_BACKTEST.md)。
 
