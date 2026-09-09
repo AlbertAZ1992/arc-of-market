@@ -2,6 +2,9 @@ name: update-data
 
 on:
   workflow_call:
+    secrets:
+      ARC_INGEST_SECRET:
+        required: true
 
 jobs:
   update:
@@ -94,9 +97,13 @@ jobs:
           ARC_INGEST_KEY_ID: github-production
           ARC_INGEST_SECRET: ${{ secrets.ARC_INGEST_SECRET }}
         run: |
-          if [ -z "$ARC_CLOUD_ENDPOINT" ] || [ -z "$ARC_INGEST_SECRET" ]; then
-            echo "Strategy publication is not configured; skipping"
-            exit 0
+          if [ -z "$ARC_CLOUD_ENDPOINT" ]; then
+            echo "ARC_CLOUD_ENDPOINT is not configured" >&2
+            exit 1
+          fi
+          if [ -z "$ARC_INGEST_SECRET" ]; then
+            echo "ARC_INGEST_SECRET is not configured" >&2
+            exit 1
           fi
           uv run python scripts/publish_strategy_decision.py \
             --endpoint "$ARC_CLOUD_ENDPOINT" \
