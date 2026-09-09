@@ -218,12 +218,7 @@ class MarketReleasePublisher:
         if latest_path.exists():
             latest = json.loads(latest_path.read_text(encoding="utf-8"))
             latest_core = latest.get("core", {})
-            if (
-                isinstance(latest_core, dict)
-                and latest_core.get("asOf") == core["asOf"]
-                and latest_core.get("qualityStatus") == "APPROVED"
-                and core["qualityStatus"] == "DEGRADED"
-            ):
+            if isinstance(latest_core, dict) and latest_core.get("asOf") == core["asOf"]:
                 latest_id = str(latest["releaseId"])
                 latest_methodology = str(latest_core["methodologyVersion"])
                 latest_release = (

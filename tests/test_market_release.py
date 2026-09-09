@@ -104,6 +104,24 @@ def test_publisher_should_write_immutable_release_latest_and_ledger(tmp_path: Pa
     assert len(ledger) == 1
 
 
+def test_publisher_should_reuse_first_release_when_same_session_data_changes(
+    tmp_path: Path,
+) -> None:
+    publisher = MarketReleasePublisher(tmp_path)
+    generated_at = datetime(2026, 8, 29, 1, 0, tzinfo=UTC)
+    first = publisher.publish(release_core(), generated_at=generated_at)
+    revised_core = release_core()
+    revised_core["producerCommit"] = "b" * 40
+
+    replay = publisher.publish(revised_core, generated_at=generated_at + timedelta(hours=1))
+
+    assert replay.release_id == first.release_id
+    assert replay.path == first.path
+    latest = json.loads((tmp_path / "market/latest.json").read_text(encoding="utf-8"))
+    assert latest["releaseId"] == first.release_id
+    assert len((tmp_path / "market/ledger.jsonl").read_text().splitlines()) == 1
+
+
 def test_publisher_should_reject_raw_market_history_fields(tmp_path: Path) -> None:
     publisher = MarketReleasePublisher(tmp_path)
     core = release_core()
