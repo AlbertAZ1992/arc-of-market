@@ -77,9 +77,12 @@ def _require_core(
     complete = prices.loc[:, list(symbols)].dropna(how="any").sort_index()
     if len(complete) < 252:
         raise MarketSourceError(f"core Yahoo prices have only {len(complete)} complete sessions")
-    age = (target_date - _last_date(complete)).days
-    if age < 0 or age > 5:
-        raise MarketSourceError(f"core Yahoo prices are stale by {age} calendar days")
+    observed_date = _last_date(complete)
+    if observed_date != target_date:
+        raise MarketSourceError(
+            f"core Yahoo prices end at {observed_date.isoformat()}; "
+            f"expected {target_date.isoformat()}"
+        )
     return complete
 
 

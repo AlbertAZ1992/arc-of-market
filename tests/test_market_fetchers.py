@@ -7,7 +7,11 @@ from arc_market.fetchers.fred import parse_fred_csv
 from arc_market.fetchers.ofr import parse_ofr_csv
 from arc_market.fetchers.treasury import parse_treasury_table
 from arc_market.fetchers.wikipedia import parse_universe_tables
-from arc_market.fetchers.yahoo import YahooPriceFetcher, normalize_close_frame
+from arc_market.fetchers.yahoo import (
+    YahooPriceFetcher,
+    latest_intraday_closes,
+    normalize_close_frame,
+)
 
 
 def test_normalize_close_frame_should_handle_yfinance_multi_index() -> None:
@@ -25,20 +29,42 @@ def test_normalize_close_frame_should_handle_yfinance_multi_index() -> None:
     assert float(result.loc["2026-08-28", "QQQ"]) == 202.0
 
 
-def test_yahoo_fetcher_should_not_reconstruct_missing_daily_bars() -> None:
-    captured: dict[str, object] = {}
+def test_yahoo_fetcher_should_fill_missing_daily_close_from_intraday() -> None:
+    intervals: list[str] = []
 
     def download(_symbols: list[str], **kwargs: object) -> pd.DataFrame:
-        captured.update(kwargs)
+        intervals.append(str(kwargs["interval"]))
+        if kwargs["interval"] == "1h":
+            return pd.DataFrame(
+                {"Close": [101.5, 102.0]},
+                index=pd.to_datetime(["2026-08-28 14:30", "2026-08-28 15:30"]),
+            )
         return pd.DataFrame(
-            {"Close": [100.0, 101.0]},
+            {"Close": [100.0, float("nan")]},
             index=pd.to_datetime(["2026-08-27", "2026-08-28"]),
         )
 
     result = YahooPriceFetcher(downloader=download).fetch(("SPY",), date(2026, 8, 28))
 
-    assert captured["repair"] is False
+    assert intervals == ["1d", "1h"]
     assert result.index[-1].date() == date(2026, 8, 28)
+    assert float(result.loc["2026-08-28", "SPY"]) == 102.0
+
+
+def test_latest_intraday_closes_should_use_last_non_null_price_per_symbol() -> None:
+    columns = pd.MultiIndex.from_tuples(
+        [("Close", "SPY"), ("Close", "QQQ")],
+        names=["Price", "Ticker"],
+    )
+    frame = pd.DataFrame(
+        [[100.0, 200.0], [101.0, float("nan")], [float("nan"), 202.0]],
+        index=pd.to_datetime(["2026-08-28 14:30", "2026-08-28 15:00", "2026-08-28 15:30"]),
+        columns=columns,
+    )
+
+    result = latest_intraday_closes(frame, ("SPY", "QQQ"), date(2026, 8, 28))
+
+    assert result == {"SPY": 101.0, "QQQ": 202.0}
 
 
 def test_yahoo_fetcher_should_retry_missing_batch_symbols() -> None:
@@ -60,8 +86,41 @@ def test_yahoo_fetcher_should_retry_missing_batch_symbols() -> None:
 
     result = YahooPriceFetcher(downloader=download).fetch(("SPY", "QQQ"), date(2026, 8, 28))
 
-    assert calls == [("SPY", "QQQ"), ("QQQ",)]
+    assert calls == [("SPY", "QQQ"), ("QQQ",), ("QQQ",)]
     assert list(result) == ["SPY", "QQQ"]
+
+
+def test_yahoo_fetcher_should_retry_stale_batch_symbol_individually() -> None:
+    intraday_calls: list[tuple[str, ...]] = []
+
+    def download(symbols: list[str], **kwargs: object) -> pd.DataFrame:
+        requested = tuple(symbols)
+        if kwargs["interval"] == "1d":
+            columns = pd.MultiIndex.from_tuples(
+                [("Close", symbol) for symbol in requested],
+                names=["Price", "Ticker"],
+            )
+            return pd.DataFrame(
+                [[100.0 for _symbol in requested]],
+                index=pd.to_datetime(["2026-08-27"]),
+                columns=columns,
+            )
+        intraday_calls.append(requested)
+        returned = ("SPY",) if requested == ("SPY", "QQQ") else requested
+        columns = pd.MultiIndex.from_tuples(
+            [("Close", symbol) for symbol in returned],
+            names=["Price", "Ticker"],
+        )
+        return pd.DataFrame(
+            [[101.0 for _symbol in returned]],
+            index=pd.to_datetime(["2026-08-28 15:30"]),
+            columns=columns,
+        )
+
+    result = YahooPriceFetcher(downloader=download).fetch(("SPY", "QQQ"), date(2026, 8, 28))
+
+    assert intraday_calls == [("SPY", "QQQ"), ("QQQ",)]
+    assert result.loc["2026-08-28"].to_dict() == {"SPY": 101.0, "QQQ": 101.0}
 
 
 def test_parse_fred_csv_should_return_named_numeric_series() -> None:

@@ -92,14 +92,14 @@ def test_collector_should_fetch_core_once_and_build_optional_breadth() -> None:
     config = load_market_config(Path("config/market-data-v2.json"))
     collector = MarketCollector(config, dependencies(config.core_symbols))
 
-    result = collector.collect(date(2026, 8, 29))
+    result = collector.collect(date(2026, 8, 28))
 
     assert result.market_as_of == date(2026, 8, 28)
     assert set(result.core_prices) == set(config.core_symbols)
     assert set(result.breadth) == {"sp500", "nasdaq100", "dow30"}
     assert result.treasury is not None
     status_as_of = {status.source_id: status.as_of for status in result.source_status}
-    assert status_as_of["wikipedia"] == "2026-08-29"
+    assert status_as_of["wikipedia"] == "2026-08-28"
     assert status_as_of["us-treasury"] == "2026-08-28"
     assert all(status.status == "APPROVED" for status in result.source_status)
 
@@ -111,7 +111,7 @@ def test_collector_should_degrade_when_optional_source_fails() -> None:
         dependencies(config.core_symbols, fred=FailingFred()),
     )
 
-    result = collector.collect(date(2026, 8, 29))
+    result = collector.collect(date(2026, 8, 28))
 
     assert result.fred_series is None
     assert any(
@@ -128,7 +128,7 @@ def test_collector_should_fail_optional_source_in_strict_mode() -> None:
     )
 
     with pytest.raises(MarketSourceError, match="fred"):
-        collector.collect(date(2026, 8, 29))
+        collector.collect(date(2026, 8, 28))
 
 
 def test_collector_should_not_publish_uncontrolled_exception_messages() -> None:
@@ -138,7 +138,7 @@ def test_collector_should_not_publish_uncontrolled_exception_messages() -> None:
         dependencies(config.core_symbols, fred=LeakingFred()),
     )
 
-    result = collector.collect(date(2026, 8, 29))
+    result = collector.collect(date(2026, 8, 28))
 
     failure = next(status for status in result.source_status if status.source_id == "fred")
     assert failure.message == "RuntimeError"
@@ -149,3 +149,13 @@ def test_core_prices_should_require_enough_history_for_52_week_metrics() -> None
 
     with pytest.raises(MarketSourceError, match="251 complete sessions"):
         _require_core(prices, ("SPY", "QQQ"), date(2026, 8, 28))
+
+
+def test_core_prices_should_reject_a_stale_latest_session() -> None:
+    prices = price_frame(("SPY", "QQQ"))
+
+    with pytest.raises(
+        MarketSourceError,
+        match="core Yahoo prices end at 2026-08-28; expected 2026-08-31",
+    ):
+        _require_core(prices, ("SPY", "QQQ"), date(2026, 8, 31))
