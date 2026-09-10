@@ -2,8 +2,9 @@ name: daily-update
 
 on:
   schedule:
-    # 07:07 Asia/Shanghai, Tuesday through Saturday.
-    - cron: "7 23 * * 1-5"
+    # 18:07 New York time, two hours after the regular U.S. market close.
+    - cron: "7 18 * * 1-5"
+      timezone: "America/New_York"
   workflow_dispatch:
 
 permissions:
