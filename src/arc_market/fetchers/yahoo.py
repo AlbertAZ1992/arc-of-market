@@ -53,6 +53,55 @@ def normalize_close_frame(
     return close
 
 
+def latest_intraday_closes(
+    frame: pd.DataFrame,
+    symbols: Sequence[str],
+    target_date: date,
+) -> dict[str, float]:
+    if frame is None or frame.empty:
+        raise MarketSourceError("Yahoo intraday response is empty")
+    close = _close_columns(frame)
+    if len(symbols) == 1 and list(close.columns) == ["Close"]:
+        close.columns = [symbols[0]]
+    close.columns = [str(column).upper() for column in close.columns]
+    same_day = close.loc[[pd.Timestamp(item).date() == target_date for item in close.index]].apply(
+        pd.to_numeric, errors="coerce"
+    )
+    result: dict[str, float] = {}
+    for symbol in symbols:
+        if symbol not in same_day:
+            continue
+        values = same_day[symbol].dropna()
+        if not values.empty:
+            result[symbol] = float(values.iloc[-1])
+    if not result:
+        raise MarketSourceError("Yahoo intraday response has no completed closing prices")
+    return result
+
+
+def _symbols_missing_target(
+    prices: pd.DataFrame,
+    symbols: Sequence[str],
+    target_date: date,
+) -> tuple[str, ...]:
+    return tuple(
+        symbol
+        for symbol in symbols
+        if symbol not in prices
+        or prices[symbol].dropna().empty
+        or pd.Timestamp(prices[symbol].dropna().index[-1]).date() != target_date
+    )
+
+
+def _symbols_missing_history(
+    prices: pd.DataFrame,
+    symbols: Sequence[str],
+) -> tuple[str, ...]:
+    return tuple(
+        symbol for symbol in symbols if symbol not in prices or len(prices[symbol].dropna()) <= 1
+    )
+
+
 class YahooPriceFetcher:
     def __init__(self, *, downloader: Downloader = yf.download, chunk_size: int = 100) -> None:
         self._downloader = downloader
@@ -82,10 +131,37 @@ class YahooPriceFetcher:
         finally:
             logger.setLevel(previous_level)
         try:
-            return normalize_close_frame(frame, symbols, target_date)
+            prices = normalize_close_frame(frame, symbols, target_date)
         except MarketSourceError as error:
             names = ", ".join(symbols)
             raise MarketSourceError(f"Yahoo batch failed for {names}: {error}") from error
+        missing_latest = _symbols_missing_target(prices, symbols, target_date)
+        if missing_latest:
+            latest = self._download_intraday(missing_latest, target_date)
+            for symbol, value in latest.items():
+                prices.loc[pd.Timestamp(target_date), symbol] = value
+        return prices.sort_index()
+
+    def _download_intraday(
+        self,
+        symbols: tuple[str, ...],
+        target_date: date,
+    ) -> dict[str, float]:
+        frame = self._downloader(
+            list(symbols),
+            start=target_date.isoformat(),
+            end=(target_date + timedelta(days=1)).isoformat(),
+            interval="1h",
+            auto_adjust=True,
+            actions=False,
+            repair=False,
+            progress=False,
+            threads=True,
+            group_by="column",
+            multi_level_index=True,
+            timeout=30,
+        )
+        return latest_intraday_closes(frame, symbols, target_date)
 
     def fetch(self, symbols: Sequence[str], target_date: date) -> pd.DataFrame:
         unique = tuple(dict.fromkeys(symbol.upper() for symbol in symbols))
@@ -96,11 +172,17 @@ class YahooPriceFetcher:
             frames.append(self._download(unique[offset : offset + self._chunk_size], target_date))
         combined = pd.concat(frames, axis=1)
         combined = combined.loc[:, ~combined.columns.duplicated(keep="last")]
-        missing = tuple(
-            symbol for symbol in unique if symbol not in combined or combined[symbol].dropna().empty
-        )
-        if missing:
-            retry = self._download(missing, target_date)
-            combined = pd.concat([combined, retry], axis=1)
-            combined = combined.loc[:, ~combined.columns.duplicated(keep="last")]
+        for symbol in _symbols_missing_history(combined, unique):
+            try:
+                retry = self._download((symbol,), target_date)
+            except MarketSourceError:
+                continue
+            combined = combined.drop(columns=[symbol], errors="ignore")
+            combined = pd.concat([combined, retry.loc[:, [symbol]]], axis=1)
+        for symbol in _symbols_missing_target(combined, unique, target_date):
+            try:
+                latest = self._download_intraday((symbol,), target_date)
+            except MarketSourceError:
+                continue
+            combined.loc[pd.Timestamp(target_date), symbol] = latest[symbol]
         return combined.sort_index()

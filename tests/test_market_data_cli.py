@@ -12,9 +12,15 @@ def test_last_completed_market_date_should_use_friday_on_saturday() -> None:
 
 
 def test_last_completed_market_date_should_use_previous_day_before_settlement() -> None:
-    now = datetime(2026, 8, 28, 18, tzinfo=ZoneInfo("America/New_York"))
+    now = datetime(2026, 8, 28, 17, 59, tzinfo=ZoneInfo("America/New_York"))
 
     assert last_completed_market_date(now).isoformat() == "2026-08-27"
+
+
+def test_last_completed_market_date_should_use_same_day_after_settlement() -> None:
+    now = datetime(2026, 8, 28, 18, 7, tzinfo=ZoneInfo("America/New_York"))
+
+    assert last_completed_market_date(now).isoformat() == "2026-08-28"
 
 
 def test_write_github_output_should_publish_market_release_paths(tmp_path: Path) -> None:

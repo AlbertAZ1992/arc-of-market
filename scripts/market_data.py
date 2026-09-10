@@ -37,7 +37,7 @@ NEW_YORK = ZoneInfo("America/New_York")
 def last_completed_market_date(now: datetime | None = None) -> date:
     current = now.astimezone(NEW_YORK) if now is not None else datetime.now(NEW_YORK)
     candidate = current.date()
-    if current.weekday() >= 5 or current.timetz().replace(tzinfo=None) < time(20):
+    if current.weekday() >= 5 or current.timetz().replace(tzinfo=None) < time(18):
         candidate -= timedelta(days=1)
     while candidate.weekday() >= 5:
         candidate -= timedelta(days=1)
@@ -114,10 +114,12 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
 
 def main(argv: Sequence[str] | None = None) -> int:
     args = parse_args(argv)
+    target_date = args.as_of or last_completed_market_date()
+    print(f"market release target: {target_date.isoformat()}")
     try:
         receipt = run_market_data(
             ROOT,
-            target_date=args.as_of or last_completed_market_date(),
+            target_date=target_date,
             strict=args.strict,
         )
     except (MarketDataError, ValueError, OSError, subprocess.SubprocessError) as error:
