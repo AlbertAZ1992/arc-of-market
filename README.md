@@ -85,6 +85,16 @@ uv run python scripts/research_store.py status
 它只保存 Release、来源可用时间、评分和分项证据，不保存第三方原始行情。完整说明见
 [Research Store 与回测路线](docs/RESEARCH_STORE_AND_BACKTEST.md)。
 
+为 Cloud 的生产策略引擎生成临时复权 OHLC 回放输入（输出目录已被 Git 忽略）：
+
+```bash
+uv run python scripts/export_rotation_backtest_bars.py
+cd ../arc-of-market-cloud
+pnpm backtest:local
+```
+
+该输入只用于本地研究复算，不属于公开 Market Release，也不会提交第三方原始价格。
+
 ## 验证
 
 ```bash
