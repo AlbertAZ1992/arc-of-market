@@ -4,6 +4,7 @@ import pandas as pd
 
 from arc_market.fetchers.cboe import parse_vix_csv
 from arc_market.fetchers.fred import parse_fred_csv
+from arc_market.fetchers.nasdaq import parse_stock_screener
 from arc_market.fetchers.ofr import parse_ofr_csv
 from arc_market.fetchers.treasury import parse_treasury_table
 from arc_market.fetchers.wikipedia import parse_universe_tables
@@ -178,7 +179,15 @@ def test_parse_ofr_csv_should_keep_latest_compact_components() -> None:
 
 def test_parse_universe_tables_should_normalize_yahoo_tickers() -> None:
     tables = {
-        "sp500": [pd.DataFrame({"Symbol": ["BRK.B", "AAPL"]})],
+        "sp500": [
+            pd.DataFrame(
+                {
+                    "Symbol": ["BRK.B", "AAPL"],
+                    "Security": ["Berkshire Hathaway", "Apple"],
+                    "GICS Sector": ["Financials", "Information Technology"],
+                }
+            )
+        ],
         "nasdaq100": [pd.DataFrame({"Ticker": ["GOOGL", "GOOG"]})],
         "dow30": [pd.DataFrame({"Symbol": [f"D{index}" for index in range(30)]})],
     }
@@ -186,5 +195,36 @@ def test_parse_universe_tables_should_normalize_yahoo_tickers() -> None:
     result = parse_universe_tables(tables, observed_at=date(2026, 8, 29))
 
     assert result["sp500"].members == ("BRK-B", "AAPL")
+    assert result["sp500"].sectors == {
+        "BRK-B": "Financials",
+        "AAPL": "Information Technology",
+    }
     assert result["nasdaq100"].members == ("GOOGL", "GOOG")
     assert len(result["dow30"].members) == 30
+
+
+def test_parse_stock_screener_should_keep_requested_positive_market_caps() -> None:
+    document = {
+        "data": {
+            "rows": [
+                {
+                    "symbol": "BRK.B",
+                    "name": "Berkshire Hathaway Inc.",
+                    "sector": "Finance",
+                    "marketCap": "1000000.00",
+                },
+                {
+                    "symbol": "AAPL",
+                    "name": "Apple Inc.",
+                    "sector": "Technology",
+                    "marketCap": "0.00",
+                },
+            ]
+        }
+    }
+
+    result = parse_stock_screener(document, ("BRK-B", "AAPL"))
+
+    assert set(result) == {"BRK-B"}
+    assert result["BRK-B"].sector == "Finance"
+    assert result["BRK-B"].market_cap == 1_000_000

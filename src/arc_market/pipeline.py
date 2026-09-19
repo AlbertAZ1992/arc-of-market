@@ -18,6 +18,7 @@ from arc_market.calculations import (
 )
 from arc_market.config import MarketConfig
 from arc_market.indicators import build_indicator_snapshot
+from arc_market.market_map import market_map_metrics
 from arc_market.models import CollectedMarketData, SourceStatus
 from arc_market.strategy_inputs import core_rotation_inputs
 from arc_market.time_series import build_time_series
@@ -109,6 +110,9 @@ def build_release_core(
             lookback_sessions=config.style.lookback_sessions,
         ),
         "breadth": _breadth(config, collected),
+        "marketMap": (
+            market_map_metrics(collected.market_map) if collected.market_map is not None else None
+        ),
         "sectors": sector_metrics(collected.core_prices, config.sectors, benchmark="SPY"),
         "semiconductorPulse": semiconductor_pulse(
             collected.core_prices,

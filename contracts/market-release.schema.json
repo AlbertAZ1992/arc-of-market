@@ -70,6 +70,12 @@
                     "oneOf": [{"type": "null"}, {"$ref": "#/$defs/coreRotationInputs"}]
                 },
                 "breadth": {"type": "array", "items": {"$ref": "#/$defs/breadth"}, "maxItems": 3},
+                "marketMap": {
+                    "oneOf": [
+                        {"type": "null"},
+                        {"$ref": "#/$defs/marketMap"}
+                    ]
+                },
                 "sectors": {"type": "array", "items": {"$ref": "#/$defs/sector"}, "maxItems": 11},
                 "semiconductorPulse": {"$ref": "#/$defs/semiconductorPulse"},
                 "mega7": {"$ref": "#/$defs/mega7"},
@@ -134,6 +140,34 @@
                     "items": {"$ref": "#/$defs/marketHistoryPoint"},
                     "minItems": 2,
                     "maxItems": 252
+                }
+            }
+        },
+        "marketMapMember": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["ticker", "name", "sector", "marketCapWeightPct", "return1d"],
+            "properties": {
+                "ticker": {"type": "string", "minLength": 1},
+                "name": {"type": "string", "minLength": 1},
+                "sector": {"type": "string", "minLength": 1},
+                "marketCapWeightPct": {"type": "number", "exclusiveMinimum": 0, "maximum": 100},
+                "return1d": {"type": "number"}
+            }
+        },
+        "marketMap": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["universe", "weighting", "asOf", "coveragePct", "members"],
+            "properties": {
+                "universe": {"const": "sp500-current-members"},
+                "weighting": {"const": "current-market-cap"},
+                "asOf": {"$ref": "#/$defs/date"},
+                "coveragePct": {"type": "number", "minimum": 0, "maximum": 100},
+                "members": {
+                    "type": "array",
+                    "items": {"$ref": "#/$defs/marketMapMember"},
+                    "maxItems": 503
                 }
             }
         },

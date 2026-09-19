@@ -24,6 +24,7 @@ from arc_market.errors import MarketDataError
 from arc_market.fetchers.cboe import CboeVixFetcher
 from arc_market.fetchers.cftc import CftcFetcher
 from arc_market.fetchers.fred import FredFetcher
+from arc_market.fetchers.nasdaq import NasdaqMarketProfileFetcher
 from arc_market.fetchers.ofr import OfrFetcher
 from arc_market.fetchers.treasury import TreasuryFetcher
 from arc_market.fetchers.wikipedia import WikipediaUniverseFetcher
@@ -68,6 +69,7 @@ def build_live_collector(root: Path, *, strict: bool) -> tuple[MarketConfig, Mar
         ofr=OfrFetcher(),
         treasury=TreasuryFetcher(),
         cftc=CftcFetcher(),
+        nasdaq=NasdaqMarketProfileFetcher(),
     )
     return config, MarketCollector(config, dependencies, strict=strict)
 

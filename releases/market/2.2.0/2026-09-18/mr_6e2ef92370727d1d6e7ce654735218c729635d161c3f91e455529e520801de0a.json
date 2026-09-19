@@ -1,13 +1,13 @@
 {
-  "releaseId": "mr_4835d846ba1d187ced7227f22e9b7e7714dc6f9517d6d1c418d0dd9af25ecc79",
-  "coreDigest": "4835d846ba1d187ced7227f22e9b7e7714dc6f9517d6d1c418d0dd9af25ecc79",
-  "generatedAt": "2026-09-19T16:55:37.732893Z",
+  "releaseId": "mr_6e2ef92370727d1d6e7ce654735218c729635d161c3f91e455529e520801de0a",
+  "coreDigest": "6e2ef92370727d1d6e7ce654735218c729635d161c3f91e455529e520801de0a",
+  "generatedAt": "2026-09-19T15:38:51.193540Z",
   "core": {
     "schemaVersion": "2.0",
     "methodologyVersion": "2.2.0",
     "asOf": "2026-09-18",
-    "qualityStatus": "APPROVED",
-    "producerCommit": "09b9ba297a520ad1300fb1d7746afe86aaf39322",
+    "qualityStatus": "DEGRADED",
+    "producerCommit": "475ba5c63ad517e1957cf26962e4719e9506629c",
     "sources": [
       {
         "sourceId": "yahoo-finance",
@@ -32,6 +32,24 @@
         "status": "APPROVED",
         "asOf": "2026-09-18",
         "message": null,
+        "url": "https://finance.yahoo.com/",
+        "publishPolicy": "derived-only",
+        "attribution": "Source: Yahoo Finance via yfinance; ArcOfMarket publishes compact research calculations, not raw price history."
+      },
+      {
+        "sourceId": "yahoo-finance",
+        "status": "FAILED",
+        "asOf": null,
+        "message": "sp500 breadth coverage 99.4% is below minimum",
+        "url": "https://finance.yahoo.com/",
+        "publishPolicy": "derived-only",
+        "attribution": "Source: Yahoo Finance via yfinance; ArcOfMarket publishes compact research calculations, not raw price history."
+      },
+      {
+        "sourceId": "yahoo-finance",
+        "status": "FAILED",
+        "asOf": null,
+        "message": "nasdaq100 breadth coverage 97.0% is below minimum",
         "url": "https://finance.yahoo.com/",
         "publishPolicy": "derived-only",
         "attribution": "Source: Yahoo Finance via yfinance; ArcOfMarket publishes compact research calculations, not raw price history."
@@ -65,9 +83,9 @@
       },
       {
         "sourceId": "ofr",
-        "status": "APPROVED",
-        "asOf": "2026-09-16",
-        "message": null,
+        "status": "FAILED",
+        "asOf": null,
+        "message": "ConnectionError",
         "url": "https://www.financialresearch.gov/financial-stress-index/",
         "publishPolicy": "compact-history-and-latest-components",
         "attribution": "Source: Office of Financial Research, Financial Stress Index; ArcOfMarket is not endorsed by OFR or the U.S. Treasury."
@@ -216,7 +234,7 @@
             },
             {
               "asOf": "2025-10-07",
-              "value": 1.3159
+              "value": 1.316
             },
             {
               "asOf": "2025-10-08",
@@ -228,7 +246,7 @@
             },
             {
               "asOf": "2025-10-10",
-              "value": -1.1219
+              "value": -1.1218
             },
             {
               "asOf": "2025-10-13",
@@ -244,7 +262,7 @@
             },
             {
               "asOf": "2025-10-16",
-              "value": 0.0319
+              "value": 0.032
             },
             {
               "asOf": "2025-10-17",
@@ -252,7 +270,7 @@
             },
             {
               "asOf": "2025-10-20",
-              "value": 1.646
+              "value": 1.6461
             },
             {
               "asOf": "2025-10-21",
@@ -280,7 +298,7 @@
             },
             {
               "asOf": "2025-10-29",
-              "value": 4.0823
+              "value": 4.0824
             },
             {
               "asOf": "2025-10-30",
@@ -300,11 +318,11 @@
             },
             {
               "asOf": "2025-11-05",
-              "value": 2.5969
+              "value": 2.597
             },
             {
               "asOf": "2025-11-06",
-              "value": 1.4961
+              "value": 1.4962
             },
             {
               "asOf": "2025-11-07",
@@ -328,7 +346,7 @@
             },
             {
               "asOf": "2025-11-14",
-              "value": 1.7414
+              "value": 1.7415
             },
             {
               "asOf": "2025-11-17",
@@ -368,7 +386,7 @@
             },
             {
               "asOf": "2025-12-01",
-              "value": 3.0042
+              "value": 3.0043
             },
             {
               "asOf": "2025-12-02",
@@ -384,7 +402,7 @@
             },
             {
               "asOf": "2025-12-05",
-              "value": 3.8249
+              "value": 3.825
             },
             {
               "asOf": "2025-12-08",
@@ -444,7 +462,7 @@
             },
             {
               "asOf": "2025-12-29",
-              "value": 4.4597
+              "value": 4.4598
             },
             {
               "asOf": "2025-12-30",
@@ -472,7 +490,7 @@
             },
             {
               "asOf": "2026-01-08",
-              "value": 4.7118
+              "value": 4.7119
             },
             {
               "asOf": "2026-01-09",
@@ -516,7 +534,7 @@
             },
             {
               "asOf": "2026-01-26",
-              "value": 5.2008
+              "value": 5.2009
             },
             {
               "asOf": "2026-01-27",
@@ -536,7 +554,7 @@
             },
             {
               "asOf": "2026-02-02",
-              "value": 5.6078
+              "value": 5.6079
             },
             {
               "asOf": "2026-02-03",
@@ -600,11 +618,11 @@
             },
             {
               "asOf": "2026-02-25",
-              "value": 5.2646
+              "value": 5.2647
             },
             {
               "asOf": "2026-02-26",
-              "value": 4.6799
+              "value": 4.68
             },
             {
               "asOf": "2026-02-27",
@@ -656,7 +674,7 @@
             },
             {
               "asOf": "2026-03-17",
-              "value": 1.8689
+              "value": 1.869
             },
             {
               "asOf": "2026-03-18",
@@ -780,7 +798,7 @@
             },
             {
               "asOf": "2026-04-30",
-              "value": 9.4367
+              "value": 9.4368
             },
             {
               "asOf": "2026-05-01",
@@ -804,7 +822,7 @@
             },
             {
               "asOf": "2026-05-08",
-              "value": 12.3239
+              "value": 12.324
             },
             {
               "asOf": "2026-05-11",
@@ -816,7 +834,7 @@
             },
             {
               "asOf": "2026-05-13",
-              "value": 13.0381
+              "value": 13.0382
             },
             {
               "asOf": "2026-05-14",
@@ -856,7 +874,7 @@
             },
             {
               "asOf": "2026-05-28",
-              "value": 14.9096
+              "value": 14.9097
             },
             {
               "asOf": "2026-05-29",
@@ -984,7 +1002,7 @@
             },
             {
               "asOf": "2026-07-15",
-              "value": 15.2377
+              "value": 15.2378
             },
             {
               "asOf": "2026-07-16",
@@ -1076,7 +1094,7 @@
             },
             {
               "asOf": "2026-08-17",
-              "value": 17.9644
+              "value": 17.9645
             },
             {
               "asOf": "2026-08-18",
@@ -1104,7 +1122,7 @@
             },
             {
               "asOf": "2026-08-26",
-              "value": 16.9583
+              "value": 16.9584
             },
             {
               "asOf": "2026-08-27",
@@ -1301,7 +1319,7 @@
             },
             {
               "asOf": "2025-10-30",
-              "value": 5.2839
+              "value": 5.2838
             },
             {
               "asOf": "2025-10-31",
@@ -1389,7 +1407,7 @@
             },
             {
               "asOf": "2025-12-02",
-              "value": 4.6028
+              "value": 4.6027
             },
             {
               "asOf": "2025-12-03",
@@ -2206,7 +2224,7 @@
             },
             {
               "asOf": "2025-09-22",
-              "value": 0.5111
+              "value": 0.5112
             },
             {
               "asOf": "2025-09-23",
@@ -2234,7 +2252,7 @@
             },
             {
               "asOf": "2025-10-01",
-              "value": 0.639
+              "value": 0.6391
             },
             {
               "asOf": "2025-10-02",
@@ -2290,7 +2308,7 @@
             },
             {
               "asOf": "2025-10-21",
-              "value": 1.7485
+              "value": 1.7486
             },
             {
               "asOf": "2025-10-22",
@@ -2298,7 +2316,7 @@
             },
             {
               "asOf": "2025-10-23",
-              "value": 1.33
+              "value": 1.3301
             },
             {
               "asOf": "2025-10-24",
@@ -2330,7 +2348,7 @@
             },
             {
               "asOf": "2025-11-04",
-              "value": 2.1128
+              "value": 2.1129
             },
             {
               "asOf": "2025-11-05",
@@ -2346,7 +2364,7 @@
             },
             {
               "asOf": "2025-11-10",
-              "value": 2.746
+              "value": 2.7461
             },
             {
               "asOf": "2025-11-11",
@@ -2358,7 +2376,7 @@
             },
             {
               "asOf": "2025-11-13",
-              "value": 2.9455
+              "value": 2.9456
             },
             {
               "asOf": "2025-11-14",
@@ -2458,7 +2476,7 @@
             },
             {
               "asOf": "2025-12-19",
-              "value": 4.6943
+              "value": 4.6944
             },
             {
               "asOf": "2025-12-22",
@@ -2486,7 +2504,7 @@
             },
             {
               "asOf": "2025-12-31",
-              "value": 4.5681
+              "value": 4.5682
             },
             {
               "asOf": "2026-01-02",
@@ -2498,7 +2516,7 @@
             },
             {
               "asOf": "2026-01-06",
-              "value": 7.6231
+              "value": 7.6232
             },
             {
               "asOf": "2026-01-07",
@@ -2506,11 +2524,11 @@
             },
             {
               "asOf": "2026-01-08",
-              "value": 7.1705
+              "value": 7.1706
             },
             {
               "asOf": "2026-01-09",
-              "value": 7.7123
+              "value": 7.7124
             },
             {
               "asOf": "2026-01-12",
@@ -2522,7 +2540,7 @@
             },
             {
               "asOf": "2026-01-14",
-              "value": 6.9638
+              "value": 6.9639
             },
             {
               "asOf": "2026-01-15",
@@ -2558,7 +2576,7 @@
             },
             {
               "asOf": "2026-01-28",
-              "value": 6.6869
+              "value": 6.687
             },
             {
               "asOf": "2026-01-29",
@@ -2570,7 +2588,7 @@
             },
             {
               "asOf": "2026-02-02",
-              "value": 7.5358
+              "value": 7.5359
             },
             {
               "asOf": "2026-02-03",
@@ -2586,7 +2604,7 @@
             },
             {
               "asOf": "2026-02-06",
-              "value": 9.0595
+              "value": 9.0596
             },
             {
               "asOf": "2026-02-09",
@@ -2598,7 +2616,7 @@
             },
             {
               "asOf": "2026-02-11",
-              "value": 9.1248
+              "value": 9.1249
             },
             {
               "asOf": "2026-02-12",
@@ -2606,7 +2624,7 @@
             },
             {
               "asOf": "2026-02-13",
-              "value": 7.8079
+              "value": 7.808
             },
             {
               "asOf": "2026-02-17",
@@ -2614,11 +2632,11 @@
             },
             {
               "asOf": "2026-02-18",
-              "value": 8.1823
+              "value": 8.1824
             },
             {
               "asOf": "2026-02-19",
-              "value": 7.612
+              "value": 7.6121
             },
             {
               "asOf": "2026-02-20",
@@ -2634,7 +2652,7 @@
             },
             {
               "asOf": "2026-02-25",
-              "value": 7.8415
+              "value": 7.8416
             },
             {
               "asOf": "2026-02-26",
@@ -2646,7 +2664,7 @@
             },
             {
               "asOf": "2026-03-02",
-              "value": 6.6123
+              "value": 6.6124
             },
             {
               "asOf": "2026-03-03",
@@ -2682,7 +2700,7 @@
             },
             {
               "asOf": "2026-03-13",
-              "value": 1.6498
+              "value": 1.6499
             },
             {
               "asOf": "2026-03-16",
@@ -2698,7 +2716,7 @@
             },
             {
               "asOf": "2026-03-19",
-              "value": 0.4838
+              "value": 0.4839
             },
             {
               "asOf": "2026-03-20",
@@ -2726,7 +2744,7 @@
             },
             {
               "asOf": "2026-03-30",
-              "value": -1.2648
+              "value": -1.2647
             },
             {
               "asOf": "2026-03-31",
@@ -2734,7 +2752,7 @@
             },
             {
               "asOf": "2026-04-01",
-              "value": 1.6663
+              "value": 1.6664
             },
             {
               "asOf": "2026-04-02",
@@ -2766,7 +2784,7 @@
             },
             {
               "asOf": "2026-04-14",
-              "value": 6.0367
+              "value": 6.0368
             },
             {
               "asOf": "2026-04-15",
@@ -2774,7 +2792,7 @@
             },
             {
               "asOf": "2026-04-16",
-              "value": 6.0673
+              "value": 6.0674
             },
             {
               "asOf": "2026-04-17",
@@ -2838,7 +2856,7 @@
             },
             {
               "asOf": "2026-05-08",
-              "value": 8.4066
+              "value": 8.4067
             },
             {
               "asOf": "2026-05-11",
@@ -2906,7 +2924,7 @@
             },
             {
               "asOf": "2026-06-03",
-              "value": 11.1183
+              "value": 11.1184
             },
             {
               "asOf": "2026-06-04",
@@ -2918,7 +2936,7 @@
             },
             {
               "asOf": "2026-06-08",
-              "value": 11.2604
+              "value": 11.2605
             },
             {
               "asOf": "2026-06-09",
@@ -2926,7 +2944,7 @@
             },
             {
               "asOf": "2026-06-10",
-              "value": 9.3671
+              "value": 9.3672
             },
             {
               "asOf": "2026-06-11",
@@ -2938,7 +2956,7 @@
             },
             {
               "asOf": "2026-06-15",
-              "value": 13.3439
+              "value": 13.344
             },
             {
               "asOf": "2026-06-16",
@@ -2978,11 +2996,11 @@
             },
             {
               "asOf": "2026-06-30",
-              "value": 14.5191
+              "value": 14.5192
             },
             {
               "asOf": "2026-07-01",
-              "value": 14.5213
+              "value": 14.5214
             },
             {
               "asOf": "2026-07-02",
@@ -3002,7 +3020,7 @@
             },
             {
               "asOf": "2026-07-09",
-              "value": 14.9137
+              "value": 14.9138
             },
             {
               "asOf": "2026-07-10",
@@ -3022,7 +3040,7 @@
             },
             {
               "asOf": "2026-07-16",
-              "value": 15.054
+              "value": 15.0541
             },
             {
               "asOf": "2026-07-17",
@@ -3054,7 +3072,7 @@
             },
             {
               "asOf": "2026-07-28",
-              "value": 15.5384
+              "value": 15.5385
             },
             {
               "asOf": "2026-07-29",
@@ -3070,7 +3088,7 @@
             },
             {
               "asOf": "2026-08-03",
-              "value": 16.4879
+              "value": 16.488
             },
             {
               "asOf": "2026-08-04",
@@ -3078,7 +3096,7 @@
             },
             {
               "asOf": "2026-08-05",
-              "value": 19.0294
+              "value": 19.0295
             },
             {
               "asOf": "2026-08-06",
@@ -3086,7 +3104,7 @@
             },
             {
               "asOf": "2026-08-07",
-              "value": 18.3299
+              "value": 18.33
             },
             {
               "asOf": "2026-08-10",
@@ -3130,7 +3148,7 @@
             },
             {
               "asOf": "2026-08-24",
-              "value": 17.1178
+              "value": 17.1179
             },
             {
               "asOf": "2026-08-25",
@@ -3150,7 +3168,7 @@
             },
             {
               "asOf": "2026-08-31",
-              "value": 16.6613
+              "value": 16.6614
             },
             {
               "asOf": "2026-09-01",
@@ -3158,7 +3176,7 @@
             },
             {
               "asOf": "2026-09-02",
-              "value": 16.4528
+              "value": 16.4529
             },
             {
               "asOf": "2026-09-03",
@@ -3170,7 +3188,7 @@
             },
             {
               "asOf": "2026-09-08",
-              "value": 15.8844
+              "value": 15.8845
             },
             {
               "asOf": "2026-09-09",
@@ -3275,7 +3293,7 @@
             },
             {
               "asOf": "2025-10-09",
-              "value": 0.1184
+              "value": 0.1185
             },
             {
               "asOf": "2025-10-10",
@@ -3367,7 +3385,7 @@
             },
             {
               "asOf": "2025-11-11",
-              "value": -0.2451
+              "value": -0.245
             },
             {
               "asOf": "2025-11-12",
@@ -3407,11 +3425,11 @@
             },
             {
               "asOf": "2025-11-25",
-              "value": 0.1184
+              "value": 0.1185
             },
             {
               "asOf": "2025-11-26",
-              "value": 1.0048
+              "value": 1.0047
             },
             {
               "asOf": "2025-11-28",
@@ -3555,11 +3573,11 @@
             },
             {
               "asOf": "2026-01-21",
-              "value": 9.7402
+              "value": 9.7403
             },
             {
               "asOf": "2026-01-22",
-              "value": 10.5598
+              "value": 10.5599
             },
             {
               "asOf": "2026-01-23",
@@ -3575,7 +3593,7 @@
             },
             {
               "asOf": "2026-01-28",
-              "value": 7.9002
+              "value": 7.9003
             },
             {
               "asOf": "2026-01-29",
@@ -3591,7 +3609,7 @@
             },
             {
               "asOf": "2026-02-03",
-              "value": 7.6871
+              "value": 7.6872
             },
             {
               "asOf": "2026-02-04",
@@ -3783,7 +3801,7 @@
             },
             {
               "asOf": "2026-04-14",
-              "value": 10.3173
+              "value": 10.3172
             },
             {
               "asOf": "2026-04-15",
@@ -3875,7 +3893,7 @@
             },
             {
               "asOf": "2026-05-15",
-              "value": 13.9627
+              "value": 13.9628
             },
             {
               "asOf": "2026-05-18",
@@ -4262,10 +4280,10 @@
         "roc35": -4.948285005901376,
         "value": 721.4500122070312,
         "ma50": 709.9511975097656,
-        "ma200": 661.772956237793,
+        "ma200": 661.7729553222656,
         "ma50FiveSessionsAgo": 710.4063989257812,
         "recentHigh": true,
-        "calculationDigest": "fda8486235dd3a93d06e6b072ca4fb772315f1677945638604c012b27990b12e"
+        "calculationDigest": "5e2cc3674403a847bc383032503afacfa4faf21ef8353468898365c46c35b896"
       },
       "participation": [
         {
@@ -4339,30 +4357,6 @@
       },
       "breadth": [
         {
-          "indexId": "sp500",
-          "asOf": "2026-09-18",
-          "universeObservedAt": "2026-09-18",
-          "universeCount": 503,
-          "eligibleCountMa50": 503,
-          "eligibleCountMa200": 501,
-          "pctAboveMa50": 28.63,
-          "pctAboveMa200": 52.5,
-          "breadthState": "mixed",
-          "caveat": "current-universe survivorship bias"
-        },
-        {
-          "indexId": "nasdaq100",
-          "asOf": "2026-09-18",
-          "universeObservedAt": "2026-09-18",
-          "universeCount": 101,
-          "eligibleCountMa50": 101,
-          "eligibleCountMa200": 99,
-          "pctAboveMa50": 32.67,
-          "pctAboveMa200": 55.56,
-          "breadthState": "mixed",
-          "caveat": "current-universe survivorship bias"
-        },
-        {
           "indexId": "dow30",
           "asOf": "2026-09-18",
           "universeObservedAt": "2026-09-18",
@@ -4379,3492 +4373,3485 @@
         "universe": "sp500-current-members",
         "weighting": "current-market-cap",
         "asOf": "2026-09-18",
-        "coveragePct": 99.6,
+        "coveragePct": 99.4,
         "members": [
           {
             "ticker": "NVDA",
             "name": "Nvidia",
             "sector": "Information Technology",
-            "marketCapWeightPct": 7.809492,
+            "marketCapWeightPct": 7.914947,
             "return1d": 1.3358
           },
           {
             "ticker": "AAPL",
             "name": "Apple Inc.",
             "sector": "Information Technology",
-            "marketCapWeightPct": 7.151742,
+            "marketCapWeightPct": 7.248316,
             "return1d": -0.2582
           },
           {
             "ticker": "GOOGL",
             "name": "Alphabet Inc. (Class A)",
             "sector": "Communication Services",
-            "marketCapWeightPct": 6.232298,
+            "marketCapWeightPct": 6.316456,
             "return1d": 0.4243
           },
           {
             "ticker": "MSFT",
             "name": "Microsoft",
             "sector": "Information Technology",
-            "marketCapWeightPct": 5.34548,
+            "marketCapWeightPct": 5.417663,
             "return1d": -0.7976
           },
           {
             "ticker": "AMZN",
             "name": "Amazon",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 3.989657,
+            "marketCapWeightPct": 4.043531,
             "return1d": 1.0032
           },
           {
             "ticker": "AVGO",
             "name": "Broadcom",
             "sector": "Information Technology",
-            "marketCapWeightPct": 2.488762,
+            "marketCapWeightPct": 2.522368,
             "return1d": 2.9686
           },
           {
             "ticker": "META",
             "name": "Meta Platforms",
             "sector": "Communication Services",
-            "marketCapWeightPct": 2.472586,
+            "marketCapWeightPct": 2.505974,
             "return1d": -2.427
           },
           {
             "ticker": "TSLA",
             "name": "Tesla, Inc.",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 2.097469,
+            "marketCapWeightPct": 2.125792,
             "return1d": -0.527
           },
           {
             "ticker": "MU",
             "name": "Micron Technology",
             "sector": "Information Technology",
-            "marketCapWeightPct": 1.672547,
+            "marketCapWeightPct": 1.695132,
             "return1d": 3.9182
           },
           {
             "ticker": "LLY",
             "name": "Lilly (Eli)",
             "sector": "Health Care",
-            "marketCapWeightPct": 1.582276,
+            "marketCapWeightPct": 1.603642,
             "return1d": 0.0425
           },
           {
             "ticker": "JPM",
             "name": "JPMorgan Chase",
             "sector": "Financials",
-            "marketCapWeightPct": 1.355092,
+            "marketCapWeightPct": 1.37339,
             "return1d": 0.1031
-          },
-          {
-            "ticker": "AMD",
-            "name": "Advanced Micro Devices",
-            "sector": "Information Technology",
-            "marketCapWeightPct": 1.332355,
-            "return1d": 2.7023
           },
           {
             "ticker": "WMT",
             "name": "Walmart",
             "sector": "Consumer Staples",
-            "marketCapWeightPct": 1.234496,
+            "marketCapWeightPct": 1.251166,
             "return1d": -0.0562
           },
           {
             "ticker": "XOM",
             "name": "ExxonMobil",
             "sector": "Energy",
-            "marketCapWeightPct": 0.980376,
+            "marketCapWeightPct": 0.993615,
             "return1d": 0.1654
           },
           {
             "ticker": "V",
             "name": "Visa Inc.",
             "sector": "Financials",
-            "marketCapWeightPct": 0.959356,
+            "marketCapWeightPct": 0.972311,
             "return1d": -0.4433
           },
           {
             "ticker": "JNJ",
             "name": "Johnson & Johnson",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.948574,
+            "marketCapWeightPct": 0.961383,
             "return1d": -0.0851
           },
           {
             "ticker": "INTC",
             "name": "Intel",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.836769,
+            "marketCapWeightPct": 0.848068,
             "return1d": -0.1838
           },
           {
             "ticker": "MA",
             "name": "Mastercard",
             "sector": "Financials",
-            "marketCapWeightPct": 0.721883,
+            "marketCapWeightPct": 0.731631,
             "return1d": -0.0866
           },
           {
             "ticker": "ABBV",
             "name": "AbbVie",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.68003,
+            "marketCapWeightPct": 0.689213,
             "return1d": -0.0227
           },
           {
             "ticker": "ORCL",
             "name": "Oracle Corporation",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.650706,
+            "marketCapWeightPct": 0.659492,
             "return1d": -1.9789
           },
           {
             "ticker": "CSCO",
             "name": "Cisco",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.629448,
+            "marketCapWeightPct": 0.637948,
             "return1d": -0.6622
           },
           {
             "ticker": "PLTR",
             "name": "Palantir Technologies",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.622083,
+            "marketCapWeightPct": 0.630483,
             "return1d": 0.7944
           },
           {
             "ticker": "CVX",
             "name": "Chevron Corporation",
             "sector": "Energy",
-            "marketCapWeightPct": 0.603485,
+            "marketCapWeightPct": 0.611634,
             "return1d": -0.9737
           },
           {
             "ticker": "BAC",
             "name": "Bank of America",
             "sector": "Financials",
-            "marketCapWeightPct": 0.588538,
+            "marketCapWeightPct": 0.596485,
             "return1d": -0.7735
           },
           {
             "ticker": "COST",
             "name": "Costco",
             "sector": "Consumer Staples",
-            "marketCapWeightPct": 0.578857,
+            "marketCapWeightPct": 0.586673,
             "return1d": 0.1544
           },
           {
             "ticker": "KO",
             "name": "Coca-Cola Company (The)",
             "sector": "Consumer Staples",
-            "marketCapWeightPct": 0.553561,
+            "marketCapWeightPct": 0.561036,
             "return1d": 0.2158
           },
           {
             "ticker": "CAT",
             "name": "Caterpillar Inc.",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.542149,
+            "marketCapWeightPct": 0.54947,
             "return1d": 1.3048
           },
           {
             "ticker": "MRK",
             "name": "Merck & Co.",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.528272,
+            "marketCapWeightPct": 0.535405,
             "return1d": -0.1903
           },
           {
             "ticker": "DELL",
             "name": "Dell Technologies",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.526561,
+            "marketCapWeightPct": 0.533671,
             "return1d": -3.4568
           },
           {
             "ticker": "LRCX",
             "name": "Lam Research",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.525596,
+            "marketCapWeightPct": 0.532693,
             "return1d": 6.9808
           },
           {
             "ticker": "AMAT",
             "name": "Applied Materials",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.514358,
+            "marketCapWeightPct": 0.521303,
             "return1d": 6.5093
           },
           {
             "ticker": "PG",
             "name": "Procter & Gamble",
             "sector": "Consumer Staples",
-            "marketCapWeightPct": 0.496082,
+            "marketCapWeightPct": 0.502781,
             "return1d": -0.7862
           },
           {
             "ticker": "UNH",
             "name": "UnitedHealth Group",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.493209,
+            "marketCapWeightPct": 0.499869,
             "return1d": 0.4504
           },
           {
             "ticker": "GE",
             "name": "GE Aerospace",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.475381,
+            "marketCapWeightPct": 0.481801,
             "return1d": 0.2552
           },
           {
             "ticker": "MS",
             "name": "Morgan Stanley",
             "sector": "Financials",
-            "marketCapWeightPct": 0.46385,
+            "marketCapWeightPct": 0.470114,
             "return1d": -0.4619
           },
           {
             "ticker": "HD",
             "name": "Home Depot (The)",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.436328,
+            "marketCapWeightPct": 0.442219,
             "return1d": -0.8363
           },
           {
             "ticker": "NFLX",
             "name": "Netflix",
             "sector": "Communication Services",
-            "marketCapWeightPct": 0.435806,
+            "marketCapWeightPct": 0.441691,
             "return1d": -4.674
           },
           {
             "ticker": "PANW",
             "name": "Palo Alto Networks",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.433589,
+            "marketCapWeightPct": 0.439444,
             "return1d": -3.0608
           },
           {
             "ticker": "PM",
             "name": "Philip Morris International",
             "sector": "Consumer Staples",
-            "marketCapWeightPct": 0.428599,
+            "marketCapWeightPct": 0.434386,
             "return1d": -0.9765
           },
           {
             "ticker": "GS",
             "name": "Goldman Sachs",
             "sector": "Financials",
-            "marketCapWeightPct": 0.399875,
+            "marketCapWeightPct": 0.405275,
             "return1d": -0.9953
           },
           {
             "ticker": "SNDK",
             "name": "Sandisk",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.382487,
+            "marketCapWeightPct": 0.387652,
             "return1d": 10.9905
           },
           {
             "ticker": "RTX",
             "name": "RTX Corporation",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.381187,
+            "marketCapWeightPct": 0.386335,
             "return1d": 0.2377
           },
           {
             "ticker": "WFC",
             "name": "Wells Fargo",
             "sector": "Financials",
-            "marketCapWeightPct": 0.379674,
+            "marketCapWeightPct": 0.384801,
             "return1d": -0.8862
           },
           {
             "ticker": "ANET",
             "name": "Arista Networks",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.366624,
+            "marketCapWeightPct": 0.371575,
             "return1d": -0.0702
           },
           {
             "ticker": "GEV",
             "name": "GE Vernova",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.365116,
+            "marketCapWeightPct": 0.370047,
             "return1d": 1.665
           },
           {
             "ticker": "TXN",
             "name": "Texas Instruments",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.355009,
+            "marketCapWeightPct": 0.359802,
             "return1d": 3.2928
           },
           {
             "ticker": "CRWD",
             "name": "CrowdStrike",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.35476,
+            "marketCapWeightPct": 0.359551,
             "return1d": -3.2764
           },
           {
             "ticker": "TMO",
             "name": "Thermo Fisher Scientific",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.351165,
+            "marketCapWeightPct": 0.355907,
             "return1d": -1.0436
           },
           {
             "ticker": "KLAC",
             "name": "KLA Corporation",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.337131,
+            "marketCapWeightPct": 0.341683,
             "return1d": 4.7402
           },
           {
             "ticker": "C",
             "name": "Citigroup",
             "sector": "Financials",
-            "marketCapWeightPct": 0.322246,
+            "marketCapWeightPct": 0.326597,
             "return1d": -0.7008
           },
           {
             "ticker": "IBM",
             "name": "IBM",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.315294,
+            "marketCapWeightPct": 0.319551,
             "return1d": -3.449
           },
           {
             "ticker": "MRVL",
             "name": "Marvell Technology",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.312255,
+            "marketCapWeightPct": 0.316472,
             "return1d": 1.4496
           },
           {
             "ticker": "LIN",
             "name": "Linde plc",
             "sector": "Materials",
-            "marketCapWeightPct": 0.309416,
+            "marketCapWeightPct": 0.313594,
             "return1d": 0.4188
           },
           {
             "ticker": "AXP",
             "name": "American Express",
             "sector": "Financials",
-            "marketCapWeightPct": 0.306739,
+            "marketCapWeightPct": 0.310882,
             "return1d": 0.1253
           },
           {
             "ticker": "AMGN",
             "name": "Amgen",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.303962,
+            "marketCapWeightPct": 0.308067,
             "return1d": 1.5456
           },
           {
             "ticker": "VZ",
             "name": "Verizon",
             "sector": "Communication Services",
-            "marketCapWeightPct": 0.291291,
+            "marketCapWeightPct": 0.295225,
             "return1d": -0.4966
           },
           {
             "ticker": "STX",
             "name": "Seagate Technology",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.286361,
+            "marketCapWeightPct": 0.290227,
             "return1d": 6.9304
           },
           {
             "ticker": "CRM",
             "name": "Salesforce",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.285467,
+            "marketCapWeightPct": 0.289322,
             "return1d": -2.0301
           },
           {
             "ticker": "APH",
             "name": "Amphenol",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.278801,
+            "marketCapWeightPct": 0.282566,
             "return1d": -1.0463
           },
           {
             "ticker": "QCOM",
             "name": "Qualcomm",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.272112,
+            "marketCapWeightPct": 0.275786,
             "return1d": -5.8238
           },
           {
             "ticker": "GILD",
             "name": "Gilead Sciences",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.271357,
+            "marketCapWeightPct": 0.275021,
             "return1d": -0.5169
           },
           {
             "ticker": "DE",
             "name": "Deere & Company",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.268866,
+            "marketCapWeightPct": 0.272496,
             "return1d": -0.2392
           },
           {
             "ticker": "ADI",
             "name": "Analog Devices",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.265425,
+            "marketCapWeightPct": 0.269009,
             "return1d": 3.604
           },
           {
             "ticker": "SCHW",
             "name": "Charles Schwab Corporation",
             "sector": "Financials",
-            "marketCapWeightPct": 0.265354,
+            "marketCapWeightPct": 0.268938,
             "return1d": 0.5926
           },
           {
             "ticker": "TMUS",
             "name": "T-Mobile US",
             "sector": "Communication Services",
-            "marketCapWeightPct": 0.263006,
+            "marketCapWeightPct": 0.266558,
             "return1d": 1.0393
           },
           {
             "ticker": "ABT",
             "name": "Abbott Laboratories",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.258855,
+            "marketCapWeightPct": 0.262351,
             "return1d": 0.3717
           },
           {
             "ticker": "DIS",
             "name": "Walt Disney Company (The)",
             "sector": "Communication Services",
-            "marketCapWeightPct": 0.258453,
+            "marketCapWeightPct": 0.261943,
             "return1d": -2.5439
           },
           {
             "ticker": "PEP",
             "name": "PepsiCo",
             "sector": "Consumer Staples",
-            "marketCapWeightPct": 0.258185,
+            "marketCapWeightPct": 0.261671,
             "return1d": -2.9253
           },
           {
             "ticker": "MCD",
             "name": "McDonald's",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.2561,
+            "marketCapWeightPct": 0.259558,
             "return1d": -0.0966
           },
           {
             "ticker": "T",
             "name": "AT&T",
             "sector": "Communication Services",
-            "marketCapWeightPct": 0.253747,
+            "marketCapWeightPct": 0.257173,
             "return1d": 0.0394
           },
           {
             "ticker": "NEE",
             "name": "NextEra Energy",
             "sector": "Utilities",
-            "marketCapWeightPct": 0.24472,
+            "marketCapWeightPct": 0.248024,
             "return1d": -0.9966
           },
           {
             "ticker": "UNP",
             "name": "Union Pacific Corporation",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.241962,
+            "marketCapWeightPct": 0.245229,
             "return1d": -1.101
           },
           {
             "ticker": "BLK",
             "name": "BlackRock",
             "sector": "Financials",
-            "marketCapWeightPct": 0.241538,
+            "marketCapWeightPct": 0.244799,
             "return1d": 1.501
           },
           {
             "ticker": "ETN",
             "name": "Eaton Corporation",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.240524,
+            "marketCapWeightPct": 0.243772,
             "return1d": 3.7391
           },
           {
             "ticker": "WELL",
             "name": "Welltower",
             "sector": "Real Estate",
-            "marketCapWeightPct": 0.240489,
+            "marketCapWeightPct": 0.243737,
             "return1d": -1.4596
           },
           {
             "ticker": "WDC",
             "name": "Western Digital",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.231992,
+            "marketCapWeightPct": 0.235124,
             "return1d": 4.1263
           },
           {
             "ticker": "COP",
             "name": "ConocoPhillips",
             "sector": "Energy",
-            "marketCapWeightPct": 0.230889,
+            "marketCapWeightPct": 0.234007,
             "return1d": -1.0211
           },
           {
             "ticker": "PFE",
             "name": "Pfizer",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.229841,
+            "marketCapWeightPct": 0.232944,
             "return1d": 0.0724
           },
           {
             "ticker": "BA",
             "name": "Boeing",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.22838,
+            "marketCapWeightPct": 0.231464,
             "return1d": 0.6091
           },
           {
             "ticker": "DHR",
             "name": "Danaher Corporation",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.217079,
+            "marketCapWeightPct": 0.22001,
             "return1d": -0.3247
           },
           {
             "ticker": "UBER",
             "name": "Uber",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.209937,
+            "marketCapWeightPct": 0.212772,
             "return1d": -0.5221
           },
           {
             "ticker": "NOW",
             "name": "ServiceNow",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.204215,
+            "marketCapWeightPct": 0.206973,
             "return1d": -2.1665
           },
           {
             "ticker": "TJX",
             "name": "TJX Companies",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.204047,
+            "marketCapWeightPct": 0.206803,
             "return1d": 0.5452
           },
           {
             "ticker": "ISRG",
             "name": "Intuitive Surgical",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.202581,
+            "marketCapWeightPct": 0.205316,
             "return1d": 2.5525
           },
           {
             "ticker": "CB",
             "name": "Chubb Limited",
             "sector": "Financials",
-            "marketCapWeightPct": 0.191594,
+            "marketCapWeightPct": 0.194181,
             "return1d": -0.3685
           },
           {
             "ticker": "MNST",
             "name": "Monster Beverage",
             "sector": "Consumer Staples",
-            "marketCapWeightPct": 0.191543,
+            "marketCapWeightPct": 0.19413,
             "return1d": 0.4493
           },
           {
             "ticker": "NEM",
             "name": "Newmont",
             "sector": "Materials",
-            "marketCapWeightPct": 0.189578,
+            "marketCapWeightPct": 0.192138,
             "return1d": -0.7878
           },
           {
             "ticker": "GLW",
             "name": "Corning Inc.",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.188535,
+            "marketCapWeightPct": 0.191081,
             "return1d": 1.5765
           },
           {
             "ticker": "VRTX",
             "name": "Vertex Pharmaceuticals",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.187841,
+            "marketCapWeightPct": 0.190377,
             "return1d": -1.5494
           },
           {
             "ticker": "BMY",
             "name": "Bristol Myers Squibb",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.187796,
+            "marketCapWeightPct": 0.190332,
             "return1d": 0.3501
           },
           {
             "ticker": "PLD",
             "name": "Prologis",
             "sector": "Real Estate",
-            "marketCapWeightPct": 0.186375,
+            "marketCapWeightPct": 0.188891,
             "return1d": -0.2515
           },
           {
             "ticker": "BKNG",
             "name": "Booking Holdings",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.183923,
+            "marketCapWeightPct": 0.186406,
             "return1d": -1.5365
           },
           {
             "ticker": "FTNT",
             "name": "Fortinet",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.181673,
+            "marketCapWeightPct": 0.184127,
             "return1d": -1.5877
           },
           {
             "ticker": "COF",
             "name": "Capital One",
             "sector": "Financials",
-            "marketCapWeightPct": 0.181052,
+            "marketCapWeightPct": 0.183497,
             "return1d": 0.193
           },
           {
             "ticker": "PGR",
             "name": "Progressive Corporation",
             "sector": "Financials",
-            "marketCapWeightPct": 0.180941,
+            "marketCapWeightPct": 0.183384,
             "return1d": -1.2992
           },
           {
             "ticker": "LMT",
             "name": "Lockheed Martin",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.179465,
+            "marketCapWeightPct": 0.181889,
             "return1d": -0.8753
           },
           {
             "ticker": "ACN",
             "name": "Accenture",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.176424,
+            "marketCapWeightPct": 0.178806,
             "return1d": -4.7296
           },
           {
             "ticker": "SPGI",
             "name": "S&P Global",
             "sector": "Financials",
-            "marketCapWeightPct": 0.174201,
+            "marketCapWeightPct": 0.176553,
             "return1d": 0.2994
           },
           {
             "ticker": "MPC",
             "name": "Marathon Petroleum",
             "sector": "Energy",
-            "marketCapWeightPct": 0.173955,
+            "marketCapWeightPct": 0.176304,
             "return1d": 0.6944
           },
           {
             "ticker": "VLO",
             "name": "Valero Energy",
             "sector": "Energy",
-            "marketCapWeightPct": 0.173481,
+            "marketCapWeightPct": 0.175824,
             "return1d": 0.1818
           },
           {
             "ticker": "PH",
             "name": "Parker Hannifin",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.173388,
+            "marketCapWeightPct": 0.175729,
             "return1d": 1.9724
           },
           {
             "ticker": "MDT",
             "name": "Medtronic",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.171808,
+            "marketCapWeightPct": 0.174128,
             "return1d": -0.6899
           },
           {
             "ticker": "MO",
             "name": "Altria",
             "sector": "Consumer Staples",
-            "marketCapWeightPct": 0.169233,
+            "marketCapWeightPct": 0.171518,
             "return1d": -0.2583
           },
           {
             "ticker": "CVS",
             "name": "CVS Health",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.165651,
+            "marketCapWeightPct": 0.167888,
             "return1d": -1.5841
           },
           {
             "ticker": "SBUX",
             "name": "Starbucks",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.159269,
+            "marketCapWeightPct": 0.16142,
             "return1d": -0.8689
           },
           {
             "ticker": "PSX",
             "name": "Phillips 66",
             "sector": "Energy",
-            "marketCapWeightPct": 0.158888,
+            "marketCapWeightPct": 0.161033,
             "return1d": -0.3939
           },
           {
             "ticker": "LOW",
             "name": "Lowe's",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.157448,
+            "marketCapWeightPct": 0.159574,
             "return1d": -0.8754
           },
           {
             "ticker": "ADP",
             "name": "Automatic Data Processing",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.157081,
+            "marketCapWeightPct": 0.159202,
             "return1d": -0.3747
           },
           {
             "ticker": "HOOD",
             "name": "Robinhood Markets",
             "sector": "Financials",
-            "marketCapWeightPct": 0.157056,
+            "marketCapWeightPct": 0.159176,
             "return1d": 9.1157
           },
           {
             "ticker": "SYK",
             "name": "Stryker Corporation",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.153849,
+            "marketCapWeightPct": 0.155927,
             "return1d": -1.7885
           },
           {
             "ticker": "BNY",
             "name": "BNY Mellon",
             "sector": "Financials",
-            "marketCapWeightPct": 0.152127,
+            "marketCapWeightPct": 0.154181,
             "return1d": 0.5032
           },
           {
             "ticker": "APP",
             "name": "AppLovin",
             "sector": "Communication Services",
-            "marketCapWeightPct": 0.150298,
+            "marketCapWeightPct": 0.152327,
             "return1d": -4.2102
           },
           {
             "ticker": "FCX",
             "name": "Freeport-McMoRan",
             "sector": "Materials",
-            "marketCapWeightPct": 0.149773,
+            "marketCapWeightPct": 0.151795,
             "return1d": 0.9739
           },
           {
             "ticker": "MCK",
             "name": "McKesson Corporation",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.148669,
+            "marketCapWeightPct": 0.150677,
             "return1d": -0.5594
           },
           {
             "ticker": "EQIX",
             "name": "Equinix",
             "sector": "Real Estate",
-            "marketCapWeightPct": 0.146922,
+            "marketCapWeightPct": 0.148906,
             "return1d": -0.4484
           },
           {
             "ticker": "ABNB",
             "name": "Airbnb",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.145104,
+            "marketCapWeightPct": 0.147063,
             "return1d": 0.1748
           },
           {
             "ticker": "CME",
             "name": "CME Group",
             "sector": "Financials",
-            "marketCapWeightPct": 0.144692,
+            "marketCapWeightPct": 0.146646,
             "return1d": 1.7924
           },
           {
             "ticker": "ADBE",
             "name": "Adobe Inc.",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.144252,
+            "marketCapWeightPct": 0.1462,
             "return1d": -1.4841
           },
           {
             "ticker": "SO",
             "name": "Southern Company",
             "sector": "Utilities",
-            "marketCapWeightPct": 0.143426,
+            "marketCapWeightPct": 0.145363,
             "return1d": -1.4292
           },
           {
             "ticker": "VRT",
             "name": "Vertiv",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.139975,
+            "marketCapWeightPct": 0.141865,
             "return1d": 3.2714
           },
           {
             "ticker": "GD",
             "name": "General Dynamics",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.139258,
+            "marketCapWeightPct": 0.141138,
             "return1d": -0.8147
           },
           {
             "ticker": "TT",
             "name": "Trane Technologies",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.137645,
+            "marketCapWeightPct": 0.139504,
             "return1d": 1.3654
           },
           {
             "ticker": "PWR",
             "name": "Quanta Services",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.136759,
+            "marketCapWeightPct": 0.138606,
             "return1d": 3.2715
           },
           {
             "ticker": "BX",
             "name": "Blackstone Inc.",
             "sector": "Financials",
-            "marketCapWeightPct": 0.136747,
+            "marketCapWeightPct": 0.138594,
             "return1d": -0.3588
           },
           {
             "ticker": "USB",
             "name": "U.S. Bancorp",
             "sector": "Financials",
-            "marketCapWeightPct": 0.136424,
+            "marketCapWeightPct": 0.138267,
             "return1d": -0.3154
           },
           {
             "ticker": "PNC",
             "name": "PNC Financial Services",
             "sector": "Financials",
-            "marketCapWeightPct": 0.135615,
+            "marketCapWeightPct": 0.137447,
             "return1d": 0.5
           },
           {
             "ticker": "HCA",
             "name": "HCA Healthcare",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.135,
+            "marketCapWeightPct": 0.136823,
             "return1d": -0.31
           },
           {
             "ticker": "DUK",
             "name": "Duke Energy",
             "sector": "Utilities",
-            "marketCapWeightPct": 0.133599,
+            "marketCapWeightPct": 0.135403,
             "return1d": -0.852
           },
           {
             "ticker": "HWM",
             "name": "Howmet Aerospace",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.133532,
+            "marketCapWeightPct": 0.135335,
             "return1d": 1.7319
           },
           {
             "ticker": "CEG",
             "name": "Constellation Energy",
             "sector": "Utilities",
-            "marketCapWeightPct": 0.131568,
+            "marketCapWeightPct": 0.133345,
             "return1d": -3.0784
           },
           {
             "ticker": "ELV",
             "name": "Elevance Health",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.129931,
+            "marketCapWeightPct": 0.131685,
             "return1d": -0.799
           },
           {
             "ticker": "KKR",
             "name": "KKR & Co.",
             "sector": "Financials",
-            "marketCapWeightPct": 0.129308,
+            "marketCapWeightPct": 0.131054,
             "return1d": 0.6314
           },
           {
             "ticker": "MAR",
             "name": "Marriott International",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.128847,
+            "marketCapWeightPct": 0.130587,
             "return1d": 1.4731
           },
           {
             "ticker": "WMB",
             "name": "Williams Companies",
             "sector": "Energy",
-            "marketCapWeightPct": 0.128483,
+            "marketCapWeightPct": 0.130218,
             "return1d": 0.3342
           },
           {
             "ticker": "ICE",
             "name": "Intercontinental Exchange",
             "sector": "Financials",
-            "marketCapWeightPct": 0.127245,
+            "marketCapWeightPct": 0.128963,
             "return1d": 1.4155
           },
           {
             "ticker": "CSX",
             "name": "CSX Corporation",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.127203,
+            "marketCapWeightPct": 0.128921,
             "return1d": -1.6702
           },
           {
             "ticker": "JCI",
             "name": "Johnson Controls",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.126531,
+            "marketCapWeightPct": 0.12824,
             "return1d": 1.5738
           },
           {
             "ticker": "MMM",
             "name": "3M",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.124727,
+            "marketCapWeightPct": 0.126411,
             "return1d": 0.7164
           },
           {
             "ticker": "WM",
             "name": "Waste Management",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.123017,
+            "marketCapWeightPct": 0.124678,
             "return1d": -1.0453
           },
           {
             "ticker": "UPS",
             "name": "United Parcel Service",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.122869,
+            "marketCapWeightPct": 0.124528,
             "return1d": -1.1081
           },
           {
             "ticker": "EMR",
             "name": "Emerson Electric",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.121917,
+            "marketCapWeightPct": 0.123563,
             "return1d": 1.7096
           },
           {
             "ticker": "DASH",
             "name": "DoorDash",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.12188,
+            "marketCapWeightPct": 0.123526,
             "return1d": -0.8326
           },
           {
             "ticker": "MRSH",
             "name": "Marsh McLennan",
             "sector": "Financials",
-            "marketCapWeightPct": 0.121758,
+            "marketCapWeightPct": 0.123402,
             "return1d": 0.2463
           },
           {
             "ticker": "LITE",
             "name": "Lumentum",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.121738,
+            "marketCapWeightPct": 0.123382,
             "return1d": 4.1741
           },
           {
             "ticker": "DDOG",
             "name": "Datadog",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.120361,
+            "marketCapWeightPct": 0.121987,
             "return1d": -2.5763
           },
           {
             "ticker": "MCO",
             "name": "Moody's Corporation",
             "sector": "Financials",
-            "marketCapWeightPct": 0.118322,
+            "marketCapWeightPct": 0.11992,
             "return1d": 1.4528
           },
           {
             "ticker": "AMT",
             "name": "American Tower",
             "sector": "Real Estate",
-            "marketCapWeightPct": 0.118188,
+            "marketCapWeightPct": 0.119784,
             "return1d": -0.9113
           },
           {
             "ticker": "INTU",
             "name": "Intuit",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.118123,
+            "marketCapWeightPct": 0.119718,
             "return1d": -3.1744
           },
           {
             "ticker": "REGN",
             "name": "Regeneron Pharmaceuticals",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.117804,
+            "marketCapWeightPct": 0.119394,
             "return1d": -0.5827
           },
           {
             "ticker": "CMCSA",
             "name": "Comcast",
             "sector": "Communication Services",
-            "marketCapWeightPct": 0.117646,
+            "marketCapWeightPct": 0.119235,
             "return1d": -0.742
           },
           {
             "ticker": "HPE",
             "name": "Hewlett Packard Enterprise",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.117589,
+            "marketCapWeightPct": 0.119177,
             "return1d": -0.4587
           },
           {
             "ticker": "CTAS",
             "name": "Cintas",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.115116,
+            "marketCapWeightPct": 0.11667,
             "return1d": -0.1617
           },
           {
             "ticker": "TRV",
             "name": "Travelers Companies (The)",
             "sector": "Financials",
-            "marketCapWeightPct": 0.113914,
+            "marketCapWeightPct": 0.115453,
             "return1d": -1.2833
           },
           {
             "ticker": "CDNS",
             "name": "Cadence Design Systems",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.113582,
+            "marketCapWeightPct": 0.115116,
             "return1d": 0.7622
           },
           {
             "ticker": "SHW",
             "name": "Sherwin-Williams",
             "sector": "Materials",
-            "marketCapWeightPct": 0.113511,
+            "marketCapWeightPct": 0.115044,
             "return1d": -0.0654
           },
           {
             "ticker": "MDLZ",
             "name": "Mondelez International",
             "sector": "Consumer Staples",
-            "marketCapWeightPct": 0.113225,
+            "marketCapWeightPct": 0.114754,
             "return1d": -1.9181
           },
           {
             "ticker": "ITW",
             "name": "Illinois Tool Works",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.111865,
+            "marketCapWeightPct": 0.113376,
             "return1d": 0.714
           },
           {
             "ticker": "MSI",
             "name": "Motorola Solutions",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.110664,
+            "marketCapWeightPct": 0.112158,
             "return1d": -0.2197
           },
           {
             "ticker": "SLB",
             "name": "Schlumberger",
             "sector": "Energy",
-            "marketCapWeightPct": 0.110609,
+            "marketCapWeightPct": 0.112103,
             "return1d": -1.8433
           },
           {
             "ticker": "EOG",
             "name": "EOG Resources",
             "sector": "Energy",
-            "marketCapWeightPct": 0.110294,
+            "marketCapWeightPct": 0.111783,
             "return1d": -0.8524
           },
           {
             "ticker": "ECL",
             "name": "Ecolab",
             "sector": "Materials",
-            "marketCapWeightPct": 0.110125,
+            "marketCapWeightPct": 0.111612,
             "return1d": -0.8171
           },
           {
             "ticker": "NOC",
             "name": "Northrop Grumman",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.109229,
+            "marketCapWeightPct": 0.110704,
             "return1d": 0.6469
           },
           {
             "ticker": "APO",
             "name": "Apollo Global Management",
             "sector": "Financials",
-            "marketCapWeightPct": 0.108402,
+            "marketCapWeightPct": 0.109866,
             "return1d": -0.0714
           },
           {
             "ticker": "SNPS",
             "name": "Synopsys",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.107555,
+            "marketCapWeightPct": 0.109007,
             "return1d": 0.9969
           },
           {
             "ticker": "CMI",
             "name": "Cummins",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.106818,
+            "marketCapWeightPct": 0.108261,
             "return1d": 1.5939
           },
           {
             "ticker": "CI",
             "name": "Cigna",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.106047,
+            "marketCapWeightPct": 0.107479,
             "return1d": -0.2609
           },
           {
             "ticker": "ROST",
             "name": "Ross Stores",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.105539,
+            "marketCapWeightPct": 0.106964,
             "return1d": -1.2507
           },
           {
             "ticker": "GM",
             "name": "General Motors",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.105153,
+            "marketCapWeightPct": 0.106572,
             "return1d": -5.1028
           },
           {
             "ticker": "TGT",
             "name": "Target Corporation",
             "sector": "Consumer Staples",
-            "marketCapWeightPct": 0.104772,
+            "marketCapWeightPct": 0.106186,
             "return1d": -1.0261
           },
           {
             "ticker": "FDX",
             "name": "FedEx",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.104771,
+            "marketCapWeightPct": 0.106186,
             "return1d": -0.729
           },
           {
             "ticker": "CVNA",
             "name": "Carvana",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.10446,
+            "marketCapWeightPct": 0.10587,
             "return1d": -1.1087
           },
           {
             "ticker": "KMI",
             "name": "Kinder Morgan",
             "sector": "Energy",
-            "marketCapWeightPct": 0.103366,
+            "marketCapWeightPct": 0.104762,
             "return1d": 1.6928
           },
           {
             "ticker": "NSC",
             "name": "Norfolk Southern",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.102873,
+            "marketCapWeightPct": 0.104262,
             "return1d": -1.508
           },
           {
             "ticker": "WBD",
             "name": "Warner Bros. Discovery",
             "sector": "Communication Services",
-            "marketCapWeightPct": 0.101757,
+            "marketCapWeightPct": 0.103131,
             "return1d": -1.5581
           },
           {
             "ticker": "CL",
             "name": "Colgate-Palmolive",
             "sector": "Consumer Staples",
-            "marketCapWeightPct": 0.101657,
+            "marketCapWeightPct": 0.10303,
             "return1d": -0.2964
           },
           {
             "ticker": "HLT",
             "name": "Hilton Worldwide",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.100316,
+            "marketCapWeightPct": 0.101671,
             "return1d": 1.0544
           },
           {
             "ticker": "ORLY",
             "name": "O'Reilly Automotive",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.099905,
+            "marketCapWeightPct": 0.101254,
             "return1d": -0.212
           },
           {
             "ticker": "DLR",
             "name": "Digital Realty",
             "sector": "Real Estate",
-            "marketCapWeightPct": 0.098249,
+            "marketCapWeightPct": 0.099575,
             "return1d": -1.1614
           },
           {
             "ticker": "RSG",
             "name": "Republic Services",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.097352,
+            "marketCapWeightPct": 0.098666,
             "return1d": -0.3928
           },
           {
             "ticker": "SPG",
             "name": "Simon Property Group",
             "sector": "Real Estate",
-            "marketCapWeightPct": 0.09685,
+            "marketCapWeightPct": 0.098158,
             "return1d": 0.4157
           },
           {
             "ticker": "RCL",
             "name": "Royal Caribbean Group",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.095845,
+            "marketCapWeightPct": 0.097139,
             "return1d": -1.5736
           },
           {
             "ticker": "HON",
             "name": "Honeywell Technologies",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.095398,
+            "marketCapWeightPct": 0.096686,
             "return1d": -0.0145
           },
           {
             "ticker": "AEP",
             "name": "American Electric Power",
             "sector": "Utilities",
-            "marketCapWeightPct": 0.095241,
+            "marketCapWeightPct": 0.096527,
             "return1d": -1.332
           },
           {
             "ticker": "APD",
             "name": "Air Products",
             "sector": "Materials",
-            "marketCapWeightPct": 0.092259,
+            "marketCapWeightPct": 0.093505,
             "return1d": -0.678
           },
           {
             "ticker": "ALL",
             "name": "Allstate",
             "sector": "Financials",
-            "marketCapWeightPct": 0.092097,
+            "marketCapWeightPct": 0.093341,
             "return1d": -0.9437
           },
           {
             "ticker": "URI",
             "name": "United Rentals",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.092005,
+            "marketCapWeightPct": 0.093247,
             "return1d": 1.1351
           },
           {
             "ticker": "BSX",
             "name": "Boston Scientific",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.09157,
+            "marketCapWeightPct": 0.092806,
             "return1d": -0.4822
           },
           {
             "ticker": "AON",
             "name": "Aon plc",
             "sector": "Financials",
-            "marketCapWeightPct": 0.091428,
+            "marketCapWeightPct": 0.092663,
             "return1d": -0.1385
           },
           {
             "ticker": "TRGP",
             "name": "Targa Resources",
             "sector": "Energy",
-            "marketCapWeightPct": 0.091344,
+            "marketCapWeightPct": 0.092577,
             "return1d": 2.4976
           },
           {
             "ticker": "COHR",
             "name": "Coherent Corp.",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.090607,
+            "marketCapWeightPct": 0.09183,
             "return1d": 7.2235
           },
           {
             "ticker": "MET",
             "name": "MetLife",
             "sector": "Financials",
-            "marketCapWeightPct": 0.089903,
+            "marketCapWeightPct": 0.091117,
             "return1d": -0.3184
           },
           {
             "ticker": "MRNA",
             "name": "Moderna",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.089658,
+            "marketCapWeightPct": 0.090868,
             "return1d": -2.5495
           },
           {
             "ticker": "AJG",
             "name": "Arthur J. Gallagher & Co.",
             "sector": "Financials",
-            "marketCapWeightPct": 0.089483,
+            "marketCapWeightPct": 0.090692,
             "return1d": -0.7995
           },
           {
             "ticker": "PCAR",
             "name": "Paccar",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.089062,
+            "marketCapWeightPct": 0.090265,
             "return1d": -1.1077
           },
           {
             "ticker": "TDG",
             "name": "TransDigm Group",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.087522,
+            "marketCapWeightPct": 0.088703,
             "return1d": 0.9331
           },
           {
             "ticker": "MPWR",
             "name": "Monolithic Power Systems",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.087249,
+            "marketCapWeightPct": 0.088428,
             "return1d": 4.1229
           },
           {
             "ticker": "GWW",
             "name": "W. W. Grainger",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.086976,
+            "marketCapWeightPct": 0.08815,
             "return1d": 0.3168
           },
           {
             "ticker": "TEL",
             "name": "TE Connectivity",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.086703,
+            "marketCapWeightPct": 0.087874,
             "return1d": -0.5712
           },
           {
             "ticker": "TFC",
             "name": "Truist Financial",
             "sector": "Financials",
-            "marketCapWeightPct": 0.086485,
+            "marketCapWeightPct": 0.087653,
             "return1d": 0.227
           },
           {
             "ticker": "COR",
             "name": "Cencora",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.085904,
+            "marketCapWeightPct": 0.087064,
             "return1d": -0.2036
           },
           {
             "ticker": "OKE",
             "name": "Oneok",
             "sector": "Energy",
-            "marketCapWeightPct": 0.085891,
+            "marketCapWeightPct": 0.08705,
             "return1d": 0.2575
           },
           {
             "ticker": "OXY",
             "name": "Occidental Petroleum",
             "sector": "Energy",
-            "marketCapWeightPct": 0.085751,
+            "marketCapWeightPct": 0.086909,
             "return1d": -0.759
           },
           {
             "ticker": "AFL",
             "name": "Aflac",
             "sector": "Financials",
-            "marketCapWeightPct": 0.085026,
+            "marketCapWeightPct": 0.086174,
             "return1d": -0.2316
           },
           {
             "ticker": "FIX",
             "name": "Comfort Systems USA",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.084731,
+            "marketCapWeightPct": 0.085875,
             "return1d": 4.9182
           },
           {
             "ticker": "TER",
             "name": "Teradyne",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.084668,
+            "marketCapWeightPct": 0.085812,
             "return1d": 5.1936
           },
           {
             "ticker": "CRH",
             "name": "CRH plc",
             "sector": "Materials",
-            "marketCapWeightPct": 0.084067,
+            "marketCapWeightPct": 0.085202,
             "return1d": -0.6344
           },
           {
             "ticker": "NXPI",
             "name": "NXP Semiconductors",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.083815,
+            "marketCapWeightPct": 0.084947,
             "return1d": 0.0176
           },
           {
             "ticker": "KEYS",
             "name": "Keysight Technologies",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.083146,
+            "marketCapWeightPct": 0.084269,
             "return1d": 1.0741
           },
           {
             "ticker": "BKR",
             "name": "Baker Hughes",
             "sector": "Energy",
-            "marketCapWeightPct": 0.082853,
+            "marketCapWeightPct": 0.083972,
             "return1d": 1.2021
           },
           {
             "ticker": "NUE",
             "name": "Nucor",
             "sector": "Materials",
-            "marketCapWeightPct": 0.082154,
+            "marketCapWeightPct": 0.083264,
             "return1d": -6.3212
           },
           {
             "ticker": "FAST",
             "name": "Fastenal",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.08199,
+            "marketCapWeightPct": 0.083097,
             "return1d": -0.3457
           },
           {
             "ticker": "D",
             "name": "Dominion Energy",
             "sector": "Utilities",
-            "marketCapWeightPct": 0.081526,
+            "marketCapWeightPct": 0.082626,
             "return1d": -1.1044
           },
           {
             "ticker": "AME",
             "name": "Ametek",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.079428,
+            "marketCapWeightPct": 0.080501,
             "return1d": 1.4169
           },
           {
             "ticker": "FANG",
             "name": "Diamondback Energy",
             "sector": "Energy",
-            "marketCapWeightPct": 0.078554,
+            "marketCapWeightPct": 0.079615,
             "return1d": -2.2951
           },
           {
             "ticker": "CTVA",
             "name": "Corteva",
             "sector": "Materials",
-            "marketCapWeightPct": 0.078331,
+            "marketCapWeightPct": 0.079389,
             "return1d": -1.2265
           },
           {
             "ticker": "O",
             "name": "Realty Income",
             "sector": "Real Estate",
-            "marketCapWeightPct": 0.078161,
+            "marketCapWeightPct": 0.079217,
             "return1d": -1.1514
           },
           {
             "ticker": "DVN",
             "name": "Devon Energy",
             "sector": "Energy",
-            "marketCapWeightPct": 0.077955,
+            "marketCapWeightPct": 0.079008,
             "return1d": -0.2258
           },
           {
             "ticker": "SRE",
             "name": "Sempra",
             "sector": "Utilities",
-            "marketCapWeightPct": 0.077514,
+            "marketCapWeightPct": 0.078561,
             "return1d": -1.0587
           },
           {
             "ticker": "GRMN",
             "name": "Garmin",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.077054,
+            "marketCapWeightPct": 0.078095,
             "return1d": -0.4685
           },
           {
             "ticker": "NKE",
             "name": "Nike, Inc.",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.0768,
+            "marketCapWeightPct": 0.077837,
             "return1d": -2.3377
           },
           {
             "ticker": "CAH",
             "name": "Cardinal Health",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.07642,
+            "marketCapWeightPct": 0.077452,
             "return1d": -0.4241
           },
           {
             "ticker": "DAL",
             "name": "Delta Air Lines",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.076335,
+            "marketCapWeightPct": 0.077366,
             "return1d": 0.2392
           },
           {
             "ticker": "NDAQ",
             "name": "Nasdaq, Inc.",
             "sector": "Financials",
-            "marketCapWeightPct": 0.076228,
+            "marketCapWeightPct": 0.077258,
             "return1d": 2.4422
           },
           {
             "ticker": "PSA",
             "name": "Public Storage",
             "sector": "Real Estate",
-            "marketCapWeightPct": 0.075866,
+            "marketCapWeightPct": 0.076891,
             "return1d": -1.4796
           },
           {
             "ticker": "HONA",
             "name": "Honeywell Aerospace",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.075597,
+            "marketCapWeightPct": 0.076617,
             "return1d": -2.1121
           },
           {
             "ticker": "F",
             "name": "Ford Motor Company",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.075432,
+            "marketCapWeightPct": 0.07645,
             "return1d": -2.939
           },
           {
             "ticker": "COIN",
             "name": "Coinbase",
             "sector": "Financials",
-            "marketCapWeightPct": 0.074717,
+            "marketCapWeightPct": 0.075726,
             "return1d": 11.6572
           },
           {
             "ticker": "EW",
             "name": "Edwards Lifesciences",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.074167,
+            "marketCapWeightPct": 0.075169,
             "return1d": 0.0113
           },
           {
             "ticker": "STT",
             "name": "State Street Corporation",
             "sector": "Financials",
-            "marketCapWeightPct": 0.073237,
+            "marketCapWeightPct": 0.074226,
             "return1d": -0.1093
           },
           {
             "ticker": "EBAY",
             "name": "eBay Inc.",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.072557,
+            "marketCapWeightPct": 0.073537,
             "return1d": -0.9389
           },
           {
             "ticker": "CIEN",
             "name": "Ciena",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.072111,
+            "marketCapWeightPct": 0.073085,
             "return1d": 1.3217
           },
           {
             "ticker": "BDX",
             "name": "Becton Dickinson",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.071853,
+            "marketCapWeightPct": 0.072823,
             "return1d": -0.2426
           },
           {
             "ticker": "AMP",
             "name": "Ameriprise Financial",
             "sector": "Financials",
-            "marketCapWeightPct": 0.07134,
+            "marketCapWeightPct": 0.072303,
             "return1d": -0.2511
           },
           {
             "ticker": "VMRK",
             "name": "Vivmark Residential",
             "sector": "Real Estate",
-            "marketCapWeightPct": 0.070286,
+            "marketCapWeightPct": 0.071235,
             "return1d": -2.8408
           },
           {
             "ticker": "FITB",
             "name": "Fifth Third Bancorp",
             "sector": "Financials",
-            "marketCapWeightPct": 0.069955,
+            "marketCapWeightPct": 0.0709,
             "return1d": -0.6758
           },
           {
             "ticker": "ETR",
             "name": "Entergy",
             "sector": "Utilities",
-            "marketCapWeightPct": 0.069397,
+            "marketCapWeightPct": 0.070334,
             "return1d": -1.2583
           },
           {
             "ticker": "WAB",
             "name": "Wabtec",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.069008,
+            "marketCapWeightPct": 0.069939,
             "return1d": 0.5057
           },
           {
             "ticker": "VST",
             "name": "Vistra Corp.",
             "sector": "Utilities",
-            "marketCapWeightPct": 0.068833,
+            "marketCapWeightPct": 0.069762,
             "return1d": -2.0131
           },
           {
             "ticker": "WDAY",
             "name": "Workday, Inc.",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.068117,
+            "marketCapWeightPct": 0.069036,
             "return1d": -2.7148
           },
           {
             "ticker": "AZO",
             "name": "AutoZone",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.067958,
+            "marketCapWeightPct": 0.068876,
             "return1d": 0.3867
           },
           {
             "ticker": "HUM",
             "name": "Humana",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.067613,
+            "marketCapWeightPct": 0.068526,
             "return1d": 0.4421
           },
           {
             "ticker": "ROK",
             "name": "Rockwell Automation",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.067424,
+            "marketCapWeightPct": 0.068335,
             "return1d": 1.3584
           },
           {
             "ticker": "LHX",
             "name": "L3Harris",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.067134,
+            "marketCapWeightPct": 0.068041,
             "return1d": -1.2657
           },
           {
             "ticker": "XYZ",
             "name": "Block, Inc.",
             "sector": "Financials",
-            "marketCapWeightPct": 0.066813,
+            "marketCapWeightPct": 0.067715,
             "return1d": -0.2485
           },
           {
             "ticker": "ADSK",
             "name": "Autodesk",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.066104,
+            "marketCapWeightPct": 0.066997,
             "return1d": -0.773
           },
           {
             "ticker": "XEL",
             "name": "Xcel Energy",
             "sector": "Utilities",
-            "marketCapWeightPct": 0.06584,
+            "marketCapWeightPct": 0.066729,
             "return1d": -1.8063
           },
           {
             "ticker": "PYPL",
             "name": "PayPal",
             "sector": "Financials",
-            "marketCapWeightPct": 0.065364,
+            "marketCapWeightPct": 0.066247,
             "return1d": -1.0011
           },
           {
             "ticker": "VTR",
             "name": "Ventas",
             "sector": "Real Estate",
-            "marketCapWeightPct": 0.064828,
+            "marketCapWeightPct": 0.065704,
             "return1d": -1.1629
           },
           {
             "ticker": "CARR",
             "name": "Carrier Global",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.064752,
+            "marketCapWeightPct": 0.065626,
             "return1d": -0.9377
           },
           {
             "ticker": "A",
             "name": "Agilent Technologies",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.064313,
+            "marketCapWeightPct": 0.065181,
             "return1d": 0.0832
           },
           {
             "ticker": "IQV",
             "name": "IQVIA",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.063932,
+            "marketCapWeightPct": 0.064796,
             "return1d": -1.1208
           },
           {
             "ticker": "EXC",
             "name": "Exelon",
             "sector": "Utilities",
-            "marketCapWeightPct": 0.063312,
+            "marketCapWeightPct": 0.064167,
             "return1d": -1.3368
           },
           {
             "ticker": "CMG",
             "name": "Chipotle Mexican Grill",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.061673,
+            "marketCapWeightPct": 0.062506,
             "return1d": -0.2387
           },
           {
             "ticker": "KDP",
             "name": "Keurig Dr Pepper",
             "sector": "Consumer Staples",
-            "marketCapWeightPct": 0.061423,
+            "marketCapWeightPct": 0.062252,
             "return1d": -1.4954
           },
           {
             "ticker": "VEEV",
             "name": "Veeva Systems",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.061421,
+            "marketCapWeightPct": 0.062251,
             "return1d": -1.3422
           },
           {
             "ticker": "FERG",
             "name": "Ferguson Enterprises",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.060476,
+            "marketCapWeightPct": 0.061293,
             "return1d": 0.0793
           },
           {
             "ticker": "WAT",
             "name": "Waters Corporation",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.060392,
+            "marketCapWeightPct": 0.061208,
             "return1d": -1.8826
           },
           {
             "ticker": "PAYX",
             "name": "Paychex",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.060274,
+            "marketCapWeightPct": 0.061088,
             "return1d": -0.3176
           },
           {
             "ticker": "IBKR",
             "name": "Interactive Brokers",
             "sector": "Financials",
-            "marketCapWeightPct": 0.059904,
+            "marketCapWeightPct": 0.060713,
             "return1d": 2.6137
           },
           {
             "ticker": "ADM",
             "name": "Archer Daniels Midland",
             "sector": "Consumer Staples",
-            "marketCapWeightPct": 0.059851,
+            "marketCapWeightPct": 0.060659,
             "return1d": -3.3034
           },
           {
             "ticker": "ARES",
             "name": "Ares Management",
             "sector": "Financials",
-            "marketCapWeightPct": 0.059611,
+            "marketCapWeightPct": 0.060416,
             "return1d": -1.2129
           },
           {
             "ticker": "PRU",
             "name": "Prudential Financial",
             "sector": "Financials",
-            "marketCapWeightPct": 0.059552,
+            "marketCapWeightPct": 0.060356,
             "return1d": 0.3985
           },
           {
             "ticker": "CBRE",
             "name": "CBRE Group",
             "sector": "Real Estate",
-            "marketCapWeightPct": 0.058893,
+            "marketCapWeightPct": 0.059688,
             "return1d": 0.1292
           },
           {
             "ticker": "IDXX",
             "name": "Idexx Laboratories",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.058765,
+            "marketCapWeightPct": 0.059559,
             "return1d": 1.0208
           },
           {
             "ticker": "MSCI",
             "name": "MSCI",
             "sector": "Financials",
-            "marketCapWeightPct": 0.058598,
+            "marketCapWeightPct": 0.059389,
             "return1d": 0.6188
           },
           {
             "ticker": "FLEX",
             "name": "Flex Ltd.",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.058438,
+            "marketCapWeightPct": 0.059227,
             "return1d": -0.4678
           },
           {
             "ticker": "MCHP",
             "name": "Microchip Technology",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.058004,
+            "marketCapWeightPct": 0.058787,
             "return1d": 3.4595
           },
           {
             "ticker": "AIG",
             "name": "American International Group",
             "sector": "Financials",
-            "marketCapWeightPct": 0.057426,
+            "marketCapWeightPct": 0.058201,
             "return1d": -0.4625
           },
           {
             "ticker": "LYV",
             "name": "Live Nation Entertainment",
             "sector": "Communication Services",
-            "marketCapWeightPct": 0.05741,
+            "marketCapWeightPct": 0.058186,
             "return1d": -0.7247
           },
           {
             "ticker": "ED",
             "name": "Consolidated Edison",
             "sector": "Utilities",
-            "marketCapWeightPct": 0.056845,
+            "marketCapWeightPct": 0.057612,
             "return1d": -1.5409
           },
           {
             "ticker": "SYY",
             "name": "Sysco",
             "sector": "Consumer Staples",
-            "marketCapWeightPct": 0.056691,
+            "marketCapWeightPct": 0.057457,
             "return1d": -0.0758
           },
           {
             "ticker": "NTAP",
             "name": "NetApp",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.056639,
+            "marketCapWeightPct": 0.057403,
             "return1d": 0.4418
           },
           {
             "ticker": "DHI",
             "name": "D. R. Horton",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.056281,
+            "marketCapWeightPct": 0.057041,
             "return1d": -1.6812
           },
           {
             "ticker": "TTWO",
             "name": "Take-Two Interactive",
             "sector": "Communication Services",
-            "marketCapWeightPct": 0.056005,
+            "marketCapWeightPct": 0.056761,
             "return1d": -2.4547
           },
           {
             "ticker": "YUM",
             "name": "Yum! Brands",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.054901,
+            "marketCapWeightPct": 0.055642,
             "return1d": 1.6501
           },
           {
             "ticker": "ROP",
             "name": "Roper Technologies",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.053744,
+            "marketCapWeightPct": 0.05447,
             "return1d": -0.539
           },
           {
             "ticker": "KR",
             "name": "Kroger",
             "sector": "Consumer Staples",
-            "marketCapWeightPct": 0.05359,
+            "marketCapWeightPct": 0.054314,
             "return1d": -1.2346
           },
           {
             "ticker": "AXON",
             "name": "Axon Enterprise",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.053031,
+            "marketCapWeightPct": 0.053747,
             "return1d": -1.2657
           },
           {
             "ticker": "ODFL",
             "name": "Old Dominion",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.052298,
+            "marketCapWeightPct": 0.053005,
             "return1d": -1.1937
           },
           {
             "ticker": "TKO",
             "name": "TKO Group Holdings",
             "sector": "Communication Services",
-            "marketCapWeightPct": 0.052223,
+            "marketCapWeightPct": 0.052929,
             "return1d": -0.0211
           },
           {
             "ticker": "HIG",
             "name": "Hartford (The)",
             "sector": "Financials",
-            "marketCapWeightPct": 0.052084,
+            "marketCapWeightPct": 0.052787,
             "return1d": -0.9389
           },
           {
             "ticker": "PCG",
             "name": "PG&E Corporation",
             "sector": "Utilities",
-            "marketCapWeightPct": 0.051576,
+            "marketCapWeightPct": 0.052273,
             "return1d": -1.3453
           },
           {
             "ticker": "UAL",
             "name": "United Airlines Holdings",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.051442,
+            "marketCapWeightPct": 0.052137,
             "return1d": 0.9941
           },
           {
             "ticker": "PEG",
             "name": "Public Service Enterprise Group",
             "sector": "Utilities",
-            "marketCapWeightPct": 0.050698,
+            "marketCapWeightPct": 0.051382,
             "return1d": -1.7047
           },
           {
             "ticker": "KVUE",
             "name": "Kenvue",
             "sector": "Consumer Staples",
-            "marketCapWeightPct": 0.049873,
+            "marketCapWeightPct": 0.050546,
             "return1d": -0.3358
           },
           {
             "ticker": "HSY",
             "name": "Hershey Company (The)",
             "sector": "Consumer Staples",
-            "marketCapWeightPct": 0.049736,
+            "marketCapWeightPct": 0.050408,
             "return1d": 0.8673
           },
           {
             "ticker": "IRM",
             "name": "Iron Mountain",
             "sector": "Real Estate",
-            "marketCapWeightPct": 0.049626,
+            "marketCapWeightPct": 0.050296,
             "return1d": 0.2982
           },
           {
             "ticker": "EL",
             "name": "Estée Lauder Companies (The)",
             "sector": "Consumer Staples",
-            "marketCapWeightPct": 0.049281,
+            "marketCapWeightPct": 0.049946,
             "return1d": -0.4581
           },
           {
             "ticker": "STLD",
             "name": "Steel Dynamics",
             "sector": "Materials",
-            "marketCapWeightPct": 0.049159,
+            "marketCapWeightPct": 0.049823,
             "return1d": -4.1125
           },
           {
             "ticker": "DXCM",
             "name": "Dexcom",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.049156,
+            "marketCapWeightPct": 0.04982,
             "return1d": 1.6149
           },
           {
             "ticker": "WEC",
             "name": "WEC Energy Group",
             "sector": "Utilities",
-            "marketCapWeightPct": 0.049011,
+            "marketCapWeightPct": 0.049673,
             "return1d": -1.4895
           },
           {
             "ticker": "EME",
             "name": "Emcor",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.048236,
+            "marketCapWeightPct": 0.048888,
             "return1d": 2.8563
           },
           {
             "ticker": "ACGL",
             "name": "Arch Capital Group",
             "sector": "Financials",
-            "marketCapWeightPct": 0.0482,
+            "marketCapWeightPct": 0.048851,
             "return1d": 0.1965
           },
           {
             "ticker": "MTB",
             "name": "M&T Bank",
             "sector": "Financials",
-            "marketCapWeightPct": 0.047859,
+            "marketCapWeightPct": 0.048505,
             "return1d": 0.4197
           },
           {
             "ticker": "KMB",
             "name": "Kimberly-Clark",
             "sector": "Consumer Staples",
-            "marketCapWeightPct": 0.047449,
+            "marketCapWeightPct": 0.048089,
             "return1d": -0.3361
           },
           {
             "ticker": "NTRS",
             "name": "Northern Trust",
             "sector": "Financials",
-            "marketCapWeightPct": 0.047448,
+            "marketCapWeightPct": 0.048089,
             "return1d": 0.5369
           },
           {
             "ticker": "RMD",
             "name": "ResMed|",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.047316,
+            "marketCapWeightPct": 0.047955,
             "return1d": -1.5016
           },
           {
             "ticker": "CNC",
             "name": "Centene Corporation",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.046892,
+            "marketCapWeightPct": 0.047525,
             "return1d": -2.9657
           },
           {
             "ticker": "HBAN",
             "name": "Huntington Bancshares",
             "sector": "Financials",
-            "marketCapWeightPct": 0.046775,
+            "marketCapWeightPct": 0.047407,
             "return1d": 0.0
           },
           {
             "ticker": "EXPE",
             "name": "Expedia Group",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.04663,
+            "marketCapWeightPct": 0.047259,
             "return1d": -1.8274
           },
           {
             "ticker": "BIIB",
             "name": "Biogen",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.046421,
+            "marketCapWeightPct": 0.047048,
             "return1d": -1.6206
           },
           {
             "ticker": "RJF",
             "name": "Raymond James Financial",
             "sector": "Financials",
-            "marketCapWeightPct": 0.046203,
+            "marketCapWeightPct": 0.046827,
             "return1d": 0.5984
           },
           {
             "ticker": "JBL",
             "name": "Jabil",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.045765,
+            "marketCapWeightPct": 0.046383,
             "return1d": 1.2266
           },
           {
             "ticker": "EQT",
             "name": "EQT Corporation",
             "sector": "Energy",
-            "marketCapWeightPct": 0.045597,
+            "marketCapWeightPct": 0.046212,
             "return1d": -0.6951
           },
           {
             "ticker": "VMC",
             "name": "Vulcan Materials Company",
             "sector": "Materials",
-            "marketCapWeightPct": 0.045496,
+            "marketCapWeightPct": 0.04611,
             "return1d": -1.501
           },
           {
             "ticker": "CCI",
             "name": "Crown Castle",
             "sector": "Real Estate",
-            "marketCapWeightPct": 0.045317,
+            "marketCapWeightPct": 0.045929,
             "return1d": -0.9222
           },
           {
             "ticker": "HPQ",
             "name": "HP Inc.",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.045226,
+            "marketCapWeightPct": 0.045837,
             "return1d": -0.7501
           },
           {
             "ticker": "CBOE",
             "name": "Cboe Global Markets",
             "sector": "Financials",
-            "marketCapWeightPct": 0.044481,
+            "marketCapWeightPct": 0.045082,
             "return1d": 2.3212
           },
           {
             "ticker": "CCL",
             "name": "Carnival Corporation",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.04361,
+            "marketCapWeightPct": 0.044199,
             "return1d": -1.4885
           },
           {
             "ticker": "ZTS",
             "name": "Zoetis",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.043014,
+            "marketCapWeightPct": 0.043595,
             "return1d": -2.2186
           },
           {
             "ticker": "MLM",
             "name": "Martin Marietta Materials",
             "sector": "Materials",
-            "marketCapWeightPct": 0.042965,
+            "marketCapWeightPct": 0.043545,
             "return1d": -0.7685
           },
           {
             "ticker": "RDDT",
             "name": "Reddit",
             "sector": "Communication Services",
-            "marketCapWeightPct": 0.042312,
+            "marketCapWeightPct": 0.042884,
             "return1d": -1.2956
           },
           {
             "ticker": "KHC",
             "name": "Kraft Heinz",
             "sector": "Consumer Staples",
-            "marketCapWeightPct": 0.042235,
+            "marketCapWeightPct": 0.042805,
             "return1d": -1.2131
           },
           {
             "ticker": "GEHC",
             "name": "GE HealthCare",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.04223,
+            "marketCapWeightPct": 0.0428,
             "return1d": -0.4888
           },
           {
             "ticker": "EXR",
             "name": "Extra Space Storage",
             "sector": "Real Estate",
-            "marketCapWeightPct": 0.042108,
+            "marketCapWeightPct": 0.042676,
             "return1d": -1.6687
           },
           {
             "ticker": "WTW",
             "name": "Willis Towers Watson",
             "sector": "Financials",
-            "marketCapWeightPct": 0.04197,
+            "marketCapWeightPct": 0.042537,
             "return1d": -0.3248
           },
           {
             "ticker": "AEE",
             "name": "Ameren",
             "sector": "Utilities",
-            "marketCapWeightPct": 0.041261,
+            "marketCapWeightPct": 0.041818,
             "return1d": -1.6073
           },
           {
             "ticker": "CFG",
             "name": "Citizens Financial Group",
             "sector": "Financials",
-            "marketCapWeightPct": 0.041165,
+            "marketCapWeightPct": 0.04172,
             "return1d": -0.5194
           },
           {
             "ticker": "HAL",
             "name": "Halliburton",
             "sector": "Energy",
-            "marketCapWeightPct": 0.04086,
+            "marketCapWeightPct": 0.041411,
             "return1d": -1.146
           },
           {
             "ticker": "TDY",
             "name": "Teledyne Technologies",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.040783,
+            "marketCapWeightPct": 0.041333,
             "return1d": 0.2459
           },
           {
             "ticker": "SYF",
             "name": "Synchrony Financial",
             "sector": "Financials",
-            "marketCapWeightPct": 0.040703,
+            "marketCapWeightPct": 0.041253,
             "return1d": 0.8467
           },
           {
             "ticker": "MTD",
             "name": "Mettler Toledo",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.040671,
+            "marketCapWeightPct": 0.04122,
             "return1d": -1.2847
           },
           {
             "ticker": "IR",
             "name": "Ingersoll Rand",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.040631,
+            "marketCapWeightPct": 0.04118,
             "return1d": -1.1287
           },
           {
             "ticker": "VRSN",
             "name": "Verisign",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.039905,
+            "marketCapWeightPct": 0.040444,
             "return1d": 0.3542
           },
           {
             "ticker": "ON",
             "name": "ON Semiconductor",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.03972,
+            "marketCapWeightPct": 0.040256,
             "return1d": 2.4597
           },
           {
             "ticker": "DGX",
             "name": "Quest Diagnostics",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.039657,
+            "marketCapWeightPct": 0.040192,
             "return1d": -0.4041
           },
           {
             "ticker": "ECHO",
             "name": "EchoStar",
             "sector": "Communication Services",
-            "marketCapWeightPct": 0.039581,
+            "marketCapWeightPct": 0.040115,
             "return1d": -0.659
           },
           {
             "ticker": "CPRT",
             "name": "Copart",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.03952,
+            "marketCapWeightPct": 0.040054,
             "return1d": -1.2812
           },
           {
             "ticker": "ATO",
             "name": "Atmos Energy",
             "sector": "Utilities",
-            "marketCapWeightPct": 0.039493,
+            "marketCapWeightPct": 0.040026,
             "return1d": -1.0677
           },
           {
             "ticker": "FOXA",
             "name": "Fox Corporation (Class A)",
             "sector": "Communication Services",
-            "marketCapWeightPct": 0.039431,
+            "marketCapWeightPct": 0.039963,
             "return1d": -0.9983
           },
           {
             "ticker": "AWK",
             "name": "American Water Works",
             "sector": "Utilities",
-            "marketCapWeightPct": 0.039374,
+            "marketCapWeightPct": 0.039905,
             "return1d": -1.6927
           },
           {
             "ticker": "DG",
             "name": "Dollar General",
             "sector": "Consumer Staples",
-            "marketCapWeightPct": 0.039371,
+            "marketCapWeightPct": 0.039903,
             "return1d": -2.0328
           },
           {
             "ticker": "CTSH",
             "name": "Cognizant",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.039317,
+            "marketCapWeightPct": 0.039847,
             "return1d": -3.2482
           },
           {
             "ticker": "DTE",
             "name": "DTE Energy",
             "sector": "Utilities",
-            "marketCapWeightPct": 0.038989,
+            "marketCapWeightPct": 0.039516,
             "return1d": -1.4719
           },
           {
             "ticker": "WSM",
             "name": "Williams-Sonoma, Inc.",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.038497,
+            "marketCapWeightPct": 0.039017,
             "return1d": 2.4118
           },
           {
             "ticker": "FE",
             "name": "FirstEnergy",
             "sector": "Utilities",
-            "marketCapWeightPct": 0.038181,
+            "marketCapWeightPct": 0.038697,
             "return1d": -1.0278
           },
           {
             "ticker": "VICI",
             "name": "Vici Properties",
             "sector": "Real Estate",
-            "marketCapWeightPct": 0.038077,
+            "marketCapWeightPct": 0.038591,
             "return1d": -1.6176
           },
           {
             "ticker": "CPAY",
             "name": "Corpay",
             "sector": "Financials",
-            "marketCapWeightPct": 0.038075,
+            "marketCapWeightPct": 0.03859,
             "return1d": -1.6079
           },
           {
             "ticker": "OTIS",
             "name": "Otis Worldwide",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.038027,
+            "marketCapWeightPct": 0.03854,
             "return1d": -0.262
           },
           {
             "ticker": "LH",
             "name": "Labcorp",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.037919,
+            "marketCapWeightPct": 0.038431,
             "return1d": -0.6259
           },
           {
             "ticker": "WRB",
             "name": "W. R. Berkley Corporation",
             "sector": "Financials",
-            "marketCapWeightPct": 0.037879,
+            "marketCapWeightPct": 0.038391,
             "return1d": -0.1569
           },
           {
             "ticker": "CINF",
             "name": "Cincinnati Financial",
             "sector": "Financials",
-            "marketCapWeightPct": 0.037814,
+            "marketCapWeightPct": 0.038325,
             "return1d": -0.5297
           },
           {
             "ticker": "LVS",
             "name": "Las Vegas Sands",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.037752,
+            "marketCapWeightPct": 0.038262,
             "return1d": -1.6966
           },
           {
             "ticker": "SMCI",
             "name": "Supermicro",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.03744,
+            "marketCapWeightPct": 0.037945,
             "return1d": -3.1227
           },
           {
             "ticker": "ES",
             "name": "Eversource Energy",
             "sector": "Utilities",
-            "marketCapWeightPct": 0.037188,
+            "marketCapWeightPct": 0.037691,
             "return1d": -1.8408
           },
           {
             "ticker": "WST",
             "name": "West Pharmaceutical Services",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.037173,
+            "marketCapWeightPct": 0.037675,
             "return1d": -1.1702
           },
           {
             "ticker": "INCY",
             "name": "Incyte",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.03703,
+            "marketCapWeightPct": 0.037531,
             "return1d": -1.8101
           },
           {
             "ticker": "DOV",
             "name": "Dover Corporation",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.0368,
+            "marketCapWeightPct": 0.037297,
             "return1d": -0.9617
           },
           {
             "ticker": "PFG",
             "name": "Principal Financial Group",
             "sector": "Financials",
-            "marketCapWeightPct": 0.03673,
+            "marketCapWeightPct": 0.037226,
             "return1d": 1.4921
           },
           {
             "ticker": "CNP",
             "name": "CenterPoint Energy",
             "sector": "Utilities",
-            "marketCapWeightPct": 0.036704,
+            "marketCapWeightPct": 0.0372,
             "return1d": -0.8817
           },
           {
             "ticker": "Q",
             "name": "Qnity Electronics",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.036616,
+            "marketCapWeightPct": 0.03711,
             "return1d": 2.493
           },
           {
             "ticker": "XYL",
             "name": "Xylem Inc.",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.036613,
+            "marketCapWeightPct": 0.037108,
             "return1d": -0.0372
           },
           {
             "ticker": "FISV",
             "name": "Fiserv",
             "sector": "Financials",
-            "marketCapWeightPct": 0.036584,
+            "marketCapWeightPct": 0.037078,
             "return1d": -4.2799
           },
           {
             "ticker": "PPL",
             "name": "PPL Corporation",
             "sector": "Utilities",
-            "marketCapWeightPct": 0.036578,
+            "marketCapWeightPct": 0.037072,
             "return1d": -0.7738
           },
           {
             "ticker": "EXPD",
             "name": "Expeditors International",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.036185,
+            "marketCapWeightPct": 0.036674,
             "return1d": 0.9837
           },
           {
             "ticker": "FFIV",
             "name": "F5, Inc.",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.035667,
+            "marketCapWeightPct": 0.036148,
             "return1d": -0.5959
           },
           {
             "ticker": "TPL",
             "name": "Texas Pacific Land Corporation",
             "sector": "Energy",
-            "marketCapWeightPct": 0.035464,
+            "marketCapWeightPct": 0.035943,
             "return1d": 1.5755
           },
           {
             "ticker": "RF",
             "name": "Regions Financial Corporation",
             "sector": "Financials",
-            "marketCapWeightPct": 0.035398,
+            "marketCapWeightPct": 0.035876,
             "return1d": 0.0702
           },
           {
             "ticker": "DRI",
             "name": "Darden Restaurants",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.034806,
+            "marketCapWeightPct": 0.035276,
             "return1d": 1.2286
           },
           {
             "ticker": "HUBB",
             "name": "Hubbell Incorporated",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.034424,
+            "marketCapWeightPct": 0.034888,
             "return1d": 0.8325
           },
           {
             "ticker": "SW",
             "name": "Smurfit Westrock",
             "sector": "Materials",
-            "marketCapWeightPct": 0.033899,
+            "marketCapWeightPct": 0.034357,
             "return1d": -2.5286
           },
           {
             "ticker": "PPG",
             "name": "PPG Industries",
             "sector": "Materials",
-            "marketCapWeightPct": 0.033874,
+            "marketCapWeightPct": 0.034331,
             "return1d": -0.8819
           },
           {
             "ticker": "ULTA",
             "name": "Ulta Beauty",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.033722,
+            "marketCapWeightPct": 0.034178,
             "return1d": -0.5058
           },
           {
             "ticker": "VLTO",
             "name": "Veralto",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.033584,
+            "marketCapWeightPct": 0.034038,
             "return1d": -0.7979
           },
           {
             "ticker": "TPR",
             "name": "Tapestry, Inc.",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.033429,
+            "marketCapWeightPct": 0.033881,
             "return1d": -0.8962
           },
           {
             "ticker": "VRSK",
             "name": "Verisk Analytics",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.033285,
+            "marketCapWeightPct": 0.033734,
             "return1d": -0.6063
           },
           {
             "ticker": "GPN",
             "name": "Global Payments",
             "sector": "Financials",
-            "marketCapWeightPct": 0.032815,
+            "marketCapWeightPct": 0.033258,
             "return1d": -0.3981
           },
           {
             "ticker": "CHD",
             "name": "Church & Dwight",
             "sector": "Consumer Staples",
-            "marketCapWeightPct": 0.032766,
+            "marketCapWeightPct": 0.033209,
             "return1d": -0.3156
           },
           {
             "ticker": "TROW",
             "name": "T. Rowe Price",
             "sector": "Financials",
-            "marketCapWeightPct": 0.032393,
+            "marketCapWeightPct": 0.03283,
             "return1d": 1.2836
           },
           {
             "ticker": "KEY",
             "name": "KeyCorp",
             "sector": "Financials",
-            "marketCapWeightPct": 0.032375,
+            "marketCapWeightPct": 0.032812,
             "return1d": -0.6683
           },
           {
             "ticker": "BG",
             "name": "Bunge Global",
             "sector": "Consumer Staples",
-            "marketCapWeightPct": 0.032373,
+            "marketCapWeightPct": 0.03281,
             "return1d": -3.1263
           },
           {
             "ticker": "CASY",
             "name": "Casey's",
             "sector": "Consumer Staples",
-            "marketCapWeightPct": 0.032195,
+            "marketCapWeightPct": 0.032629,
             "return1d": -1.6413
           },
           {
             "ticker": "L",
             "name": "Loews Corporation",
             "sector": "Financials",
-            "marketCapWeightPct": 0.032119,
+            "marketCapWeightPct": 0.032553,
             "return1d": -0.5445
           },
           {
             "ticker": "JBHT",
             "name": "J.B. Hunt",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.032073,
+            "marketCapWeightPct": 0.032506,
             "return1d": -1.0769
           },
           {
             "ticker": "PHM",
             "name": "PulteGroup",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.032045,
+            "marketCapWeightPct": 0.032478,
             "return1d": -1.3295
           },
           {
             "ticker": "NRG",
             "name": "NRG Energy",
             "sector": "Utilities",
-            "marketCapWeightPct": 0.031768,
+            "marketCapWeightPct": 0.032197,
             "return1d": -2.4193
           },
           {
             "ticker": "BRO",
             "name": "Brown & Brown",
             "sector": "Financials",
-            "marketCapWeightPct": 0.031718,
+            "marketCapWeightPct": 0.032147,
             "return1d": -0.1536
           },
           {
             "ticker": "EIX",
             "name": "Edison International",
             "sector": "Utilities",
-            "marketCapWeightPct": 0.03103,
+            "marketCapWeightPct": 0.031449,
             "return1d": -0.3423
           },
           {
             "ticker": "IFF",
             "name": "International Flavors & Fragrances",
             "sector": "Materials",
-            "marketCapWeightPct": 0.03086,
+            "marketCapWeightPct": 0.031276,
             "return1d": -1.8341
           },
           {
             "ticker": "FSLR",
             "name": "First Solar",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.030703,
+            "marketCapWeightPct": 0.031117,
             "return1d": -2.585
           },
           {
             "ticker": "DLTR",
             "name": "Dollar Tree",
             "sector": "Consumer Staples",
-            "marketCapWeightPct": 0.030626,
+            "marketCapWeightPct": 0.03104,
             "return1d": -2.1329
           },
           {
             "ticker": "OMC",
             "name": "Omnicom Group",
             "sector": "Communication Services",
-            "marketCapWeightPct": 0.030625,
+            "marketCapWeightPct": 0.031039,
             "return1d": -1.581
           },
           {
             "ticker": "DOW",
             "name": "Dow Inc.",
             "sector": "Materials",
-            "marketCapWeightPct": 0.030255,
+            "marketCapWeightPct": 0.030664,
             "return1d": -2.5771
           },
           {
             "ticker": "PKG",
             "name": "Packaging Corporation of America",
             "sector": "Materials",
-            "marketCapWeightPct": 0.030236,
+            "marketCapWeightPct": 0.030644,
             "return1d": -1.1886
           },
           {
             "ticker": "FICO",
             "name": "Fair Isaac",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.029903,
+            "marketCapWeightPct": 0.030306,
             "return1d": -1.72
           },
           {
             "ticker": "CMS",
             "name": "CMS Energy",
             "sector": "Utilities",
-            "marketCapWeightPct": 0.029871,
+            "marketCapWeightPct": 0.030274,
             "return1d": -1.2991
           },
           {
             "ticker": "STZ",
             "name": "Constellation Brands",
             "sector": "Consumer Staples",
-            "marketCapWeightPct": 0.029621,
+            "marketCapWeightPct": 0.030021,
             "return1d": -2.842
           },
           {
             "ticker": "EXE",
             "name": "Expand Energy",
             "sector": "Energy",
-            "marketCapWeightPct": 0.029529,
+            "marketCapWeightPct": 0.029927,
             "return1d": -0.951
           },
           {
             "ticker": "LUV",
             "name": "Southwest Airlines",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.029227,
+            "marketCapWeightPct": 0.029622,
             "return1d": 1.5865
           },
           {
             "ticker": "LYB",
             "name": "LyondellBasell",
             "sector": "Materials",
-            "marketCapWeightPct": 0.029166,
+            "marketCapWeightPct": 0.02956,
             "return1d": -3.6109
           },
           {
             "ticker": "STE",
             "name": "Steris",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.029145,
+            "marketCapWeightPct": 0.029539,
             "return1d": -1.442
           },
           {
             "ticker": "RL",
             "name": "Ralph Lauren Corporation",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.029108,
+            "marketCapWeightPct": 0.029501,
             "return1d": 0.6065
           },
           {
             "ticker": "BBY",
             "name": "Best Buy",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.02839,
+            "marketCapWeightPct": 0.028773,
             "return1d": -1.8084
           },
           {
             "ticker": "VTRS",
             "name": "Viatris",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.028383,
+            "marketCapWeightPct": 0.028766,
             "return1d": -1.0508
           },
           {
             "ticker": "NI",
             "name": "NiSource",
             "sector": "Utilities",
-            "marketCapWeightPct": 0.028371,
+            "marketCapWeightPct": 0.028754,
             "return1d": -0.8066
           },
           {
             "ticker": "GIS",
             "name": "General Mills",
             "sector": "Consumer Staples",
-            "marketCapWeightPct": 0.028309,
+            "marketCapWeightPct": 0.028691,
             "return1d": -0.9274
           },
           {
             "ticker": "AMCR",
             "name": "Amcor",
             "sector": "Materials",
-            "marketCapWeightPct": 0.028243,
+            "marketCapWeightPct": 0.028624,
             "return1d": -1.1326
           },
           {
             "ticker": "CF",
             "name": "CF Industries",
             "sector": "Materials",
-            "marketCapWeightPct": 0.028175,
+            "marketCapWeightPct": 0.028555,
             "return1d": -4.5733
           },
           {
             "ticker": "SNA",
             "name": "Snap-on",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.028065,
+            "marketCapWeightPct": 0.028444,
             "return1d": 0.1426
           },
           {
             "ticker": "SBAC",
             "name": "SBA Communications",
             "sector": "Real Estate",
-            "marketCapWeightPct": 0.027622,
+            "marketCapWeightPct": 0.027995,
             "return1d": -1.4023
           },
           {
             "ticker": "EFX",
             "name": "Equifax",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.027211,
+            "marketCapWeightPct": 0.027579,
             "return1d": -1.4271
           },
           {
             "ticker": "BR",
             "name": "Broadridge Financial Solutions",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.027117,
+            "marketCapWeightPct": 0.027483,
             "return1d": -0.7182
           },
           {
             "ticker": "TSN",
             "name": "Tyson Foods",
             "sector": "Consumer Staples",
-            "marketCapWeightPct": 0.027065,
+            "marketCapWeightPct": 0.027431,
             "return1d": 0.9759
           },
           {
             "ticker": "LEN",
             "name": "Lennar",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.026842,
+            "marketCapWeightPct": 0.027205,
             "return1d": -4.1029
           },
           {
             "ticker": "EVRG",
             "name": "Evergy",
             "sector": "Utilities",
-            "marketCapWeightPct": 0.026817,
+            "marketCapWeightPct": 0.02718,
             "return1d": -1.3112
           },
           {
             "ticker": "FIS",
             "name": "Fidelity National Information Services",
             "sector": "Financials",
-            "marketCapWeightPct": 0.026781,
+            "marketCapWeightPct": 0.027142,
             "return1d": -2.2234
           },
           {
             "ticker": "IP",
             "name": "International Paper",
             "sector": "Materials",
-            "marketCapWeightPct": 0.026659,
+            "marketCapWeightPct": 0.027019,
             "return1d": -2.8692
           },
           {
             "ticker": "CDW",
             "name": "CDW Corporation",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.026645,
+            "marketCapWeightPct": 0.027005,
             "return1d": -2.0174
           },
           {
             "ticker": "ZBH",
             "name": "Zimmer Biomet",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.026517,
+            "marketCapWeightPct": 0.026875,
             "return1d": 1.1777
           },
           {
             "ticker": "FDXF",
             "name": "FedEx Freight",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.026186,
+            "marketCapWeightPct": 0.02654,
             "return1d": -1.8305
           },
           {
             "ticker": "CHRW",
             "name": "C.H. Robinson",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.026063,
+            "marketCapWeightPct": 0.026415,
             "return1d": -0.5396
           },
           {
             "ticker": "NWSA",
             "name": "News Corp (Class A)",
             "sector": "Communication Services",
-            "marketCapWeightPct": 0.025778,
+            "marketCapWeightPct": 0.026126,
             "return1d": -1.6966
           },
           {
             "ticker": "GPC",
             "name": "Genuine Parts Company",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.025742,
+            "marketCapWeightPct": 0.02609,
             "return1d": -2.1394
           },
           {
             "ticker": "DD",
             "name": "DuPont",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.025399,
+            "marketCapWeightPct": 0.025742,
             "return1d": 0.4281
           },
           {
             "ticker": "GEN",
             "name": "Gen Digital",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.025316,
+            "marketCapWeightPct": 0.025658,
             "return1d": -3.9722
           },
           {
             "ticker": "ESS",
             "name": "Essex Property Trust",
             "sector": "Real Estate",
-            "marketCapWeightPct": 0.025303,
+            "marketCapWeightPct": 0.025644,
             "return1d": -0.277
           },
           {
             "ticker": "NDSN",
             "name": "Nordson Corporation",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.025301,
+            "marketCapWeightPct": 0.025642,
             "return1d": -0.0545
           },
           {
             "ticker": "LNT",
             "name": "Alliant Energy",
             "sector": "Utilities",
-            "marketCapWeightPct": 0.024799,
+            "marketCapWeightPct": 0.025134,
             "return1d": -1.5456
           },
           {
             "ticker": "J",
             "name": "Jacobs Solutions",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.024468,
+            "marketCapWeightPct": 0.024799,
             "return1d": -0.5272
           },
           {
             "ticker": "TSCO",
             "name": "Tractor Supply",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.024467,
+            "marketCapWeightPct": 0.024798,
             "return1d": -1.8586
           },
           {
             "ticker": "BEN",
             "name": "Franklin Resources",
             "sector": "Financials",
-            "marketCapWeightPct": 0.024451,
+            "marketCapWeightPct": 0.024781,
             "return1d": -0.1814
           },
           {
             "ticker": "FTV",
             "name": "Fortive",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.024217,
+            "marketCapWeightPct": 0.024544,
             "return1d": -0.1271
           },
           {
             "ticker": "IEX",
             "name": "IDEX Corporation",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.024044,
+            "marketCapWeightPct": 0.024369,
             "return1d": 0.8247
           },
           {
             "ticker": "ZBRA",
             "name": "Zebra Technologies",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.023908,
+            "marketCapWeightPct": 0.024231,
             "return1d": -0.3393
           },
           {
             "ticker": "NVR",
             "name": "NVR, Inc.",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.023895,
+            "marketCapWeightPct": 0.024218,
             "return1d": -1.47
           },
           {
             "ticker": "LDOS",
             "name": "Leidos",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.023361,
+            "marketCapWeightPct": 0.023677,
             "return1d": -2.4969
           },
           {
             "ticker": "RVTY",
             "name": "Revvity",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.023337,
+            "marketCapWeightPct": 0.023652,
             "return1d": -2.2354
           },
           {
             "ticker": "BALL",
             "name": "Ball Corporation",
             "sector": "Materials",
-            "marketCapWeightPct": 0.023212,
+            "marketCapWeightPct": 0.023526,
             "return1d": -0.9877
           },
           {
             "ticker": "INVH",
             "name": "Invitation Homes",
             "sector": "Real Estate",
-            "marketCapWeightPct": 0.023171,
+            "marketCapWeightPct": 0.023484,
             "return1d": -0.884
           },
           {
             "ticker": "APA",
             "name": "APA Corporation",
             "sector": "Energy",
-            "marketCapWeightPct": 0.022918,
+            "marketCapWeightPct": 0.023228,
             "return1d": -1.2978
           },
           {
             "ticker": "ROL",
             "name": "Rollins, Inc.",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.022748,
+            "marketCapWeightPct": 0.023055,
             "return1d": -1.7273
           },
           {
             "ticker": "WY",
             "name": "Weyerhaeuser",
             "sector": "Real Estate",
-            "marketCapWeightPct": 0.022297,
+            "marketCapWeightPct": 0.022598,
             "return1d": -2.0314
           },
           {
             "ticker": "SOLV",
             "name": "Solventum",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.022047,
+            "marketCapWeightPct": 0.022345,
             "return1d": 1.4966
           },
           {
             "ticker": "KIM",
             "name": "Kimco Realty",
             "sector": "Real Estate",
-            "marketCapWeightPct": 0.022033,
+            "marketCapWeightPct": 0.02233,
             "return1d": -0.1772
           },
           {
             "ticker": "AKAM",
             "name": "Akamai Technologies",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.021899,
+            "marketCapWeightPct": 0.022195,
             "return1d": -2.3907
           },
           {
             "ticker": "HST",
             "name": "Host Hotels & Resorts",
             "sector": "Real Estate",
-            "marketCapWeightPct": 0.021815,
+            "marketCapWeightPct": 0.022109,
             "return1d": -0.274
           },
           {
             "ticker": "PTC",
             "name": "PTC Inc.",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.021496,
+            "marketCapWeightPct": 0.021787,
             "return1d": 1.0785
           },
           {
             "ticker": "CHTR",
             "name": "Charter Communications",
             "sector": "Communication Services",
-            "marketCapWeightPct": 0.02141,
+            "marketCapWeightPct": 0.021699,
             "return1d": -3.8989
           },
           {
             "ticker": "EG",
             "name": "Everest Group",
             "sector": "Financials",
-            "marketCapWeightPct": 0.020954,
+            "marketCapWeightPct": 0.021237,
             "return1d": -1.3864
           },
           {
             "ticker": "DOC",
             "name": "Healthpeak Properties",
             "sector": "Real Estate",
-            "marketCapWeightPct": 0.020437,
+            "marketCapWeightPct": 0.020713,
             "return1d": -0.8293
           },
           {
             "ticker": "AIZ",
             "name": "Assurant",
             "sector": "Financials",
-            "marketCapWeightPct": 0.020295,
+            "marketCapWeightPct": 0.020569,
             "return1d": -0.5567
           },
           {
             "ticker": "TYL",
             "name": "Tyler Technologies",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.02015,
+            "marketCapWeightPct": 0.020422,
             "return1d": -1.1916
           },
           {
             "ticker": "MAA",
             "name": "Mid-America Apartment Communities",
             "sector": "Real Estate",
-            "marketCapWeightPct": 0.020117,
+            "marketCapWeightPct": 0.020388,
             "return1d": -1.8486
           },
           {
             "ticker": "TXT",
             "name": "Textron",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.019981,
+            "marketCapWeightPct": 0.020251,
             "return1d": -1.5078
           },
           {
             "ticker": "SWK",
             "name": "Stanley Black & Decker",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.019722,
+            "marketCapWeightPct": 0.019989,
             "return1d": 0.5162
           },
           {
             "ticker": "IVZ",
             "name": "Invesco",
             "sector": "Financials",
-            "marketCapWeightPct": 0.019651,
+            "marketCapWeightPct": 0.019916,
             "return1d": 1.0258
           },
           {
             "ticker": "TRMB",
             "name": "Trimble Inc.",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.019568,
+            "marketCapWeightPct": 0.019832,
             "return1d": 0.4012
           },
           {
             "ticker": "MAS",
             "name": "Masco",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.019566,
+            "marketCapWeightPct": 0.01983,
             "return1d": -0.2492
           },
           {
             "ticker": "REG",
             "name": "Regency Centers",
             "sector": "Real Estate",
-            "marketCapWeightPct": 0.019475,
+            "marketCapWeightPct": 0.019738,
             "return1d": -0.2325
           },
           {
             "ticker": "SWKS",
             "name": "Skyworks Solutions",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.019472,
+            "marketCapWeightPct": 0.019734,
             "return1d": -2.8033
           },
           {
             "ticker": "GL",
             "name": "Globe Life",
             "sector": "Financials",
-            "marketCapWeightPct": 0.01943,
+            "marketCapWeightPct": 0.019692,
             "return1d": 0.6734
           },
           {
             "ticker": "CRL",
             "name": "Charles River Laboratories",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.019352,
+            "marketCapWeightPct": 0.019614,
             "return1d": -1.2816
           },
           {
             "ticker": "SJM",
             "name": "J.M. Smucker Company (The)",
             "sector": "Consumer Staples",
-            "marketCapWeightPct": 0.019148,
+            "marketCapWeightPct": 0.019406,
             "return1d": -0.6465
           },
           {
             "ticker": "MKC",
             "name": "McCormick & Company",
             "sector": "Consumer Staples",
-            "marketCapWeightPct": 0.019096,
+            "marketCapWeightPct": 0.019354,
             "return1d": -1.9718
           },
           {
             "ticker": "ALB",
             "name": "Albemarle Corporation",
             "sector": "Materials",
-            "marketCapWeightPct": 0.019081,
+            "marketCapWeightPct": 0.019338,
             "return1d": -3.5984
           },
           {
             "ticker": "ALLE",
             "name": "Allegion",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.018879,
+            "marketCapWeightPct": 0.019134,
             "return1d": -0.8787
           },
           {
             "ticker": "AVY",
             "name": "Avery Dennison",
             "sector": "Materials",
-            "marketCapWeightPct": 0.01853,
+            "marketCapWeightPct": 0.018781,
             "return1d": -1.9756
           },
           {
             "ticker": "LII",
             "name": "Lennox International",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.0181,
+            "marketCapWeightPct": 0.018344,
             "return1d": 0.0418
           },
           {
             "ticker": "HAS",
             "name": "Hasbro",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.018007,
+            "marketCapWeightPct": 0.01825,
             "return1d": -1.3407
           },
           {
             "ticker": "GDDY",
             "name": "GoDaddy",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.017995,
+            "marketCapWeightPct": 0.018238,
             "return1d": -0.703
           },
           {
             "ticker": "GNRC",
             "name": "Generac",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.017845,
+            "marketCapWeightPct": 0.018086,
             "return1d": 0.1013
           },
           {
             "ticker": "BAX",
             "name": "Baxter International",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.017185,
+            "marketCapWeightPct": 0.017417,
             "return1d": -0.9557
           },
           {
             "ticker": "CSGP",
             "name": "CoStar Group",
             "sector": "Real Estate",
-            "marketCapWeightPct": 0.017184,
+            "marketCapWeightPct": 0.017416,
             "return1d": -0.7167
           },
           {
             "ticker": "IT",
             "name": "Gartner",
             "sector": "Information Technology",
-            "marketCapWeightPct": 0.017104,
+            "marketCapWeightPct": 0.017335,
             "return1d": -1.0756
           },
           {
             "ticker": "DVA",
             "name": "DaVita",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.017101,
+            "marketCapWeightPct": 0.017332,
             "return1d": 0.4206
           },
           {
             "ticker": "HRL",
             "name": "Hormel Foods",
             "sector": "Consumer Staples",
-            "marketCapWeightPct": 0.016713,
+            "marketCapWeightPct": 0.016939,
             "return1d": 0.3372
           },
           {
             "ticker": "PSKY",
             "name": "Paramount Skydance Corporation",
             "sector": "Communication Services",
-            "marketCapWeightPct": 0.0167,
+            "marketCapWeightPct": 0.016926,
             "return1d": -3.8606
           },
           {
             "ticker": "PNW",
             "name": "Pinnacle West Capital",
             "sector": "Utilities",
-            "marketCapWeightPct": 0.016646,
+            "marketCapWeightPct": 0.016871,
             "return1d": -1.4437
           },
           {
             "ticker": "TECH",
             "name": "Bio-Techne",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.016546,
+            "marketCapWeightPct": 0.016769,
             "return1d": -0.0552
           },
           {
             "ticker": "ERIE",
             "name": "Erie Indemnity",
             "sector": "Financials",
-            "marketCapWeightPct": 0.016097,
+            "marketCapWeightPct": 0.016315,
             "return1d": -2.185
           },
           {
             "ticker": "UDR",
             "name": "UDR, Inc.",
             "sector": "Real Estate",
-            "marketCapWeightPct": 0.015878,
+            "marketCapWeightPct": 0.016092,
             "return1d": -0.9062
           },
           {
             "ticker": "JKHY",
             "name": "Jack Henry & Associates",
             "sector": "Financials",
-            "marketCapWeightPct": 0.015828,
+            "marketCapWeightPct": 0.016042,
             "return1d": -0.8706
           },
           {
             "ticker": "HII",
             "name": "Huntington Ingalls Industries",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.015675,
+            "marketCapWeightPct": 0.015887,
             "return1d": -1.5444
           },
           {
             "ticker": "DECK",
             "name": "Deckers Brands",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.015598,
+            "marketCapWeightPct": 0.015809,
             "return1d": -1.6058
           },
           {
             "ticker": "AES",
             "name": "AES Corporation",
             "sector": "Utilities",
-            "marketCapWeightPct": 0.015425,
+            "marketCapWeightPct": 0.015633,
             "return1d": -0.1347
           },
           {
             "ticker": "COO",
             "name": "Cooper Companies (The)",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.015328,
+            "marketCapWeightPct": 0.015535,
             "return1d": 2.8077
           },
           {
             "ticker": "ALGN",
             "name": "Align Technology",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.015288,
+            "marketCapWeightPct": 0.015494,
             "return1d": -1.4027
           },
           {
             "ticker": "UHS",
             "name": "Universal Health Services",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.015182,
+            "marketCapWeightPct": 0.015387,
             "return1d": -2.2462
           },
           {
             "ticker": "LULU",
             "name": "Lululemon Athletica",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.015096,
+            "marketCapWeightPct": 0.0153,
             "return1d": -1.3382
           },
           {
             "ticker": "FDS",
             "name": "FactSet",
             "sector": "Financials",
-            "marketCapWeightPct": 0.014717,
+            "marketCapWeightPct": 0.014916,
             "return1d": 1.7859
           },
           {
             "ticker": "BXP",
             "name": "BXP, Inc.",
             "sector": "Real Estate",
-            "marketCapWeightPct": 0.014704,
+            "marketCapWeightPct": 0.014903,
             "return1d": -1.1888
           },
           {
             "ticker": "CLX",
             "name": "Clorox",
             "sector": "Consumer Staples",
-            "marketCapWeightPct": 0.014651,
+            "marketCapWeightPct": 0.014849,
             "return1d": -2.2353
           },
           {
             "ticker": "CPT",
             "name": "Camden Property Trust",
             "sector": "Real Estate",
-            "marketCapWeightPct": 0.014529,
+            "marketCapWeightPct": 0.014725,
             "return1d": -1.7933
           },
           {
             "ticker": "MGM",
             "name": "MGM Resorts",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.01424,
+            "marketCapWeightPct": 0.014432,
             "return1d": -1.3051
           },
           {
             "ticker": "PODD",
             "name": "Insulet Corporation",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.014216,
+            "marketCapWeightPct": 0.014408,
             "return1d": -0.6711
           },
           {
             "ticker": "DPZ",
             "name": "Domino's",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.014189,
+            "marketCapWeightPct": 0.014381,
             "return1d": -1.1591
           },
           {
             "ticker": "FRT",
             "name": "Federal Realty Investment Trust",
             "sector": "Real Estate",
-            "marketCapWeightPct": 0.01405,
+            "marketCapWeightPct": 0.014239,
             "return1d": -0.7606
           },
           {
             "ticker": "HSIC",
             "name": "Henry Schein",
             "sector": "Health Care",
-            "marketCapWeightPct": 0.013785,
+            "marketCapWeightPct": 0.013971,
             "return1d": -0.2352
           },
           {
             "ticker": "ARE",
             "name": "Alexandria Real Estate Equities",
             "sector": "Real Estate",
-            "marketCapWeightPct": 0.01354,
+            "marketCapWeightPct": 0.013723,
             "return1d": -5.3958
           },
           {
             "ticker": "APTV",
             "name": "Aptiv",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.013195,
+            "marketCapWeightPct": 0.013373,
             "return1d": -0.0688
           },
           {
             "ticker": "PNR",
             "name": "Pentair",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.013015,
+            "marketCapWeightPct": 0.01319,
             "return1d": 0.3589
           },
           {
             "ticker": "WYNN",
             "name": "Wynn Resorts",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.012262,
+            "marketCapWeightPct": 0.012428,
             "return1d": -1.5429
           },
           {
             "ticker": "MOS",
             "name": "Mosaic Company (The)",
             "sector": "Materials",
-            "marketCapWeightPct": 0.011345,
+            "marketCapWeightPct": 0.011499,
             "return1d": -3.5841
           },
           {
             "ticker": "AOS",
             "name": "A. O. Smith",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.011284,
+            "marketCapWeightPct": 0.011436,
             "return1d": 0.0351
           },
           {
             "ticker": "TAP",
             "name": "Molson Coors Beverage Company",
             "sector": "Consumer Staples",
-            "marketCapWeightPct": 0.010202,
+            "marketCapWeightPct": 0.01034,
             "return1d": -3.9662
           },
           {
             "ticker": "TTD",
             "name": "Trade Desk (The)",
             "sector": "Communication Services",
-            "marketCapWeightPct": 0.009536,
+            "marketCapWeightPct": 0.009664,
             "return1d": -2.3843
           },
           {
             "ticker": "NCLH",
             "name": "Norwegian Cruise Line Holdings",
             "sector": "Consumer Discretionary",
-            "marketCapWeightPct": 0.009453,
+            "marketCapWeightPct": 0.00958,
             "return1d": -1.8763
           },
           {
             "ticker": "BLDR",
             "name": "Builders FirstSource",
             "sector": "Industrials",
-            "marketCapWeightPct": 0.009117,
+            "marketCapWeightPct": 0.00924,
             "return1d": 0.7628
           }
         ]
@@ -8216,24 +8203,7 @@
           "vintage": "latest revised; not point-in-time safe"
         }
       },
-      "financialStress": {
-        "asOf": "2026-09-16",
-        "value": -2.411,
-        "components": {
-          "credit": -1.151,
-          "equityValuation": -0.532,
-          "safeAssets": -0.287,
-          "funding": -0.216,
-          "volatility": -0.225
-        },
-        "regions": {
-          "unitedStates": -1.266,
-          "otherAdvancedEconomies": -0.605,
-          "emergingMarkets": -0.54
-        },
-        "stressState": "low",
-        "vintage": "latest revised; not point-in-time safe"
-      },
+      "financialStress": {},
       "timeSeries": [
         {
           "seriesId": "mega7-equal-weight",
@@ -9223,7 +9193,7 @@
             },
             {
               "asOf": "2026-09-09",
-              "value": 12.7277
+              "value": 12.7276
             },
             {
               "asOf": "2026-09-10",
@@ -9279,7 +9249,7 @@
             },
             {
               "asOf": "2025-09-23",
-              "value": -0.0704
+              "value": -0.0705
             },
             {
               "asOf": "2025-09-24",
@@ -9311,7 +9281,7 @@
             },
             {
               "asOf": "2025-10-03",
-              "value": 0.3141
+              "value": 0.314
             },
             {
               "asOf": "2025-10-06",
@@ -9327,7 +9297,7 @@
             },
             {
               "asOf": "2025-10-09",
-              "value": -0.812
+              "value": -0.8121
             },
             {
               "asOf": "2025-10-10",
@@ -9335,11 +9305,11 @@
             },
             {
               "asOf": "2025-10-13",
-              "value": -1.1321
+              "value": -1.1322
             },
             {
               "asOf": "2025-10-14",
-              "value": -2.4908
+              "value": -2.4909
             },
             {
               "asOf": "2025-10-15",
@@ -9359,11 +9329,11 @@
             },
             {
               "asOf": "2025-10-21",
-              "value": -0.7363
+              "value": -0.7364
             },
             {
               "asOf": "2025-10-22",
-              "value": -2.0682
+              "value": -2.0683
             },
             {
               "asOf": "2025-10-23",
@@ -9391,7 +9361,7 @@
             },
             {
               "asOf": "2025-10-31",
-              "value": 3.5085
+              "value": 3.5084
             },
             {
               "asOf": "2025-11-03",
@@ -9403,7 +9373,7 @@
             },
             {
               "asOf": "2025-11-05",
-              "value": 4.4616
+              "value": 4.4615
             },
             {
               "asOf": "2025-11-06",
@@ -9423,7 +9393,7 @@
             },
             {
               "asOf": "2025-11-12",
-              "value": 1.2693
+              "value": 1.2692
             },
             {
               "asOf": "2025-11-13",
@@ -9483,11 +9453,11 @@
             },
             {
               "asOf": "2025-12-04",
-              "value": -0.1055
+              "value": -0.1056
             },
             {
               "asOf": "2025-12-05",
-              "value": 0.4354
+              "value": 0.4353
             },
             {
               "asOf": "2025-12-08",
@@ -9547,7 +9517,7 @@
             },
             {
               "asOf": "2025-12-29",
-              "value": 0.9991
+              "value": 0.999
             },
             {
               "asOf": "2025-12-30",
@@ -9559,7 +9529,7 @@
             },
             {
               "asOf": "2026-01-02",
-              "value": -0.3391
+              "value": -0.3392
             },
             {
               "asOf": "2026-01-05",
@@ -9567,7 +9537,7 @@
             },
             {
               "asOf": "2026-01-06",
-              "value": 2.2409
+              "value": 2.2408
             },
             {
               "asOf": "2026-01-07",
@@ -9615,7 +9585,7 @@
             },
             {
               "asOf": "2026-01-23",
-              "value": -2.842
+              "value": -2.8421
             },
             {
               "asOf": "2026-01-26",
@@ -9643,7 +9613,7 @@
             },
             {
               "asOf": "2026-02-03",
-              "value": -7.8215
+              "value": -7.8216
             },
             {
               "asOf": "2026-02-04",
@@ -9723,7 +9693,7 @@
             },
             {
               "asOf": "2026-03-04",
-              "value": -12.6385
+              "value": -12.6386
             },
             {
               "asOf": "2026-03-05",
@@ -9807,15 +9777,15 @@
             },
             {
               "asOf": "2026-04-02",
-              "value": -13.9103
+              "value": -13.9104
             },
             {
               "asOf": "2026-04-06",
-              "value": -14.0104
+              "value": -14.0105
             },
             {
               "asOf": "2026-04-07",
-              "value": -13.5477
+              "value": -13.5478
             },
             {
               "asOf": "2026-04-08",
@@ -9823,7 +9793,7 @@
             },
             {
               "asOf": "2026-04-09",
-              "value": -11.9342
+              "value": -11.9343
             },
             {
               "asOf": "2026-04-10",
@@ -9851,7 +9821,7 @@
             },
             {
               "asOf": "2026-04-20",
-              "value": -5.16
+              "value": -5.1601
             },
             {
               "asOf": "2026-04-21",
@@ -9891,7 +9861,7 @@
             },
             {
               "asOf": "2026-05-04",
-              "value": -8.1432
+              "value": -8.1433
             },
             {
               "asOf": "2026-05-05",
@@ -9923,7 +9893,7 @@
             },
             {
               "asOf": "2026-05-14",
-              "value": -8.971
+              "value": -8.9711
             },
             {
               "asOf": "2026-05-15",
@@ -9959,11 +9929,11 @@
             },
             {
               "asOf": "2026-05-28",
-              "value": -5.7607
+              "value": -5.7608
             },
             {
               "asOf": "2026-05-29",
-              "value": -4.9686
+              "value": -4.9687
             },
             {
               "asOf": "2026-06-01",
@@ -9975,11 +9945,11 @@
             },
             {
               "asOf": "2026-06-03",
-              "value": -7.3858
+              "value": -7.3859
             },
             {
               "asOf": "2026-06-04",
-              "value": -6.8292
+              "value": -6.8293
             },
             {
               "asOf": "2026-06-05",
@@ -9995,7 +9965,7 @@
             },
             {
               "asOf": "2026-06-10",
-              "value": -13.4638
+              "value": -13.4639
             },
             {
               "asOf": "2026-06-11",
@@ -10011,7 +9981,7 @@
             },
             {
               "asOf": "2026-06-16",
-              "value": -9.7797
+              "value": -9.7798
             },
             {
               "asOf": "2026-06-17",
@@ -10023,11 +9993,11 @@
             },
             {
               "asOf": "2026-06-22",
-              "value": -9.276
+              "value": -9.2761
             },
             {
               "asOf": "2026-06-23",
-              "value": -11.8591
+              "value": -11.8592
             },
             {
               "asOf": "2026-06-24",
@@ -10043,11 +10013,11 @@
             },
             {
               "asOf": "2026-06-29",
-              "value": -9.9549
+              "value": -9.955
             },
             {
               "asOf": "2026-06-30",
-              "value": -8.4208
+              "value": -8.4209
             },
             {
               "asOf": "2026-07-01",
@@ -10083,7 +10053,7 @@
             },
             {
               "asOf": "2026-07-14",
-              "value": -9.8781
+              "value": -9.8782
             },
             {
               "asOf": "2026-07-15",
@@ -10111,7 +10081,7 @@
             },
             {
               "asOf": "2026-07-23",
-              "value": -15.2166
+              "value": -15.2167
             },
             {
               "asOf": "2026-07-24",
@@ -10135,7 +10105,7 @@
             },
             {
               "asOf": "2026-07-31",
-              "value": -11.4604
+              "value": -11.4605
             },
             {
               "asOf": "2026-08-03",
@@ -10151,7 +10121,7 @@
             },
             {
               "asOf": "2026-08-06",
-              "value": -9.9909
+              "value": -9.991
             },
             {
               "asOf": "2026-08-07",
@@ -10171,7 +10141,7 @@
             },
             {
               "asOf": "2026-08-13",
-              "value": -10.6584
+              "value": -10.6585
             },
             {
               "asOf": "2026-08-14",
@@ -10243,7 +10213,7 @@
             },
             {
               "asOf": "2026-09-09",
-              "value": -12.1634
+              "value": -12.1635
             },
             {
               "asOf": "2026-09-10",
@@ -10272,1026 +10242,6 @@
             {
               "asOf": "2026-09-18",
               "value": -13.0185
-            }
-          ]
-        },
-        {
-          "seriesId": "financial-stress",
-          "sourceIds": [
-            "ofr"
-          ],
-          "cadence": "daily",
-          "basis": "index_level",
-          "startAsOf": "2025-09-30",
-          "endAsOf": "2026-09-16",
-          "points": [
-            {
-              "asOf": "2025-09-30",
-              "value": -2.378
-            },
-            {
-              "asOf": "2025-10-01",
-              "value": -2.355
-            },
-            {
-              "asOf": "2025-10-02",
-              "value": -2.393
-            },
-            {
-              "asOf": "2025-10-03",
-              "value": -2.517
-            },
-            {
-              "asOf": "2025-10-06",
-              "value": -2.349
-            },
-            {
-              "asOf": "2025-10-07",
-              "value": -2.239
-            },
-            {
-              "asOf": "2025-10-08",
-              "value": -2.222
-            },
-            {
-              "asOf": "2025-10-09",
-              "value": -2.191
-            },
-            {
-              "asOf": "2025-10-10",
-              "value": -1.769
-            },
-            {
-              "asOf": "2025-10-13",
-              "value": -1.869
-            },
-            {
-              "asOf": "2025-10-14",
-              "value": -1.66
-            },
-            {
-              "asOf": "2025-10-15",
-              "value": -1.861
-            },
-            {
-              "asOf": "2025-10-16",
-              "value": -1.709
-            },
-            {
-              "asOf": "2025-10-17",
-              "value": -1.671
-            },
-            {
-              "asOf": "2025-10-20",
-              "value": -2.136
-            },
-            {
-              "asOf": "2025-10-21",
-              "value": -2.146
-            },
-            {
-              "asOf": "2025-10-22",
-              "value": -2.093
-            },
-            {
-              "asOf": "2025-10-23",
-              "value": -2.254
-            },
-            {
-              "asOf": "2025-10-24",
-              "value": -2.437
-            },
-            {
-              "asOf": "2025-10-27",
-              "value": -2.433
-            },
-            {
-              "asOf": "2025-10-28",
-              "value": -2.474
-            },
-            {
-              "asOf": "2025-10-29",
-              "value": -2.429
-            },
-            {
-              "asOf": "2025-10-30",
-              "value": -2.412
-            },
-            {
-              "asOf": "2025-10-31",
-              "value": -2.366
-            },
-            {
-              "asOf": "2025-11-03",
-              "value": -2.409
-            },
-            {
-              "asOf": "2025-11-04",
-              "value": -2.134
-            },
-            {
-              "asOf": "2025-11-05",
-              "value": -2.104
-            },
-            {
-              "asOf": "2025-11-06",
-              "value": -2.04
-            },
-            {
-              "asOf": "2025-11-07",
-              "value": -1.901
-            },
-            {
-              "asOf": "2025-11-10",
-              "value": -2.162
-            },
-            {
-              "asOf": "2025-11-11",
-              "value": -2.261
-            },
-            {
-              "asOf": "2025-11-12",
-              "value": -2.341
-            },
-            {
-              "asOf": "2025-11-13",
-              "value": -2.244
-            },
-            {
-              "asOf": "2025-11-14",
-              "value": -2.082
-            },
-            {
-              "asOf": "2025-11-17",
-              "value": -1.912
-            },
-            {
-              "asOf": "2025-11-18",
-              "value": -1.522
-            },
-            {
-              "asOf": "2025-11-19",
-              "value": -1.493
-            },
-            {
-              "asOf": "2025-11-20",
-              "value": -1.688
-            },
-            {
-              "asOf": "2025-11-21",
-              "value": -1.392
-            },
-            {
-              "asOf": "2025-11-24",
-              "value": -1.695
-            },
-            {
-              "asOf": "2025-11-25",
-              "value": -1.781
-            },
-            {
-              "asOf": "2025-11-26",
-              "value": -2.13
-            },
-            {
-              "asOf": "2025-11-27",
-              "value": -2.293
-            },
-            {
-              "asOf": "2025-11-28",
-              "value": -2.446
-            },
-            {
-              "asOf": "2025-12-01",
-              "value": -2.32
-            },
-            {
-              "asOf": "2025-12-02",
-              "value": -2.362
-            },
-            {
-              "asOf": "2025-12-03",
-              "value": -2.456
-            },
-            {
-              "asOf": "2025-12-04",
-              "value": -2.494
-            },
-            {
-              "asOf": "2025-12-05",
-              "value": -2.534
-            },
-            {
-              "asOf": "2025-12-08",
-              "value": -2.386
-            },
-            {
-              "asOf": "2025-12-09",
-              "value": -2.452
-            },
-            {
-              "asOf": "2025-12-10",
-              "value": -2.437
-            },
-            {
-              "asOf": "2025-12-11",
-              "value": -2.539
-            },
-            {
-              "asOf": "2025-12-12",
-              "value": -2.466
-            },
-            {
-              "asOf": "2025-12-15",
-              "value": -2.398
-            },
-            {
-              "asOf": "2025-12-16",
-              "value": -2.286
-            },
-            {
-              "asOf": "2025-12-17",
-              "value": -2.422
-            },
-            {
-              "asOf": "2025-12-18",
-              "value": -2.433
-            },
-            {
-              "asOf": "2025-12-19",
-              "value": -2.586
-            },
-            {
-              "asOf": "2025-12-22",
-              "value": -2.697
-            },
-            {
-              "asOf": "2025-12-23",
-              "value": -2.796
-            },
-            {
-              "asOf": "2025-12-24",
-              "value": -2.814
-            },
-            {
-              "asOf": "2025-12-25",
-              "value": -2.93
-            },
-            {
-              "asOf": "2025-12-26",
-              "value": -2.859
-            },
-            {
-              "asOf": "2025-12-29",
-              "value": -2.706
-            },
-            {
-              "asOf": "2025-12-30",
-              "value": -2.684
-            },
-            {
-              "asOf": "2025-12-31",
-              "value": -2.707
-            },
-            {
-              "asOf": "2026-01-01",
-              "value": -2.704
-            },
-            {
-              "asOf": "2026-01-02",
-              "value": -2.733
-            },
-            {
-              "asOf": "2026-01-05",
-              "value": -2.712
-            },
-            {
-              "asOf": "2026-01-06",
-              "value": -2.751
-            },
-            {
-              "asOf": "2026-01-07",
-              "value": -2.596
-            },
-            {
-              "asOf": "2026-01-08",
-              "value": -2.627
-            },
-            {
-              "asOf": "2026-01-09",
-              "value": -2.816
-            },
-            {
-              "asOf": "2026-01-12",
-              "value": -2.792
-            },
-            {
-              "asOf": "2026-01-13",
-              "value": -2.715
-            },
-            {
-              "asOf": "2026-01-14",
-              "value": -2.626
-            },
-            {
-              "asOf": "2026-01-15",
-              "value": -2.69
-            },
-            {
-              "asOf": "2026-01-16",
-              "value": -2.701
-            },
-            {
-              "asOf": "2026-01-19",
-              "value": -2.437
-            },
-            {
-              "asOf": "2026-01-20",
-              "value": -2.195
-            },
-            {
-              "asOf": "2026-01-21",
-              "value": -2.445
-            },
-            {
-              "asOf": "2026-01-22",
-              "value": -2.68
-            },
-            {
-              "asOf": "2026-01-23",
-              "value": -2.505
-            },
-            {
-              "asOf": "2026-01-26",
-              "value": -2.478
-            },
-            {
-              "asOf": "2026-01-27",
-              "value": -2.383
-            },
-            {
-              "asOf": "2026-01-28",
-              "value": -2.404
-            },
-            {
-              "asOf": "2026-01-29",
-              "value": -2.305
-            },
-            {
-              "asOf": "2026-01-30",
-              "value": -2.255
-            },
-            {
-              "asOf": "2026-02-02",
-              "value": -2.326
-            },
-            {
-              "asOf": "2026-02-03",
-              "value": -2.335
-            },
-            {
-              "asOf": "2026-02-04",
-              "value": -2.295
-            },
-            {
-              "asOf": "2026-02-05",
-              "value": -1.932
-            },
-            {
-              "asOf": "2026-02-06",
-              "value": -2.127
-            },
-            {
-              "asOf": "2026-02-09",
-              "value": -2.25
-            },
-            {
-              "asOf": "2026-02-10",
-              "value": -2.28
-            },
-            {
-              "asOf": "2026-02-11",
-              "value": -2.305
-            },
-            {
-              "asOf": "2026-02-12",
-              "value": -2.138
-            },
-            {
-              "asOf": "2026-02-13",
-              "value": -2.115
-            },
-            {
-              "asOf": "2026-02-16",
-              "value": -2.21
-            },
-            {
-              "asOf": "2026-02-17",
-              "value": -2.294
-            },
-            {
-              "asOf": "2026-02-18",
-              "value": -2.505
-            },
-            {
-              "asOf": "2026-02-19",
-              "value": -2.359
-            },
-            {
-              "asOf": "2026-02-20",
-              "value": -2.527
-            },
-            {
-              "asOf": "2026-02-23",
-              "value": -2.396
-            },
-            {
-              "asOf": "2026-02-24",
-              "value": -2.344
-            },
-            {
-              "asOf": "2026-02-25",
-              "value": -2.601
-            },
-            {
-              "asOf": "2026-02-26",
-              "value": -2.414
-            },
-            {
-              "asOf": "2026-02-27",
-              "value": -2.386
-            },
-            {
-              "asOf": "2026-03-02",
-              "value": -1.893
-            },
-            {
-              "asOf": "2026-03-03",
-              "value": -1.61
-            },
-            {
-              "asOf": "2026-03-04",
-              "value": -1.19
-            },
-            {
-              "asOf": "2026-03-05",
-              "value": -1.574
-            },
-            {
-              "asOf": "2026-03-06",
-              "value": -0.802
-            },
-            {
-              "asOf": "2026-03-09",
-              "value": -0.296
-            },
-            {
-              "asOf": "2026-03-10",
-              "value": -1.458
-            },
-            {
-              "asOf": "2026-03-11",
-              "value": -0.925
-            },
-            {
-              "asOf": "2026-03-12",
-              "value": -0.613
-            },
-            {
-              "asOf": "2026-03-13",
-              "value": -0.432
-            },
-            {
-              "asOf": "2026-03-16",
-              "value": -0.796
-            },
-            {
-              "asOf": "2026-03-17",
-              "value": -1.314
-            },
-            {
-              "asOf": "2026-03-18",
-              "value": -1.208
-            },
-            {
-              "asOf": "2026-03-19",
-              "value": -0.958
-            },
-            {
-              "asOf": "2026-03-20",
-              "value": -0.675
-            },
-            {
-              "asOf": "2026-03-23",
-              "value": -0.472
-            },
-            {
-              "asOf": "2026-03-24",
-              "value": -0.568
-            },
-            {
-              "asOf": "2026-03-25",
-              "value": -0.717
-            },
-            {
-              "asOf": "2026-03-26",
-              "value": -0.216
-            },
-            {
-              "asOf": "2026-03-27",
-              "value": -0.263
-            },
-            {
-              "asOf": "2026-03-30",
-              "value": 0.204
-            },
-            {
-              "asOf": "2026-03-31",
-              "value": -0.284
-            },
-            {
-              "asOf": "2026-04-01",
-              "value": -1.282
-            },
-            {
-              "asOf": "2026-04-02",
-              "value": -0.671
-            },
-            {
-              "asOf": "2026-04-03",
-              "value": -1.284
-            },
-            {
-              "asOf": "2026-04-06",
-              "value": -0.925
-            },
-            {
-              "asOf": "2026-04-07",
-              "value": -0.687
-            },
-            {
-              "asOf": "2026-04-08",
-              "value": -1.496
-            },
-            {
-              "asOf": "2026-04-09",
-              "value": -1.648
-            },
-            {
-              "asOf": "2026-04-10",
-              "value": -1.796
-            },
-            {
-              "asOf": "2026-04-13",
-              "value": -1.788
-            },
-            {
-              "asOf": "2026-04-14",
-              "value": -2.051
-            },
-            {
-              "asOf": "2026-04-15",
-              "value": -2.172
-            },
-            {
-              "asOf": "2026-04-16",
-              "value": -2.172
-            },
-            {
-              "asOf": "2026-04-17",
-              "value": -2.343
-            },
-            {
-              "asOf": "2026-04-20",
-              "value": -2.05
-            },
-            {
-              "asOf": "2026-04-21",
-              "value": -2.09
-            },
-            {
-              "asOf": "2026-04-22",
-              "value": -2.127
-            },
-            {
-              "asOf": "2026-04-23",
-              "value": -2.146
-            },
-            {
-              "asOf": "2026-04-24",
-              "value": -2.058
-            },
-            {
-              "asOf": "2026-04-27",
-              "value": -2.077
-            },
-            {
-              "asOf": "2026-04-28",
-              "value": -1.974
-            },
-            {
-              "asOf": "2026-04-29",
-              "value": -1.972
-            },
-            {
-              "asOf": "2026-04-30",
-              "value": -2.108
-            },
-            {
-              "asOf": "2026-05-01",
-              "value": -1.818
-            },
-            {
-              "asOf": "2026-05-04",
-              "value": -1.735
-            },
-            {
-              "asOf": "2026-05-05",
-              "value": -1.825
-            },
-            {
-              "asOf": "2026-05-06",
-              "value": -2.031
-            },
-            {
-              "asOf": "2026-05-07",
-              "value": -2.179
-            },
-            {
-              "asOf": "2026-05-08",
-              "value": -2.271
-            },
-            {
-              "asOf": "2026-05-11",
-              "value": -2.346
-            },
-            {
-              "asOf": "2026-05-12",
-              "value": -2.294
-            },
-            {
-              "asOf": "2026-05-13",
-              "value": -2.355
-            },
-            {
-              "asOf": "2026-05-14",
-              "value": -2.479
-            },
-            {
-              "asOf": "2026-05-15",
-              "value": -2.27
-            },
-            {
-              "asOf": "2026-05-18",
-              "value": -2.179
-            },
-            {
-              "asOf": "2026-05-19",
-              "value": -2.168
-            },
-            {
-              "asOf": "2026-05-20",
-              "value": -2.258
-            },
-            {
-              "asOf": "2026-05-21",
-              "value": -2.457
-            },
-            {
-              "asOf": "2026-05-22",
-              "value": -2.484
-            },
-            {
-              "asOf": "2026-05-25",
-              "value": -2.481
-            },
-            {
-              "asOf": "2026-05-26",
-              "value": -2.546
-            },
-            {
-              "asOf": "2026-05-27",
-              "value": -2.575
-            },
-            {
-              "asOf": "2026-05-28",
-              "value": -2.734
-            },
-            {
-              "asOf": "2026-05-29",
-              "value": -2.976
-            },
-            {
-              "asOf": "2026-06-01",
-              "value": -2.723
-            },
-            {
-              "asOf": "2026-06-02",
-              "value": -2.63
-            },
-            {
-              "asOf": "2026-06-03",
-              "value": -2.704
-            },
-            {
-              "asOf": "2026-06-04",
-              "value": -2.682
-            },
-            {
-              "asOf": "2026-06-05",
-              "value": -2.472
-            },
-            {
-              "asOf": "2026-06-08",
-              "value": -2.361
-            },
-            {
-              "asOf": "2026-06-09",
-              "value": -2.311
-            },
-            {
-              "asOf": "2026-06-10",
-              "value": -1.918
-            },
-            {
-              "asOf": "2026-06-11",
-              "value": -1.998
-            },
-            {
-              "asOf": "2026-06-12",
-              "value": -2.29
-            },
-            {
-              "asOf": "2026-06-15",
-              "value": -2.597
-            },
-            {
-              "asOf": "2026-06-16",
-              "value": -2.748
-            },
-            {
-              "asOf": "2026-06-17",
-              "value": -2.757
-            },
-            {
-              "asOf": "2026-06-18",
-              "value": -2.741
-            },
-            {
-              "asOf": "2026-06-19",
-              "value": -2.658
-            },
-            {
-              "asOf": "2026-06-22",
-              "value": -2.724
-            },
-            {
-              "asOf": "2026-06-23",
-              "value": -2.424
-            },
-            {
-              "asOf": "2026-06-24",
-              "value": -2.152
-            },
-            {
-              "asOf": "2026-06-25",
-              "value": -2.475
-            },
-            {
-              "asOf": "2026-06-26",
-              "value": -2.385
-            },
-            {
-              "asOf": "2026-06-29",
-              "value": -2.165
-            },
-            {
-              "asOf": "2026-06-30",
-              "value": -2.39
-            },
-            {
-              "asOf": "2026-07-01",
-              "value": -2.551
-            },
-            {
-              "asOf": "2026-07-02",
-              "value": -2.851
-            },
-            {
-              "asOf": "2026-07-03",
-              "value": -2.682
-            },
-            {
-              "asOf": "2026-07-06",
-              "value": -2.633
-            },
-            {
-              "asOf": "2026-07-07",
-              "value": -2.839
-            },
-            {
-              "asOf": "2026-07-08",
-              "value": -2.082
-            },
-            {
-              "asOf": "2026-07-09",
-              "value": -2.278
-            },
-            {
-              "asOf": "2026-07-10",
-              "value": -2.512
-            },
-            {
-              "asOf": "2026-07-13",
-              "value": -2.392
-            },
-            {
-              "asOf": "2026-07-14",
-              "value": -2.455
-            },
-            {
-              "asOf": "2026-07-15",
-              "value": -2.615
-            },
-            {
-              "asOf": "2026-07-16",
-              "value": -2.526
-            },
-            {
-              "asOf": "2026-07-17",
-              "value": -2.305
-            },
-            {
-              "asOf": "2026-07-20",
-              "value": -2.313
-            },
-            {
-              "asOf": "2026-07-21",
-              "value": -2.558
-            },
-            {
-              "asOf": "2026-07-22",
-              "value": -2.607
-            },
-            {
-              "asOf": "2026-07-23",
-              "value": -2.331
-            },
-            {
-              "asOf": "2026-07-24",
-              "value": -2.417
-            },
-            {
-              "asOf": "2026-07-27",
-              "value": -2.4
-            },
-            {
-              "asOf": "2026-07-28",
-              "value": -2.157
-            },
-            {
-              "asOf": "2026-07-29",
-              "value": -1.921
-            },
-            {
-              "asOf": "2026-07-30",
-              "value": -2.116
-            },
-            {
-              "asOf": "2026-07-31",
-              "value": -2.568
-            },
-            {
-              "asOf": "2026-08-03",
-              "value": -2.394
-            },
-            {
-              "asOf": "2026-08-04",
-              "value": -2.482
-            },
-            {
-              "asOf": "2026-08-05",
-              "value": -2.592
-            },
-            {
-              "asOf": "2026-08-06",
-              "value": -2.761
-            },
-            {
-              "asOf": "2026-08-07",
-              "value": -2.764
-            },
-            {
-              "asOf": "2026-08-10",
-              "value": -2.863
-            },
-            {
-              "asOf": "2026-08-11",
-              "value": -2.907
-            },
-            {
-              "asOf": "2026-08-12",
-              "value": -2.74
-            },
-            {
-              "asOf": "2026-08-13",
-              "value": -2.782
-            },
-            {
-              "asOf": "2026-08-14",
-              "value": -2.817
-            },
-            {
-              "asOf": "2026-08-17",
-              "value": -2.824
-            },
-            {
-              "asOf": "2026-08-18",
-              "value": -2.661
-            },
-            {
-              "asOf": "2026-08-19",
-              "value": -2.624
-            },
-            {
-              "asOf": "2026-08-20",
-              "value": -2.675
-            },
-            {
-              "asOf": "2026-08-21",
-              "value": -2.814
-            },
-            {
-              "asOf": "2026-08-24",
-              "value": -2.757
-            },
-            {
-              "asOf": "2026-08-25",
-              "value": -2.734
-            },
-            {
-              "asOf": "2026-08-26",
-              "value": -2.741
-            },
-            {
-              "asOf": "2026-08-27",
-              "value": -2.847
-            },
-            {
-              "asOf": "2026-08-28",
-              "value": -3.03
-            },
-            {
-              "asOf": "2026-08-31",
-              "value": -2.767
-            },
-            {
-              "asOf": "2026-09-01",
-              "value": -2.749
-            },
-            {
-              "asOf": "2026-09-02",
-              "value": -2.768
-            },
-            {
-              "asOf": "2026-09-03",
-              "value": -2.725
-            },
-            {
-              "asOf": "2026-09-04",
-              "value": -2.791
-            },
-            {
-              "asOf": "2026-09-07",
-              "value": -2.874
-            },
-            {
-              "asOf": "2026-09-08",
-              "value": -2.537
-            },
-            {
-              "asOf": "2026-09-09",
-              "value": -2.411
-            },
-            {
-              "asOf": "2026-09-10",
-              "value": -2.289
-            },
-            {
-              "asOf": "2026-09-11",
-              "value": -2.458
-            },
-            {
-              "asOf": "2026-09-14",
-              "value": -2.226
-            },
-            {
-              "asOf": "2026-09-15",
-              "value": -2.244
-            },
-            {
-              "asOf": "2026-09-16",
-              "value": -2.411
             }
           ]
         },
@@ -12486,38 +11436,10 @@
         "participation": {
           "indicatorId": "participation",
           "engineVersion": "2.0.0",
-          "state": "NARROW",
-          "score": 32.83,
-          "confidence": 1.0,
+          "state": "UNAVAILABLE",
+          "score": 18.57,
+          "confidence": 0.4,
           "components": [
-            {
-              "componentId": "sp500-ma50-breadth",
-              "value": 28.63,
-              "score": 28.63,
-              "weight": 0.15,
-              "contribution": 4.29
-            },
-            {
-              "componentId": "sp500-ma200-breadth",
-              "value": 52.5,
-              "score": 52.5,
-              "weight": 0.15,
-              "contribution": 7.88
-            },
-            {
-              "componentId": "nasdaq100-ma50-breadth",
-              "value": 32.67,
-              "score": 32.67,
-              "weight": 0.15,
-              "contribution": 4.9
-            },
-            {
-              "componentId": "nasdaq100-ma200-breadth",
-              "value": 55.56,
-              "score": 55.56,
-              "weight": 0.15,
-              "contribution": 8.33
-            },
             {
               "componentId": "sp500_equal_weight-relative-1m",
               "value": -3.7559,
@@ -12548,8 +11470,6 @@
             }
           ],
           "breadthStates": {
-            "sp500": "mixed",
-            "nasdaq100": "mixed",
             "dow30": "mixed"
           },
           "ratioStates": {
@@ -12615,8 +11535,8 @@
         "indicatorId": "risk-window",
         "engineVersion": "2.0.0",
         "state": "OPEN",
-        "riskScore": 27.34,
-        "confidence": 1.0,
+        "riskScore": 31.96,
+        "confidence": 0.9,
         "components": [
           {
             "componentId": "vix-level",
@@ -12647,13 +11567,6 @@
             "contribution": 5.2
           },
           {
-            "componentId": "financial-stress",
-            "value": -2.411,
-            "score": 0.0,
-            "weight": 0.1,
-            "contribution": 0.0
-          },
-          {
             "componentId": "volatility-acceleration",
             "value": 0.8113,
             "score": 31.13,
@@ -12662,13 +11575,15 @@
           },
           {
             "componentId": "participation-stress",
-            "value": 32.83,
-            "score": 67.17,
+            "value": 18.57,
+            "score": 81.43,
             "weight": 0.1,
-            "contribution": 6.72
+            "contribution": 8.14
           }
         ],
-        "flags": [],
+        "flags": [
+          "PARTICIPATION_STRESS"
+        ],
         "thresholds": {
           "cautionRiskScore": 55,
           "closedRiskScore": 75
@@ -12678,11 +11593,11 @@
         "signalId": "market-regime",
         "engineVersion": "2.0.0",
         "state": "WATCH",
-        "score": 56.75,
-        "confidence": 1.0,
+        "score": 51.78,
+        "confidence": 0.8,
         "observationStates": {
           "trend": "BULLISH",
-          "participation": "NARROW",
+          "participation": "UNAVAILABLE",
           "style": "GROWTH_LEADING",
           "cycle": "LAGGING"
         },

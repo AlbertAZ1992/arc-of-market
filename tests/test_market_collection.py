@@ -7,7 +7,14 @@ import pytest
 from arc_market.collection import FetcherDependencies, MarketCollector, _require_core
 from arc_market.config import load_market_config
 from arc_market.errors import MarketSourceError
-from arc_market.models import OfrSnapshot, TreasurySnapshot, UniverseSnapshot, VixSnapshot
+from arc_market.models import (
+    MarketProfile,
+    MarketProfileSnapshot,
+    OfrSnapshot,
+    TreasurySnapshot,
+    UniverseSnapshot,
+    VixSnapshot,
+)
 
 
 def price_frame(symbols: tuple[str, ...], *, periods: int = 270) -> pd.DataFrame:
@@ -65,6 +72,14 @@ class FakeTreasury:
         return TreasurySnapshot(date(2026, 8, 28), 4.2, 4.7, 3.0, 1.0, 7.0)
 
 
+class FakeNasdaq:
+    def fetch(self, symbols: tuple[str, ...], target: date) -> MarketProfileSnapshot:
+        return MarketProfileSnapshot(
+            target,
+            {symbol: MarketProfile(symbol, "Technology", 1_000_000) for symbol in symbols},
+        )
+
+
 class FailingFred:
     def fetch(self, _series_ids: tuple[str, ...], _target: date) -> dict[str, pd.Series]:
         raise MarketSourceError("FRED unavailable")
@@ -85,6 +100,7 @@ def dependencies(
         cboe=FakeVix(),
         ofr=FakeOfr(),
         treasury=FakeTreasury(),
+        nasdaq=FakeNasdaq(),
     )
 
 
@@ -98,9 +114,11 @@ def test_collector_should_fetch_core_once_and_build_optional_breadth() -> None:
     assert set(result.core_prices) == set(config.core_symbols)
     assert set(result.breadth) == {"sp500", "nasdaq100", "dow30"}
     assert result.treasury is not None
+    assert result.market_map is not None
     status_as_of = {status.source_id: status.as_of for status in result.source_status}
     assert status_as_of["wikipedia"] == "2026-08-28"
     assert status_as_of["us-treasury"] == "2026-08-28"
+    assert status_as_of["nasdaq-market-activity"] == "2026-08-28"
     assert all(status.status == "APPROVED" for status in result.source_status)
 
 
