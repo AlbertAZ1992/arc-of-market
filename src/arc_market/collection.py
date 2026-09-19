@@ -137,13 +137,17 @@ class MarketCollector:
         self._statuses.append(SourceStatus(source_id, "APPROVED", as_of_text))
         return result
 
-    def _collect_breadth(self, target_date: date, market_as_of: date) -> dict[str, BreadthInput]:
+    def _collect_breadth(
+        self,
+        target_date: date,
+        market_as_of: date,
+    ) -> tuple[dict[str, BreadthInput], dict[str, UniverseSnapshot], pd.DataFrame | None]:
         universes = self._optional(
             "wikipedia",
             lambda: self._dependencies.wikipedia.fetch(target_date),
         )
         if universes is None:
-            return {}
+            return {}, {}, None
         typed_universes = universes
         symbols = tuple(
             dict.fromkeys(
@@ -157,7 +161,7 @@ class MarketCollector:
             lambda: self._dependencies.yahoo.fetch(symbols, market_as_of),
         )
         if prices is None:
-            return {}
+            return {}, typed_universes, None
         typed_prices = prices
         result = {}
         for index_id, definition in self._config.breadth.items():
@@ -170,7 +174,7 @@ class MarketCollector:
                 self._statuses.append(SourceStatus("yahoo-finance", "FAILED", None, message))
                 continue
             result[index_id] = BreadthInput(universe, typed_prices)
-        return result
+        return result, typed_universes, typed_prices
 
     def collect(self, target_date: date) -> CollectedMarketData:
         self._statuses = []
@@ -178,8 +182,12 @@ class MarketCollector:
         core = _require_core(core, self._config.core_symbols, target_date)
         market_as_of = _last_date(core)
         self._statuses.append(SourceStatus("yahoo-finance", "APPROVED", market_as_of.isoformat()))
-        breadth = self._collect_breadth(target_date, market_as_of)
-        market_map = self._collect_market_map(breadth, market_as_of)
+        breadth, universes, breadth_prices = self._collect_breadth(target_date, market_as_of)
+        market_map = self._collect_market_map(
+            universes.get("sp500"),
+            breadth_prices,
+            market_as_of,
+        )
         fred_ids = tuple(definition.series_id for definition in self._config.fred_series.values())
         fred = self._optional("fred", lambda: self._dependencies.fred.fetch(fred_ids, market_as_of))
         vix = self._optional("cboe", lambda: self._dependencies.cboe.fetch(market_as_of))
@@ -210,23 +218,23 @@ class MarketCollector:
 
     def _collect_market_map(
         self,
-        breadth: dict[str, BreadthInput],
+        universe: UniverseSnapshot | None,
+        prices: pd.DataFrame | None,
         market_as_of: date,
     ) -> MarketMapInput | None:
         source = self._dependencies.nasdaq
-        sp500 = breadth.get("sp500")
-        if source is None or sp500 is None:
+        if source is None or universe is None or prices is None:
             return None
         snapshot = self._optional(
             "nasdaq-market-activity",
-            lambda: source.fetch(sp500.universe.members, market_as_of),
+            lambda: source.fetch(universe.members, market_as_of),
         )
         if snapshot is None:
             return None
         return MarketMapInput(
             market_as_of,
-            sp500.universe,
-            sp500.prices,
+            universe,
+            prices,
             snapshot.profiles,
         )
 
