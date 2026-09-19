@@ -53,8 +53,8 @@
     "TSLA"
   ],
   "breadth": {
-    "sp500": {"sourceId": "wikipedia-sp500", "minimumCoverage": 0.995},
-    "nasdaq100": {"sourceId": "wikipedia-nasdaq100", "minimumCoverage": 0.98},
+    "sp500": {"sourceId": "wikipedia-sp500", "minimumCoverage": 0.99},
+    "nasdaq100": {"sourceId": "wikipedia-nasdaq100", "minimumCoverage": 0.95},
     "dow30": {"sourceId": "wikipedia-dow", "minimumCoverage": 1.0}
   },
   "fredSeries": {

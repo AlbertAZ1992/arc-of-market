@@ -38,6 +38,9 @@ def test_market_config_should_define_the_minimum_launch_universe() -> None:
         "NVDA",
         "TSLA",
     )
+    assert config.breadth["sp500"].minimum_coverage == 0.99
+    assert config.breadth["nasdaq100"].minimum_coverage == 0.95
+    assert config.breadth["dow30"].minimum_coverage == 1.0
     assert "themes" not in config.raw
 
 
