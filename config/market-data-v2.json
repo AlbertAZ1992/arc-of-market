@@ -90,6 +90,11 @@
       "publishPolicy": "current-membership-derived-breadth",
       "attribution": "Adapted from Wikipedia contributors under CC BY-SA 4.0; membership is current-cross-section only."
     },
+    "nasdaq-market-activity": {
+      "url": "https://www.nasdaq.com/market-activity/stocks/screener",
+      "publishPolicy": "derived-current-market-cap-weights-only",
+      "attribution": "Source: Nasdaq Market Activity; market capitalization and sector data are sourced by Nasdaq from Quotemedia. ArcOfMarket publishes derived current-market-cap weights."
+    },
     "fred": {
       "url": "https://fred.stlouisfed.org/",
       "publishPolicy": "reviewed-government-series-only",

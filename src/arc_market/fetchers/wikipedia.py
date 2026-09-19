@@ -24,15 +24,33 @@ def _normalize_ticker(value: object) -> str:
     return str(value).strip().upper().replace(".", "-")
 
 
-def _members(index_id: str, tables: Sequence[pd.DataFrame]) -> tuple[str, ...]:
+def _constituent_table(index_id: str, tables: Sequence[pd.DataFrame]) -> pd.DataFrame:
     column = _COLUMNS[index_id]
     table = next((candidate for candidate in tables if column in candidate.columns), None)
     if table is None:
         raise MarketSourceError(f"Wikipedia {index_id} constituent table was not found")
+    return table
+
+
+def _members(index_id: str, table: pd.DataFrame) -> tuple[str, ...]:
+    column = _COLUMNS[index_id]
     values = tuple(dict.fromkeys(_normalize_ticker(value) for value in table[column].dropna()))
     if not values:
         raise MarketSourceError(f"Wikipedia {index_id} constituent table is empty")
     return values
+
+
+def _sp500_metadata(table: pd.DataFrame) -> tuple[dict[str, str], dict[str, str]]:
+    required = {"Symbol", "Security", "GICS Sector"}
+    if not required.issubset(table.columns):
+        return {}, {}
+    names: dict[str, str] = {}
+    sectors: dict[str, str] = {}
+    for _, row in table.iterrows():
+        ticker = _normalize_ticker(row["Symbol"])
+        names[ticker] = str(row["Security"]).strip()
+        sectors[ticker] = str(row["GICS Sector"]).strip()
+    return names, sectors
 
 
 def parse_universe_tables(
@@ -40,10 +58,18 @@ def parse_universe_tables(
     *,
     observed_at: date,
 ) -> dict[str, UniverseSnapshot]:
-    return {
-        index_id: UniverseSnapshot(_members(index_id, tables[index_id]), observed_at, "wikipedia")
-        for index_id in ("sp500", "nasdaq100", "dow30")
-    }
+    snapshots: dict[str, UniverseSnapshot] = {}
+    for index_id in ("sp500", "nasdaq100", "dow30"):
+        table = _constituent_table(index_id, tables[index_id])
+        names, sectors = _sp500_metadata(table) if index_id == "sp500" else ({}, {})
+        snapshots[index_id] = UniverseSnapshot(
+            _members(index_id, table),
+            observed_at,
+            "wikipedia",
+            names,
+            sectors,
+        )
+    return snapshots
 
 
 class WikipediaUniverseFetcher:

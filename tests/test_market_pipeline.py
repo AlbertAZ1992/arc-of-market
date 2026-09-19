@@ -7,6 +7,8 @@ from arc_market.config import load_market_config
 from arc_market.models import (
     BreadthInput,
     CollectedMarketData,
+    MarketMapInput,
+    MarketProfile,
     OfrSnapshot,
     SourceStatus,
     TreasurySnapshot,
@@ -53,7 +55,13 @@ def test_build_release_core_should_cover_launch_modules_with_derived_history() -
     core_prices = price_frame(config.core_symbols)
     members = ("AAA", "BBB")
     breadth_prices = price_frame(members, periods=220)
-    universe = UniverseSnapshot(members, date(2026, 8, 29), "wikipedia")
+    universe = UniverseSnapshot(
+        members,
+        date(2026, 8, 29),
+        "wikipedia",
+        {"AAA": "Alpha Inc.", "BBB": "Beta Inc."},
+        {"AAA": "Information Technology", "BBB": "Financials"},
+    )
     collected = CollectedMarketData(
         market_as_of=date(2026, 8, 28),
         core_prices=core_prices,
@@ -68,6 +76,15 @@ def test_build_release_core_should_cover_launch_modules_with_derived_history() -
         ),
         source_status=(SourceStatus("yahoo-finance", "APPROVED", "2026-08-28"),),
         treasury=TreasurySnapshot(date(2026, 8, 28), 4.2, 4.7, 3.0, 1.0, 7.0),
+        market_map=MarketMapInput(
+            date(2026, 8, 28),
+            universe,
+            breadth_prices,
+            {
+                "AAA": MarketProfile("Alpha Inc.", "Technology", 3_000_000),
+                "BBB": MarketProfile("Beta Inc.", "Finance", 1_000_000),
+            },
+        ),
     )
 
     core = build_release_core(config, collected, producer_commit="a" * 40)
@@ -81,6 +98,7 @@ def test_build_release_core_should_cover_launch_modules_with_derived_history() -
         "participation",
         "style",
         "breadth",
+        "marketMap",
         "sectors",
         "semiconductorPulse",
         "mega7",
@@ -100,6 +118,8 @@ def test_build_release_core_should_cover_launch_modules_with_derived_history() -
     assert core["data"]["style"]["indicatorId"] == "roc35"
     assert len(core["data"]["sectors"]) == 11
     assert len(core["data"]["mega7"]["members"]) == 7
+    assert core["data"]["marketMap"]["members"][0]["ticker"] == "AAA"
+    assert core["data"]["marketMap"]["members"][0]["marketCapWeightPct"] == 75.0
     assert core["data"]["risk"]["vixRegime"] == "neutral"
     assert core["data"]["risk"]["vixChange1dPct"] > 0
     assert core["data"]["treasuryCurve"]["treasury10yChange3dBp"] == 7.0

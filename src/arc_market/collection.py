@@ -13,6 +13,8 @@ from arc_market.models import (
     BreadthInput,
     CftcSnapshot,
     CollectedMarketData,
+    MarketMapInput,
+    MarketProfileSnapshot,
     OfrSnapshot,
     SourceStatus,
     TreasurySnapshot,
@@ -49,6 +51,10 @@ class CftcSource(Protocol):
     def fetch(self, target_date: date) -> CftcSnapshot: ...
 
 
+class MarketProfileSource(Protocol):
+    def fetch(self, symbols: Sequence[str], target_date: date) -> MarketProfileSnapshot: ...
+
+
 @dataclass(frozen=True)
 class FetcherDependencies:
     yahoo: PriceFetcher
@@ -58,6 +64,7 @@ class FetcherDependencies:
     ofr: OfrSource
     treasury: TreasurySource | None = None
     cftc: CftcSource | None = None
+    nasdaq: MarketProfileSource | None = None
 
 
 T = TypeVar("T")
@@ -172,6 +179,7 @@ class MarketCollector:
         market_as_of = _last_date(core)
         self._statuses.append(SourceStatus("yahoo-finance", "APPROVED", market_as_of.isoformat()))
         breadth = self._collect_breadth(target_date, market_as_of)
+        market_map = self._collect_market_map(breadth, market_as_of)
         fred_ids = tuple(definition.series_id for definition in self._config.fred_series.values())
         fred = self._optional("fred", lambda: self._dependencies.fred.fetch(fred_ids, market_as_of))
         vix = self._optional("cboe", lambda: self._dependencies.cboe.fetch(market_as_of))
@@ -197,6 +205,29 @@ class MarketCollector:
             source_status=tuple(self._statuses),
             treasury=treasury,
             cftc=cftc,
+            market_map=market_map,
+        )
+
+    def _collect_market_map(
+        self,
+        breadth: dict[str, BreadthInput],
+        market_as_of: date,
+    ) -> MarketMapInput | None:
+        source = self._dependencies.nasdaq
+        sp500 = breadth.get("sp500")
+        if source is None or sp500 is None:
+            return None
+        snapshot = self._optional(
+            "nasdaq-market-activity",
+            lambda: source.fetch(sp500.universe.members, market_as_of),
+        )
+        if snapshot is None:
+            return None
+        return MarketMapInput(
+            market_as_of,
+            sp500.universe,
+            sp500.prices,
+            snapshot.profiles,
         )
 
 

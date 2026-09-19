@@ -30,12 +30,35 @@ class UniverseSnapshot:
     members: tuple[str, ...]
     observed_at: date
     source_id: str
+    names: dict[str, str] | None = None
+    sectors: dict[str, str] | None = None
 
 
 @dataclass(frozen=True)
 class BreadthInput:
     universe: UniverseSnapshot
     prices: pd.DataFrame
+
+
+@dataclass(frozen=True)
+class MarketProfile:
+    name: str
+    sector: str
+    market_cap: float
+
+
+@dataclass(frozen=True)
+class MarketProfileSnapshot:
+    as_of: date
+    profiles: dict[str, MarketProfile]
+
+
+@dataclass(frozen=True)
+class MarketMapInput:
+    as_of: date
+    universe: UniverseSnapshot
+    prices: pd.DataFrame
+    profiles: dict[str, MarketProfile]
 
 
 @dataclass(frozen=True)
@@ -83,3 +106,4 @@ class CollectedMarketData:
     source_status: tuple[SourceStatus, ...]
     treasury: TreasurySnapshot | None = None
     cftc: CftcSnapshot | None = None
+    market_map: MarketMapInput | None = None
