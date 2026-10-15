@@ -38,7 +38,7 @@ NEW_YORK = ZoneInfo("America/New_York")
 def last_completed_market_date(now: datetime | None = None) -> date:
     current = now.astimezone(NEW_YORK) if now is not None else datetime.now(NEW_YORK)
     candidate = current.date()
-    if current.weekday() >= 5 or current.timetz().replace(tzinfo=None) < time(18):
+    if current.weekday() >= 5 or current.timetz().replace(tzinfo=None) < time(17):
         candidate -= timedelta(days=1)
     while candidate.weekday() >= 5:
         candidate -= timedelta(days=1)

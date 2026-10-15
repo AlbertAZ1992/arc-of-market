@@ -78,10 +78,37 @@ def required_environment(name: str) -> str:
 
 def publish(endpoint: str, release_path: Path) -> str:
     body = release_path.read_bytes()
-    release = json.loads(body)
-    release_id = release.get("releaseId")
+    release_id = market_release_id(body)
+    for attempt in range(3):
+        try:
+            response = post_release(endpoint, body, release_id)
+        except (requests.Timeout, requests.ConnectionError):
+            if attempt == 2:
+                raise
+        else:
+            if response.ok:
+                print(response.text)
+                return release_id
+            if response.status_code != 429 and response.status_code < 500:
+                raise RuntimeError(
+                    f"Strategy publication rejected ({response.status_code}): {response.text}"
+                )
+            if attempt == 2:
+                raise RuntimeError(
+                    f"Strategy publication failed ({response.status_code}): {response.text}"
+                )
+        time.sleep(10 * (attempt + 1))
+    raise RuntimeError("Strategy publication attempts exhausted")
+
+
+def market_release_id(body: bytes) -> str:
+    release_id = json.loads(body).get("releaseId")
     if not isinstance(release_id, str) or not release_id.startswith("mr_"):
         raise ValueError("The release file is not a Market Release")
+    return release_id
+
+
+def post_release(endpoint: str, body: bytes, release_id: str) -> requests.Response:
     headers = signing_headers(
         body,
         SigningRequest(
@@ -91,11 +118,7 @@ def publish(endpoint: str, release_path: Path) -> str:
             timestamp=str(int(time.time())),
         ),
     )
-    response = requests.post(endpoint_url(endpoint), data=body, headers=headers, timeout=20)
-    if not response.ok:
-        raise RuntimeError(f"Strategy publication failed ({response.status_code}): {response.text}")
-    print(response.text)
-    return release_id
+    return requests.post(endpoint_url(endpoint), data=body, headers=headers, timeout=20)
 
 
 def publication_status(endpoint: str, release_id: str) -> dict[str, object]:
