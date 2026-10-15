@@ -2,8 +2,8 @@ name: daily-update
 
 on:
   schedule:
-    # 18:07 New York time, two hours after the regular U.S. market close.
-    - cron: "7 18 * * 1-5"
+    # Start one hour after close; later runs recover delayed or failed publication.
+    - cron: "17 17-21 * * 1-5"
       timezone: "America/New_York"
   workflow_dispatch:
 
@@ -48,18 +48,16 @@ jobs:
         run: |
           set -euo pipefail
           uv run python scripts/market_data.py --github-output "$GITHUB_OUTPUT"
-          if [ -z "$(git status --porcelain -- releases/market)" ]; then
-            echo "The collector did not generate a new market release" >&2
-            exit 1
-          fi
 
       - name: Commit and push release to main
         run: |
           set -euo pipefail
           git add releases/market
-          git commit -m "Publish market release $(date -u +%F)"
-          git pull --rebase origin main
-          git push origin HEAD:main
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish market release $(date -u +%F)"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
 
       - name: Publish release to Cloud
         env:

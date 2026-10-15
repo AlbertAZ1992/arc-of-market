@@ -21,6 +21,7 @@ from arc_market.models import (
     UniverseSnapshot,
     VixSnapshot,
 )
+from arc_market.strategy_inputs import core_rotation_inputs
 
 
 class PriceFetcher(Protocol):
@@ -81,16 +82,22 @@ def _require_core(
     missing = [symbol for symbol in symbols if symbol not in prices]
     if missing:
         raise MarketSourceError(f"core Yahoo prices are missing: {', '.join(missing)}")
-    complete = prices.loc[:, list(symbols)].dropna(how="any").sort_index()
-    if len(complete) < 252:
-        raise MarketSourceError(f"core Yahoo prices have only {len(complete)} complete sessions")
-    observed_date = _last_date(complete)
-    if observed_date != target_date:
-        raise MarketSourceError(
-            f"core Yahoo prices end at {observed_date.isoformat()}; "
-            f"expected {target_date.isoformat()}"
-        )
-    return complete
+    core = prices.loc[:, list(symbols)].apply(pd.to_numeric, errors="coerce").sort_index()
+    for symbol in symbols:
+        available = core[[symbol]].dropna()
+        if len(available) < 252:
+            raise MarketSourceError(
+                f"core Yahoo prices for {symbol} have only {len(available)} complete sessions"
+            )
+        observed_date = _last_date(available)
+        if observed_date != target_date:
+            raise MarketSourceError(
+                f"core Yahoo prices for {symbol} end at {observed_date.isoformat()}; "
+                f"expected {target_date.isoformat()}"
+            )
+    if {"QQQ", "VTV"}.issubset(core.columns) and core_rotation_inputs(core) is None:
+        raise MarketSourceError("Core Rotation requires 271 complete QQQ/VTV sessions")
+    return core
 
 
 def _breadth_coverage(

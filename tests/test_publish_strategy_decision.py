@@ -2,17 +2,62 @@ from __future__ import annotations
 
 import hashlib
 import hmac
+import json
+from pathlib import Path
 
 import pytest
+import requests
 from scripts import publish_strategy_decision
 from scripts.publish_strategy_decision import (
     SigningRequest,
     endpoint_url,
     publication_status,
+    publish,
     signing_headers,
     status_path,
     wait_for_completion,
 )
+
+
+def test_publication_retries_transient_errors_with_the_same_identity(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    path = tmp_path / "release.json"
+    release_id = f"mr_{'a' * 64}"
+    path.write_text(json.dumps({"releaseId": release_id}), encoding="utf-8")
+    calls: list[str] = []
+    delays: list[int] = []
+
+    def post(_endpoint: str, _body: bytes, identity: str) -> requests.Response:
+        calls.append(identity)
+        response = requests.Response()
+        response.status_code = 503 if len(calls) == 1 else 201
+        response._content = b'{"status":"accepted"}'
+        return response
+
+    monkeypatch.setattr(publish_strategy_decision, "post_release", post)
+    monkeypatch.setattr(publish_strategy_decision.time, "sleep", delays.append)
+    assert publish("https://closing.example", path) == release_id
+    assert calls == [release_id, release_id]
+    assert delays == [10]
+
+
+def test_publication_does_not_retry_contract_errors(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    path = tmp_path / "release.json"
+    path.write_text(json.dumps({"releaseId": f"mr_{'a' * 64}"}), encoding="utf-8")
+    response = requests.Response()
+    response.status_code = 400
+    response._content = b'{"code":"CONTRACT_INVALID"}'
+    monkeypatch.setattr(publish_strategy_decision, "post_release", lambda *_: response)
+    delays: list[int] = []
+    monkeypatch.setattr(publish_strategy_decision.time, "sleep", delays.append)
+    with pytest.raises(RuntimeError, match="rejected.*400.*CONTRACT_INVALID"):
+        publish("https://closing.example", path)
+    assert delays == []
 
 
 def test_endpoint_url_requires_https_except_for_localhost() -> None:

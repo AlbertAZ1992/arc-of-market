@@ -15,9 +15,10 @@ from arc_market.models import (
     UniverseSnapshot,
     VixSnapshot,
 )
+from arc_market.strategy_inputs import core_rotation_inputs
 
 
-def price_frame(symbols: tuple[str, ...], *, periods: int = 270) -> pd.DataFrame:
+def price_frame(symbols: tuple[str, ...], *, periods: int = 280) -> pd.DataFrame:
     index = pd.bdate_range(end="2026-08-28", periods=periods)
     return pd.DataFrame(
         {
@@ -174,6 +175,28 @@ def test_core_prices_should_reject_a_stale_latest_session() -> None:
 
     with pytest.raises(
         MarketSourceError,
-        match="core Yahoo prices end at 2026-08-28; expected 2026-08-31",
+        match="core Yahoo prices for SPY end at 2026-08-28; expected 2026-08-31",
     ):
         _require_core(prices, ("SPY", "QQQ"), date(2026, 8, 31))
+
+
+def test_unrelated_missing_price_preserves_strategy_sessions_and_calculations() -> None:
+    symbols = ("QQQ", "VTV", "NVDA")
+    prices = price_frame(symbols)
+    expected = core_rotation_inputs(prices)
+    prices.loc[prices.index[-2], "NVDA"] = float("nan")
+
+    actual = _require_core(prices, symbols, date(2026, 8, 28))
+
+    assert len(actual) == len(prices)
+    assert core_rotation_inputs(actual) == expected
+    assert expected is not None
+    assert expected["previousSession"] == "2026-08-27"
+
+
+def test_missing_strategy_session_is_rejected_instead_of_silently_removed() -> None:
+    prices = price_frame(("QQQ", "VTV", "SPY"))
+    prices.loc[prices.index[-2], "QQQ"] = float("nan")
+
+    with pytest.raises(MarketSourceError, match="271 complete QQQ/VTV sessions"):
+        _require_core(prices, ("QQQ", "VTV", "SPY"), date(2026, 8, 28))
